@@ -282,7 +282,7 @@ export default function LoginPage() {
 
           <form className="login-form" onSubmit={handleEmailLogin} noValidate>
             <div className="form-field">
-              <label htmlFor="login-email" className="form-label">이메일 <span>delexi4121@fixscal.com</span></label>
+              <label htmlFor="login-email" className="form-label">이메일</label>
               <input
                 id="login-email"
                 type="email"
@@ -298,7 +298,7 @@ export default function LoginPage() {
             </div>
 
             <div className="form-field">
-              <label htmlFor="login-password" className="form-label">비밀번호 <span>ezen123456</span></label>
+              <label htmlFor="login-password" className="form-label">비밀번호</label>
               <div className="input-wrap">
                 <input
                   id="login-password"
