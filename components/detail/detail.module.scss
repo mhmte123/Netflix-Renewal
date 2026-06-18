@@ -1,0 +1,359 @@
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(16px);
+  }
+}
+
+:global(.detail-toast) {
+  animation: slideUp 0.25s ease;
+}
+
+:global(.detail-toast-hiding) {
+  animation: slideDown 0.25s ease forwards;
+}
+
+:global(.detail-primary-hover),
+:global(.detail-secondary-hover),
+:global(.detail-circle-hover),
+:global(.detail-chip-hover),
+:global(.detail-outline-hover),
+:global(.detail-page-hover),
+:global(.detail-icon-hover) {
+  transition:
+    transform 0.16s ease,
+    filter 0.16s ease,
+    background-color 0.16s ease,
+    border-color 0.16s ease,
+    color 0.16s ease,
+    opacity 0.16s ease;
+}
+
+:global(.detail-primary-hover:hover:not(:disabled)) {
+  filter: brightness(1.16);
+  transform: translateY(-1px);
+}
+
+:global(.detail-secondary-hover:hover:not(:disabled)) {
+  background-color: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  transform: translateY(-1px);
+}
+
+:global(.detail-my-list-added:hover:not(:disabled)) {
+  background-color: rgba(229, 9, 20, 0.34) !important;
+  border-color: #e50914 !important;
+}
+
+:global(.detail-circle-hover:hover:not(:disabled)) {
+  background-color: rgba(229, 9, 20, 0.2) !important;
+  border-color: #e50914 !important;
+  color: #fff !important;
+  transform: translateY(-1px) scale(1.04);
+}
+
+:global(.detail-chip-hover:hover:not(:disabled)),
+:global(.detail-outline-hover:hover:not(:disabled)),
+:global(.detail-page-hover:hover:not(:disabled)) {
+  border-color: #e50914 !important;
+  color: #fff !important;
+  background-color: rgba(229, 9, 20, 0.16) !important;
+}
+
+:global(.detail-report-active:hover:not(:disabled)) {
+  color: #e50914 !important;
+  background-color: rgba(229, 9, 20, 0.22) !important;
+}
+
+:global(.detail-icon-hover:hover:not(:disabled)) {
+  transform: translateY(-1px) scale(1.08);
+  filter: brightness(1.2);
+}
+
+:global(.detail-half-rating) {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+:global(.detail-half-rating__stars) {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+:global(.detail-half-rating__star) {
+  position: relative;
+  display: inline-flex;
+  width: var(--detail-star-size);
+  height: var(--detail-star-size);
+  flex: 0 0 var(--detail-star-size);
+}
+
+:global(.detail-half-rating__icon) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: transparent;
+  background: linear-gradient(
+    90deg,
+    #e50914 var(--detail-star-fill),
+    #3a3a48 var(--detail-star-fill)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  font-size: var(--detail-star-size);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+:global(.detail-half-rating__hit) {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  width: 50%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 1px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 2px;
+  }
+}
+
+:global(.detail-half-rating__hit--left) {
+  left: 0;
+}
+
+:global(.detail-half-rating__hit--right) {
+  right: 0;
+}
+
+:global(.detail-half-rating__value) {
+  min-width: 24px;
+  color: #d8d8d8;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+
+/* 케데헌 이스터에그: 탭 라인 위를 달리는 루미 (클릭 → 게임 실행) */
+:global(.kpop-rumi-runner) {
+  --rw: 46px; /* 프레임 너비 */
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 5;
+  width: var(--rw);
+  height: 60px;
+  padding: 0;
+  border: none;
+  background: url("/images/game/rumi-run.png") no-repeat;
+  background-size: calc(var(--rw) * 6) 100%;
+  image-rendering: pixelated;
+  cursor: pointer;
+  animation:
+    kpopRumiSprite 0.6s steps(6) infinite,
+    kpopRumiPatrol 36s linear infinite;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+
+  &:hover {
+    filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.9));
+  }
+}
+
+@keyframes kpopRumiSprite {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: calc(var(--rw) * -6);
+  }
+}
+
+/* 불규칙한 좌우 배회 (구간마다 거리·방향이 다름, 전환 시 좌우반전) */
+@keyframes kpopRumiPatrol {
+  0% {
+    left: 2%;
+    transform: scaleX(1);
+  }
+  15% {
+    left: 36%;
+    transform: scaleX(1);
+  }
+  15.01% {
+    left: 36%;
+    transform: scaleX(-1);
+  }
+  24% {
+    left: 21%;
+    transform: scaleX(-1);
+  }
+  24.01% {
+    left: 21%;
+    transform: scaleX(1);
+  }
+  42% {
+    left: 60%;
+    transform: scaleX(1);
+  }
+  42.01% {
+    left: 60%;
+    transform: scaleX(-1);
+  }
+  53% {
+    left: 44%;
+    transform: scaleX(-1);
+  }
+  53.01% {
+    left: 44%;
+    transform: scaleX(1);
+  }
+  70% {
+    left: 86%;
+    transform: scaleX(1);
+  }
+  70.01% {
+    left: 86%;
+    transform: scaleX(-1);
+  }
+  84% {
+    left: 55%;
+    transform: scaleX(-1);
+  }
+  99.99% {
+    left: 2%;
+    transform: scaleX(-1);
+  }
+  100% {
+    left: 2%;
+    transform: scaleX(1);
+  }
+}
+
+/* 플레이리스트 선택 카드 호버 */
+:global(.detail-playlist-card) {
+  transition:
+    border-color 0.15s,
+    background-color 0.15s,
+    transform 0.15s;
+
+  &:hover {
+    border-color: #e50914 !important;
+    background: rgba(229, 9, 20, 0.06) !important;
+    transform: translateY(-2px);
+  }
+}
+
+/* 데스크탑 플레이리스트(+) 버튼: 찜/공유와 동일한 호버(확대만) */
+:global(.detail-plus-btn) {
+  transition: transform 0.15s;
+
+  &:hover {
+    transform: scale(1.08);
+  }
+}
+
+:global(.detail-party-btn) {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  cursor: pointer;
+
+  img {
+    width: 14px;
+    height: 14px;
+    filter: brightness(0) invert(1);
+  }
+
+  // &:hover {
+  //   // border-color: rgba(229, 9, 20, 0.75);
+  //   // background: rgba(229, 9, 20, 0.14);
+  // }
+}
+
+/* 모바일 히어로 액션 버튼: 원형 배경 제거 + 아이콘 확대 */
+:global(.detail-hero-action-btn) {
+  width: 56px !important;
+  height: 44px !important;
+  background: none !important;
+  border: none !important;
+
+  svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  img {
+    width: 30px !important;
+    height: 30px !important;
+  }
+}
+
+:global(.detail-review-textarea) {
+  //scrollbar-color: #e50914 #1b1b22;
+  scrollbar-color: rgba(229, 9, 20, 0.7) transparent;
+  scrollbar-width: thin;
+}
+
+:global(.detail-review-textarea::-webkit-scrollbar) {
+  width: 3px;
+}
+
+:global(.detail-review-textarea::-webkit-scrollbar-track) {
+  //background: #1b1b22;
+  // background: rgba(255, 255, 255, 0.03);
+  background: transparent;
+  border-radius: 999px;
+}
+
+:global(.detail-review-textarea::-webkit-scrollbar-thumb) {
+  //background: #e50914;
+  // background: linear-gradient(to bottom,
+  //     rgba(229, 9, 20, 0.4),
+  //     rgba(229, 9, 20, 0.9));
+
+  background: linear-gradient(
+    180deg,
+    rgba(229, 9, 20, 0.3) 0%,
+    rgba(229, 9, 20, 0.8) 100%
+  );
+  border-radius: 999px;
+  transition: all 0.2s ease;
+}
+
+:global(.detail-review-textarea::-webkit-scrollbar-thumb:hover) {
+  //background: #f6121d;
+  background: linear-gradient(
+    to bottom,
+    rgba(246, 18, 29, 0.6),
+    rgba(246, 18, 29, 1)
+  );
+}

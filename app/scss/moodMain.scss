@@ -1,0 +1,426 @@
+@use "@/app/globals" as g;
+
+.mood-main-page {
+  min-height: 100vh;
+  padding-bottom: 80px;
+  background: g.$bg-color;
+
+  .inner {
+    width: min(1200px, calc(100% - 80px));
+    margin: 0 auto;
+  }
+
+  /* Hero */
+  .mood-hero {
+    /* 데스크탑: 헤더 뒤까지 올라와 상단에 딱 붙음 (모바일은 아래 반응형에서 해제) */
+    padding: (g.$header-height + 32px) 0 60px;
+    margin-top: -(g.$header-height);
+    /* 첫 번째 배너처럼 쨍한 보라/마젠타 그라데이션 강조 */
+    background:
+      radial-gradient(circle at 78% 16%, rgba(224, 64, 251, 0.45), transparent 52%),
+      radial-gradient(circle at 10% 84%, rgba(123, 47, 247, 0.42), transparent 56%),
+      linear-gradient(135deg, #16062f 0%, #2a0a4a 48%, #1a0726 100%);
+    margin-bottom: 48px;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 97% 48%, rgba(229, 9, 20, 0.24), transparent 46%),
+        radial-gradient(circle at 48% 120%, rgba(232, 121, 249, 0.22), transparent 60%);
+    }
+
+    .inner {
+      position: relative;
+      z-index: 1;
+      // max-width: 760px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-eyebrow {
+      font-size: g.$text-12;
+      color: #a78bfa;
+      font-weight: 700;
+      letter-spacing: 0;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: 0;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      word-break: keep-all;
+      overflow-wrap: anywhere;
+
+      .accent {
+        background: linear-gradient(135deg, #a78bfa, #f472b6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+    }
+
+    p {
+      font-size: g.$text-16;
+      color: g.$g-color;
+      max-width: 600px;
+      line-height: 1.6;
+      word-break: keep-all;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  /* 무드 그리드 */
+  .mood-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 60px;
+
+    @media (max-width: 1100px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .mood-card {
+    position: relative;
+    box-sizing: border-box;
+    aspect-ratio: 4 / 5;
+    padding: 28px 22px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid #2a2a2a;
+    border-radius: g.$radius-md;
+    cursor: pointer;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    color: g.$w-color;
+    text-decoration: none;
+    transition:
+      border-color 0.3s,
+      transform 0.3s;
+
+    .mood-card-bg {
+      position: absolute;
+      inset: 0;
+      opacity: 0.6;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+
+    &:hover {
+      transform: translateY(-6px);
+      border-color: #3a3a3a;
+
+      .mood-card-bg {
+        opacity: 1;
+      }
+
+      .mood-icon-wrap {
+        transform: scale(1.1);
+      }
+
+      .mood-cta {
+        transform: translateX(4px);
+      }
+    }
+
+    .mood-icon-wrap {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 2px solid;
+      background: rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      position: relative;
+      z-index: 1;
+      transition: transform 0.3s;
+    }
+
+    .mood-card-main,
+    .mood-card-copy {
+      display: contents;
+    }
+
+    .mood-emoji {
+      position: absolute;
+      top: 24px;
+      right: 22px;
+      font-size: g.$text-24;
+      opacity: 0.4;
+    }
+
+    h3 {
+      font-size: g.$text-20;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    p {
+      font-size: g.$text-13;
+      color: g.$g-color;
+      line-height: 1.6;
+      margin-bottom: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .mood-cta {
+      font-size: g.$text-13;
+      font-weight: 600;
+      margin-top: 16px;
+      transition: transform 0.2s;
+      position: relative;
+      z-index: 1;
+    }
+  }
+
+  /* 안내 섹션 */
+  .mood-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .info-card {
+    box-sizing: border-box;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid #2a2a2a;
+    border-radius: g.$radius-md;
+
+    h3 {
+      font-size: g.$text-16;
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    p {
+      font-size: g.$text-13;
+      color: g.$g-color;
+      line-height: 1.7;
+
+      strong {
+        color: g.$w-color;
+        font-weight: 600;
+      }
+
+      a {
+        color: g.$main-color;
+        font-weight: 600;
+        text-decoration: underline;
+
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .inner {
+      width: min(100%, calc(100% - 48px));
+    }
+
+    .mood-hero {
+      /* 태블릿: 페이지 상단 패딩(16px)까지 상쇄해 상단 밀착 유지 */
+      margin-top: -(g.$header-height + 16px);
+      padding: (g.$header-height + 24px) 0 40px;
+      margin-bottom: 36px;
+
+      h1 {
+        font-size: 36px;
+      }
+    }
+
+    .mood-card {
+      aspect-ratio: 16 / 11;
+      min-height: 220px;
+    }
+  }
+
+  @media (max-width: 760px) {
+    padding-bottom: 56px;
+    margin-top: 0;
+
+    .inner {
+      width: min(100%, calc(100% - 32px));
+    }
+
+    .mood-hero {
+      /* 모바일: 헤더만큼 내려와 헤더 아래에서 시작 */
+      margin-top: 0;
+      padding: 28px 0 28px;
+      margin-bottom: 28px;
+
+      .hero-eyebrow {
+        margin-bottom: 12px;
+        font-size: 11px;
+      }
+
+      h1 {
+        max-width: 10em;
+        font-size: 28px;
+        line-height: 1.25;
+
+        br {
+          display: none;
+        }
+      }
+
+      p {
+        max-width: 22em;
+        font-size: g.$text-14;
+        line-height: 1.55;
+      }
+    }
+
+    .mood-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+
+    .mood-card {
+      aspect-ratio: auto;
+      min-height: 132px;
+      padding: 16px;
+
+      .mood-card-main {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .mood-card-copy {
+        display: block;
+        min-width: 0;
+        padding-top: 2px;
+      }
+
+      .mood-icon-wrap {
+        width: 44px;
+        height: 44px;
+        flex: 0 0 44px;
+        margin-bottom: 0;
+
+        img {
+          width: 26px;
+          height: 26px;
+        }
+      }
+
+      h3 {
+        font-size: g.$text-16;
+        margin-bottom: 4px;
+      }
+
+      p {
+        font-size: g.$text-12;
+        line-height: 1.5;
+      }
+
+      .mood-cta {
+        margin-top: auto;
+        padding-top: 12px;
+      }
+    }
+
+    .mood-info {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .info-card {
+      padding: 20px;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .inner {
+      width: min(100%, calc(100% - 32px));
+    }
+
+    .mood-hero {
+      padding: 24px 0 24px;
+
+      .hero-eyebrow {
+        margin-bottom: 10px;
+      }
+
+      h1 {
+        max-width: 9.5em;
+        font-size: 24px;
+      }
+
+      p {
+        max-width: 20em;
+        font-size: g.$text-13;
+      }
+    }
+
+    .mood-card {
+      min-height: 124px;
+      padding: 14px;
+
+      .mood-card-main {
+        gap: 10px;
+
+        .mood-card-copy {
+          h3 {
+            font-size: g.$text-14;
+          }
+        }
+      }
+
+      .mood-icon-wrap {
+        width: 40px;
+        height: 40px;
+        flex-basis: 40px;
+
+        img {
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
+  }
+}
+
+/* ===== 반응형: 사이드메뉴(nav) 좌측 여백 확보 ===== */
+@include g.respond(laptop) {
+  .mood-main-page {
+    padding-left: 80px;
+  }
+}
+
+@include g.respond(tablet) {
+  .mood-main-page {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+@include g.respond(mobile) {
+  .mood-main-page {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}

@@ -1,0 +1,970 @@
+@use "@/app/globals" as g;
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: calc(80vh + g.$header-height);
+  min-height: calc(480px + g.$header-height);
+  margin-top: -(g.$header-height) !important;
+  overflow: hidden;
+  background: #141414;
+  user-select: none;
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  .hero-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0;
+    transition: opacity 0.7s ease;
+  }
+
+  .hero-backdrop.visible,
+  .hero-loading .hero-backdrop,
+  .hero-empty .hero-backdrop {
+    opacity: 1;
+  }
+
+  .hero-video-poster {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0;
+    transition: opacity 1.4s ease;
+  }
+
+  .hero-video-poster::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.08);
+  }
+
+  .hero-video-poster.visible {
+    opacity: 1;
+  }
+
+  .hero-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    width: 100%;
+    height: 56.25vw;
+    min-width: 177.78vh;
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(1.1) translate(-50%, -45%);
+    transition: opacity 0.8s ease;
+  }
+
+  .hero-video.visible {
+    opacity: 1;
+  }
+
+  .hero-video.previous {
+    opacity: 1;
+    animation: hero-video-fade-out 0.9s ease forwards;
+  }
+
+  .hero-video-shield {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    cursor: default;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, rgba(20, 20, 20, 0.38) 0%, rgba(20, 20, 20, 0.14) 45%, transparent 80%),
+      linear-gradient(to top, #141414 0%, rgba(20, 20, 20, 0.18) 35%, transparent 60%);
+  }
+
+  .hero-backdrop::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(20, 20, 20, 0.38) 0%, rgba(20, 20, 20, 0.14) 45%, transparent 80%),
+      linear-gradient(to top, #141414 0%, rgba(20, 20, 20, 0.18) 35%, transparent 60%);
+  }
+
+  .hero-backdrop.no-img {
+    background: linear-gradient(125deg,
+        #0d1525 0%,
+        #1a2540 30%,
+        #0f1e35 55%,
+        #1a1030 80%,
+        #0d0d1a 100%);
+  }
+
+  .hero-backdrop.no-img::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 62% 38%,
+        rgba(30, 80, 160, 0.32) 0%,
+        transparent 52%),
+      radial-gradient(ellipse at 82% 18%,
+        rgba(120, 20, 50, 0.2) 0%,
+        transparent 44%);
+  }
+
+  .hero-posters {
+    position: absolute;
+    right: 48px;
+    bottom: 54px;
+    z-index: 10;
+    width: min(56vw, 760px);
+    height: clamp(220px, 30vh, 325px);
+    pointer-events: none;
+  }
+
+  .hero-poster {
+    position: absolute;
+    top: clamp(13px, 1.9vh, 20px);
+    left: 50%;
+    display: block;
+    width: clamp(130px, 12.5vw, 190px);
+    height: clamp(185px, 25.4vh, 275px);
+    overflow: hidden;
+    color: #fff;
+    background: rgba(224, 224, 224, 0.5);
+    border: 0;
+    border-radius: 8px;
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.34);
+    opacity: 0.72;
+    pointer-events: auto;
+    transform: translateX(-50%);
+    transition:
+      top 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+      right 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+      left 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+      width 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+      height 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.3s ease,
+      transform 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.3s ease;
+    will-change: left, right, top, width, height, transform, opacity;
+    animation: hero-poster-enter 0.46s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: pointer;
+  }
+
+  .hero-poster.before-2,
+  .hero-poster.after-2 {
+    top: clamp(28px, 3.9vh, 42px);
+    z-index: 1;
+    width: clamp(115px, 11.2vw, 170px);
+    height: clamp(163px, 22.4vh, 242px);
+    opacity: 0.42;
+  }
+
+  .hero-poster.before-2 {
+    left: 14%;
+    transform: translateX(-50%);
+  }
+
+  .hero-poster.before-1 {
+    left: 29%;
+    z-index: 3;
+    width: clamp(130px, 12.5vw, 190px);
+    height: clamp(196px, 26.8vh, 290px);
+    transform: translateX(-50%);
+  }
+
+  .hero-poster.active {
+    top: 0;
+    z-index: 6;
+    width: clamp(148px, 14.5vw, 220px);
+    height: clamp(220px, 30vh, 325px);
+    opacity: 1;
+    transform: translateX(-50%);
+    box-shadow: 0 22px 46px rgba(0, 0, 0, 0.48);
+  }
+
+  .hero-poster.after-1 {
+    right: auto;
+    left: 71%;
+    z-index: 3;
+    width: clamp(130px, 12.5vw, 190px);
+    height: clamp(196px, 26.8vh, 290px);
+    transform: translateX(-50%);
+  }
+
+  .hero-poster.after-2 {
+    right: auto;
+    left: 86%;
+    transform: translateX(-50%);
+  }
+
+  .hero-poster:hover {
+    opacity: 1;
+  }
+
+  .hero-poster:not(.active)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.42);
+  }
+
+  .hero-poster img,
+  .hero-poster-fallback {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-poster-fallback {
+    background: linear-gradient(160deg, #2a1a3a, #5a2d7a);
+  }
+
+  .hero-poster-grad {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    overflow: hidden;
+    padding: 42px 10px 10px;
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.3;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: linear-gradient(to top,
+        rgba(0, 0, 0, 0.88) 0%,
+        transparent 100%);
+  }
+
+  .hero-nav {
+    position: absolute;
+    right: 188px;
+    bottom: 13px;
+    z-index: 12;
+    display: flex;
+    width: 340px;
+    justify-content: space-between;
+    gap: 0;
+    pointer-events: none;
+  }
+
+  .hero-nav-btn {
+    display: flex;
+    width: 34px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 16px;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    backdrop-filter: blur(4px);
+    pointer-events: auto;
+    transition:
+      background 0.18s ease,
+      border-color 0.18s ease;
+  }
+
+  .hero-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.8);
+  }
+
+  .hero-content {
+    position: absolute;
+    bottom: 28px;
+    left: max(#{g.$main-menu-width}, clamp(24px, calc((100vw - #{g.$main-menu-width} - 1920px) / 2), 80px));
+    z-index: 10;
+    max-width: 520px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 13px;
+    padding: 3px 8px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 4px;
+  }
+
+  .hero-logo-img {
+    display: block;
+    max-width: 460px;
+    max-height: 160px;
+    margin-bottom: 16px;
+    object-fit: contain;
+    object-position: left center;
+  }
+
+  .hero-logo-text {
+    margin-bottom: 13px;
+    font-size: 40px;
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.8px;
+  }
+
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 14px;
+  }
+
+  .hero-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .hero-meta-sep {
+    opacity: 0.35;
+  }
+
+  .hero-rating-stars {
+    color: #E50914;
+    font-size: 14px;
+  }
+
+  .hero-rating-val {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .hero-age-badge {
+    padding: 1px 6px;
+    font-size: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+  }
+
+  .hero-desc {
+    display: -webkit-box;
+    max-width: 430px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 14px;
+    line-height: 1.72;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+
+  .hero-btns {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn-play,
+  .btn-info {
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    cursor: pointer;
+    transition:
+      background 0.15s ease,
+      transform 0.1s ease;
+  }
+
+  .btn-play {
+    gap: 8px;
+    height: 46px;
+    padding: 0 22px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    background: g.$main-color;
+  }
+
+  .btn-play:hover {
+    background: #b80710;
+    transform: scale(1.02);
+  }
+
+  .btn-play svg {
+    width: 15px;
+    height: 15px;
+    fill: #fff;
+  }
+
+  .btn-info {
+    gap: 7px;
+    height: 46px;
+    padding: 0 18px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(4px);
+  }
+
+  .btn-info:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .btn-info svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: #fff;
+    stroke-linecap: round;
+    stroke-width: 2;
+  }
+
+  // 도트 인디케이터: 기본(데스크톱)에서는 숨김 — 포스터 스와이퍼가 전환을 담당.
+  // 포스터가 숨겨지는 모바일에서만 표시 (아래 mobile 블록 참고)
+  .hero-dots {
+    display: none;
+    gap: 6px;
+    justify-content: center;
+  }
+
+  .hero-dot {
+    width: 6px;
+    height: 6px;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.35);
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    transition:
+      width 0.25s ease,
+      border-radius 0.25s ease,
+      background 0.25s ease;
+  }
+
+  .hero-dot.active {
+    width: 44px;
+    background: g.$main-color;
+    border-radius: 3px;
+    box-shadow: 0 0 4px 1px rgba(g.$main-color, 0.5), 0 0 10px 2px rgba(g.$main-color, 0.25);
+  }
+
+  .hero-skeleton {
+    overflow: hidden;
+    background: linear-gradient(90deg, #222 25%, #2e2e2e 50%, #222 75%);
+    background-size: 800px 100%;
+    border-radius: 4px;
+    animation: hero-shimmer 1.4s infinite linear;
+  }
+
+  .hero-badge-skeleton {
+    width: 62px;
+    height: 19px;
+    margin-bottom: 13px;
+  }
+
+  .hero-title-skeleton {
+    width: 360px;
+    height: 58px;
+    margin-bottom: 16px;
+  }
+
+  .hero-meta-skeleton {
+    width: 260px;
+    height: 16px;
+    margin-bottom: 16px;
+  }
+
+  .hero-desc-skeleton {
+    width: 430px;
+    height: 68px;
+  }
+
+  @keyframes hero-shimmer {
+    0% {
+      background-position: -400px 0;
+    }
+
+    100% {
+      background-position: 400px 0;
+    }
+  }
+
+  @keyframes hero-poster-enter {
+    0% {
+      filter: blur(5px);
+    }
+
+    100% {
+      filter: blur(0);
+    }
+  }
+
+  @keyframes hero-video-fade-out {
+    0% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0;
+    }
+  }
+
+
+  @media (max-width: 900px) {
+    & {
+      height: 100svh;
+      min-height: 560px;
+    }
+
+    .hero-content {
+      right: 24px;
+      bottom: 92px;
+      left: #{g.$main-menu-width};
+      max-width: none;
+    }
+
+    .hero-logo-text {
+      font-size: 42px;
+    }
+
+    .hero-posters {
+      right: 24px;
+      bottom: 46px;
+      width: min(68vw, 390px);
+      height: 146px;
+    }
+
+    .hero-poster {
+      top: 12px;
+      width: 86px;
+      height: 122px;
+    }
+
+    .hero-poster.before-2,
+    .hero-poster.after-2 {
+      top: 22px;
+      width: 76px;
+      height: 106px;
+    }
+
+    .hero-poster.before-2 {
+      left: 14%;
+    }
+
+    .hero-poster.before-1 {
+      left: 29%;
+      width: 86px;
+      height: 130px;
+    }
+
+    .hero-poster.active {
+      width: 100px;
+      height: 146px;
+    }
+
+    .hero-poster.after-1 {
+      right: auto;
+      left: 71%;
+      width: 86px;
+      height: 130px;
+    }
+
+    .hero-poster.after-2 {
+      right: auto;
+      left: 86%;
+    }
+
+    .hero-nav {
+      right: 48px;
+      bottom: 7px;
+      width: 286px;
+    }
+  }
+}
+
+/* ===== 반응형: 히어로 높이 축소 ===== */
+@include g.respond(laptop) {
+  .hero {
+    height: calc(72vh + g.$header-height);
+    min-height: calc(440px + g.$header-height);
+  }
+}
+
+@include g.respond(tablet) {
+  .hero {
+    width: 100vw;
+    height: clamp(520px, 72svh, 680px);
+    aspect-ratio: auto;
+    min-height: 0;
+    margin-top: -(g.$header-height) !important;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    left: auto;
+    transform: none;
+
+    .hero-backdrop,
+    .hero-video-poster,
+    .hero-video-shield {
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .hero-video {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      transform: none;
+    }
+
+    .hero-backdrop,
+    .hero-video-poster {
+      background-position: center center;
+      background-size: cover;
+    }
+
+    .hero-posters {
+      display: none;
+    }
+
+    .hero-dots {
+      position: absolute;
+      bottom: 28px;
+      left: 24px;
+      z-index: 11;
+      display: flex;
+      padding: 0;
+    }
+  }
+}
+
+/* ===== 반응형: 히어로 버튼 + 포스터 스와이퍼 ===== */
+@include g.respond(laptop) {
+  .hero .hero-posters {
+    right: 32px;
+    width: min(52vw, 620px);
+    height: clamp(190px, 26vh, 280px);
+  }
+}
+
+@include g.respond(tablet) {
+  .hero {
+    .hero-btns {
+      gap: 8px;
+    }
+
+    .btn-play,
+    .btn-info {
+      height: 40px;
+      font-size: 14px;
+    }
+
+    .btn-play {
+      padding: 0 16px;
+    }
+
+    .btn-info {
+      padding: 0 14px;
+    }
+
+    .btn-play svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .btn-info svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .hero-nav-btn {
+      width: 36px;
+      height: 36px;
+    }
+
+    .hero-posters {
+      display: none;
+    }
+
+    .hero-poster {
+      top: 12px;
+      width: 96px;
+      height: 136px;
+    }
+
+    .hero-poster.before-2,
+    .hero-poster.after-2 {
+      top: 22px;
+      width: 84px;
+      height: 118px;
+    }
+
+    .hero-poster.before-1,
+    .hero-poster.after-1 {
+      width: 96px;
+      height: 144px;
+    }
+
+    .hero-poster.active {
+      top: 0;
+      width: 112px;
+      height: 164px;
+    }
+
+    .hero-nav {
+      right: 56px;
+      bottom: 8px;
+      width: 280px;
+    }
+  }
+}
+
+@include g.respond(mobile) {
+  .hero {
+    .hero-btns {
+      gap: 6px;
+    }
+
+    .btn-play,
+    .btn-info {
+      height: 36px;
+      font-size: 13px;
+      border-radius: 4px;
+    }
+
+    .btn-play {
+      padding: 0 14px;
+      gap: 6px;
+    }
+
+    .btn-info {
+      padding: 0 12px;
+      gap: 5px;
+    }
+
+    .btn-play svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .btn-info svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .hero-nav-btn {
+      width: 30px;
+      height: 30px;
+    }
+
+    /* 폰에서는 포스터 스와이퍼 숨김(히어로 콘텐츠 공간 확보) */
+    .hero-posters {
+      display: none;
+    }
+  }
+}
+
+/* ===== 반응형(정밀): 히어로 로고/콘텐츠 축소 ===== */
+@include g.respond(laptop) {
+  .hero .hero-logo-img {
+    max-width: 320px;
+    max-height: 112px;
+  }
+}
+
+@include g.respond(tablet) {
+  .hero {
+    .hero-content {
+      z-index: 10;
+      max-width: min(58vw, 520px);
+      right: 24px;
+      bottom: 42px;
+      left: 24px;
+    }
+
+    .hero-logo-img {
+      max-width: 240px;
+      max-height: 88px;
+      margin-bottom: 12px;
+    }
+
+    .hero-logo-text {
+      font-size: 30px;
+    }
+
+    .hero-desc {
+      font-size: 13px;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      margin-bottom: 14px;
+    }
+  }
+}
+
+@keyframes hero-slide-in-left {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes hero-slide-in-right {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes hero-content-rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@include g.respond(mobile) {
+  .hero {
+    .hero-slide-left  { animation: hero-slide-in-left  0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
+    .hero-slide-right { animation: hero-slide-in-right 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
+    .hero-content-enter { animation: hero-content-rise 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both; }
+  }
+}
+
+/* ===== 반응형(모바일): 영상/콘텐츠 분리 레이아웃 =====
+   모바일에서는 히어로를 [상단: 16:9 영상] + [하단: 로고·메타·버튼]
+   두 영역으로 나눠서 콘텐츠가 영상을 가리지 않게 한다. */
+@include g.respond(mobile) {
+  .hero {
+    height: 70vh !important;
+    min-height: 0 !important;
+    overflow: hidden;
+    padding-bottom: 4px;
+
+    .hero-mobile-tap {
+      position: absolute;
+      inset: 0;
+      z-index: 6;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+    }
+
+    .hero-backdrop,
+    .hero-video-poster,
+    .hero-video-shield {
+      top: 0;
+      bottom: 0;
+      height: 100%;
+    }
+
+    /* 모바일: 영상이 히어로(70vh) 전체를 덮도록 확대 + 정중앙 배치 */
+    .hero-video {
+      top: 50%;
+      left: 50%;
+      height: 70vh;
+      width: calc(70vh * 16 / 9);
+      min-width: 100vw;
+      margin: 0;
+      transform: translate(-50%, -50%) scale(1.45);
+    }
+
+    &::after,
+    .hero-backdrop::after {
+      top: 0;
+      bottom: 0;
+      height: 100%;
+      background: linear-gradient(to top, #141414 0%, rgba(20, 20, 20, 0.4) 30%, transparent 60%);
+    }
+
+    .hero-content {
+      position: absolute;
+      top: auto;
+      right: 0;
+      bottom: 36px;
+      left: 0;
+      max-width: none;
+      margin-top: 0;
+      padding: 0 16px 0 20px;
+    }
+
+    .hero-badge {
+      margin-bottom: 8px;
+    }
+
+    .hero-logo-img {
+      width: 240px;
+      height: 88px;
+      max-width: 240px;
+      max-height: 88px;
+      margin-bottom: 10px;
+      object-fit: contain;
+      object-position: left bottom;
+    }
+
+    .hero-logo-text {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .hero-meta {
+      display: none;
+    }
+
+    .hero-desc {
+      max-width: 50%;
+      margin-bottom: 14px;
+      font-size: 12px;
+      opacity: 0.65;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+    }
+
+    // 버튼은 가로 배치 유지 (재생/상세 + 하트/공유 한 줄)
+    .hero-btns {
+      align-items: center;
+      flex-direction: row;
+      flex-wrap: wrap;
+      width: auto;
+    }
+
+    .hero-dots {
+      position: absolute;
+      bottom: 30px;
+      left: 0;
+      z-index: 11;
+      display: flex;
+      padding: 0 16px 0 20px;
+    }
+  }
+}

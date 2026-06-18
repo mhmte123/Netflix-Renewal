@@ -1,0 +1,318 @@
+@use "@/app/globals" as g;
+
+.playlist-detail-page {
+  background-color: g.$bg-color;
+  color: g.$w-color;
+  min-height: 100vh;
+  padding-bottom: 80px;
+
+  .pl-empty {
+    padding: 80px 5%;
+    text-align: center;
+    color: g.$g-color;
+  }
+
+  /* ── 히어로 배너 ───────────────────────────── */
+  .pl-hero {
+    position: relative;
+    height: 320px;
+    overflow: hidden;
+
+    .pl-hero-bg {
+      position: absolute;
+      inset: 0;
+      display: flex;
+
+      img {
+        flex: 1;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(0.85);
+      }
+    }
+
+    .pl-hero-gradient {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, g.$bg-color 2%, rgba(20, 20, 20, 0.2) 60%),
+        linear-gradient(to right, rgba(20, 20, 20, 0.85) 0%, rgba(20, 20, 20, 0.1) 45%);
+    }
+
+    .pl-hero-creator {
+      position: absolute;
+      left: 5%;
+      bottom: 22px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 2;
+
+      .pl-follow-btn {
+        padding: 6px 14px;
+        border-radius: 6px;
+        border: 0;
+        background: #e50914;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.15s ease, filter 0.15s ease;
+
+        &:hover {
+          filter: brightness(1.08);
+        }
+
+        &.following {
+          background: rgba(255, 255, 255, 0.12);
+          border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+      }
+
+      .pl-creator-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #444;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 15px;
+        color: #fff;
+        overflow: hidden;
+        border: 2px solid rgba(255, 255, 255, 0.25);
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      .pl-creator-name {
+        font-size: 15px;
+        font-weight: 600;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+      }
+
+    }
+  }
+
+  /* ── 본문 ───────────────────────────── */
+  .pl-body {
+    padding: 24px 5% 0;
+    max-width: 1100px;
+    margin: auto;
+  }
+
+  .pl-title {
+    font-size: g.$text-32;
+    font-weight: 800;
+    margin-bottom: 10px;
+  }
+
+  .pl-desc {
+    font-size: g.$text-16;
+    color: g.$g-color;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    white-space: pre-wrap;
+  }
+
+  .pl-stat-line {
+    font-size: g.$text-14;
+    color: g.$g-color;
+    margin-bottom: 18px;
+
+    .dot {
+      margin: 0 6px;
+      opacity: 0.6;
+    }
+  }
+
+  .pl-actions {
+    display: flex;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    margin-bottom: 34px;
+
+    .pl-action {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 0;
+      background: transparent;
+      border: 0;
+      color: g.$w-color;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+
+      & + .pl-action {
+        border-left: 1px solid rgba(255, 255, 255, 0.12);
+      }
+      &:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+      &.active {
+        color: g.$main-color;
+      }
+    }
+  }
+
+  /* ── 작품 목록 헤더 ───────────────────────────── */
+  .pl-works-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+    h2 {
+      font-size: g.$text-24;
+      font-weight: 800;
+
+      span {
+        color: g.$main-color;
+        margin-left: 4px;
+      }
+    }
+
+    .pl-view-toggle {
+      display: flex;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 3px;
+
+      button {
+        width: 34px;
+        height: 30px;
+        border: 0;
+        background: transparent;
+        color: g.$g-color;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 15px;
+
+        &.active {
+          background: rgba(255, 255, 255, 0.16);
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  /* ── 작품 카드 ───────────────────────────── */
+  .pl-works--grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 22px 16px;
+  }
+
+  .pl-works--list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .pl-work-card {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+
+    .pl-work-poster {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      border-radius: g.$radius-md;
+      overflow: hidden;
+      background: #1e1e1e;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.2s ease;
+      }
+      .pl-work-fallback {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        color: #555;
+      }
+    }
+
+    &:hover .pl-work-poster img {
+      transform: scale(1.04);
+    }
+
+    .pl-work-info {
+      padding-top: 10px;
+      text-align: center;
+
+      h3 {
+        font-size: g.$text-16;
+        font-weight: 700;
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .pl-work-rating {
+        display: block;
+        font-size: 13px;
+        color: g.$g-color;
+        margin-bottom: 2px;
+      }
+      .pl-work-cat {
+        display: block;
+        font-size: 12px;
+        color: g.$g-color;
+      }
+    }
+  }
+
+  /* 리스트 뷰: 가로 배치 */
+  .pl-works--list .pl-work-card {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+
+    .pl-work-poster {
+      width: 80px;
+      flex-shrink: 0;
+    }
+    .pl-work-info {
+      padding-top: 0;
+      text-align: left;
+      h3 {
+        white-space: normal;
+      }
+      .pl-work-rating,
+      .pl-work-cat {
+        display: inline-block;
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+/* ===== 반응형: 사이드메뉴(nav) 회피 (배경은 풀블리드 유지) ===== */
+@include g.respond(laptop) {
+  .playlist-detail-page .pl-hero-creator { left: 80px; }
+}
+@include g.respond(tablet) {
+  .playlist-detail-page .pl-hero-creator { left: 64px; }
+  .playlist-detail-page .pl-body { padding-left: 64px; }
+}
+@include g.respond(mobile) {
+  .playlist-detail-page .pl-hero-creator { left: 56px; }
+  .playlist-detail-page .pl-body { padding-left: 56px; padding-right: 16px; }
+}

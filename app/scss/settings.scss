@@ -1,0 +1,654 @@
+@use "@/app/globals" as g;
+
+.acset-page {
+  min-height: calc(100vh - g.$header-height);
+  background-color: g.$bg-color;
+  color: g.$w-color;
+  padding: 40px 0 80px;
+}
+
+.acset-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 40px;
+
+  @media (max-width: 768px) {
+    padding: 0 20px;
+  }
+}
+
+// ─── 헤더 ─────────────────────────────────────────────────────────────────────
+
+.acset-top {
+  margin-bottom: 28px;
+}
+
+.acset-title {
+  font-size: g.$text-32;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.acset-subtitle {
+  font-size: g.$text-14;
+  color: g.$main-menu-color;
+}
+
+// ─── 가로 탭 ──────────────────────────────────────────────────────────────────
+
+.acset-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid rgba(g.$w-color, 0.1);
+  margin-bottom: 28px;
+  overflow-x: auto;
+
+  // 스크롤바 숨김
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.acset-tab {
+  flex-shrink: 0;
+  padding: 12px 18px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: g.$main-menu-color;
+  font-size: g.$text-14;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  margin-bottom: -1px;
+
+  &:hover {
+    color: rgba(g.$w-color, 0.85);
+  }
+
+  &.is-active {
+    color: g.$w-color;
+    font-weight: 700;
+    border-bottom-color: g.$main-color;
+  }
+}
+
+// ─── 패널 ─────────────────────────────────────────────────────────────────────
+
+.acset-panel {
+  background: #1c1c1c;
+  border: 1px solid #2e2e2e;
+  border-radius: g.$radius-md;
+  overflow: hidden;
+}
+
+.acset-panel-head {
+  padding: 22px 28px 16px;
+  border-bottom: 1px solid #2e2e2e;
+
+  h2 {
+    font-size: g.$text-18;
+    font-weight: 700;
+  }
+}
+
+.acset-panel-body {
+  padding: 8px 28px 22px;
+}
+
+// ─── row ──────────────────────────────────────────────────────────────────────
+
+.acset-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid #2e2e2e;
+  gap: 20px;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.acset-row-label {
+  font-size: g.$text-14;
+  font-weight: 500;
+}
+
+.acset-row-desc {
+  font-size: g.$text-12;
+  color: g.$main-menu-color;
+  margin-top: 3px;
+}
+
+.acset-row-action {
+  flex-shrink: 0;
+}
+
+.acset-row-multi {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.acset-row-value {
+  font-size: g.$text-14;
+  color: g.$main-menu-color;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.acset-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: g.$text-12;
+  font-weight: 600;
+  color: g.$main-menu-color;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.acset-error {
+  padding: 12px 0 4px;
+  color: #ff7777;
+  font-size: g.$text-13;
+}
+
+// ─── 버튼 ─────────────────────────────────────────────────────────────────────
+
+.acset-btn {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: g.$radius-md;
+  border: 1px solid #3a3a3a;
+  background: transparent;
+  color: g.$w-color;
+  font-size: g.$text-13;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    background: #2a2a2a;
+    border-color: #555;
+  }
+
+  &.red {
+    background: g.$main-color;
+    border-color: g.$main-color;
+
+    &:hover {
+      background: #f40612;
+    }
+  }
+
+  &.danger {
+    color: #ff6b6b;
+    border-color: #5a2a2a;
+
+    &:hover {
+      background: rgba(255, 107, 107, 0.1);
+    }
+  }
+}
+
+// ─── 토글 ─────────────────────────────────────────────────────────────────────
+
+.acset-toggle {
+  width: 44px;
+  height: 24px;
+  border-radius: 100px;
+  background: #3a3a3a;
+  border: none;
+  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &::after {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: g.$w-color;
+    top: 3px;
+    left: 3px;
+    transition: left 0.2s ease;
+  }
+
+  &.on {
+    background: g.$main-color;
+
+    &::after {
+      left: 23px;
+    }
+  }
+}
+
+// ─── select ───────────────────────────────────────────────────────────────────
+
+.acset-select {
+  padding: 8px 14px;
+  border: 1px solid #3a3a3a;
+  border-radius: g.$radius-md;
+  background: g.$bg-color;
+  color: g.$w-color;
+  font-size: g.$text-13;
+  min-width: 130px;
+  cursor: pointer;
+}
+
+// ─── 멤버십 박스 ──────────────────────────────────────────────────────────────
+
+.acset-plan-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: g.$bg-color;
+  border: 1px solid #2e2e2e;
+  border-radius: g.$radius-md;
+  margin: 12px 0;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.acset-plan-name {
+  font-size: g.$text-18;
+  font-weight: 700;
+}
+
+.acset-plan-price {
+  font-size: g.$text-13;
+  color: g.$main-menu-color;
+  margin-top: 4px;
+}
+
+.acset-plan-actions {
+  display: flex;
+  gap: 10px;
+}
+
+// ─── 결제 수단 ────────────────────────────────────────────────────────────────
+
+.acset-pay-method {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid #2e2e2e;
+}
+
+.acset-pay-logo {
+  width: 40px;
+  height: 28px;
+  border-radius: 4px;
+  background: #3a3a3a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: g.$main-menu-color;
+  flex-shrink: 0;
+}
+
+.acset-pay-info {
+  flex: 1;
+}
+
+.acset-pay-default {
+  font-size: g.$text-12;
+  color: g.$main-color;
+}
+
+// ─── 프로필 관리 ──────────────────────────────────────────────────────────────
+
+.acset-profile-grid {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 16px 0;
+}
+
+.acset-profile-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  background: transparent;
+}
+
+.acset-profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: g.$radius-md;
+  overflow: hidden;
+  background: linear-gradient(135deg, #2a2a32, #3a3a48);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.acset-profile-add {
+  background: transparent;
+  border: 2px dashed #3a3a3a;
+  color: g.$main-menu-color;
+}
+
+.acset-profile-name {
+  font-size: g.$text-13;
+}
+
+.acset-profile-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.72);
+}
+
+.acset-profile-modal {
+  width: min(100%, 460px);
+  max-height: calc(100vh - 48px);
+  border: 1px solid #2e2e2e;
+  border-radius: g.$radius-md;
+  background: #1c1c1c;
+  color: g.$w-color;
+  overflow: hidden;
+}
+
+.acset-profile-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 1px solid #2e2e2e;
+
+  h2 {
+    font-size: g.$text-18;
+    font-weight: 700;
+  }
+
+  button {
+    border: 0;
+    background: transparent;
+    color: g.$main-menu-color;
+    font-size: g.$text-24;
+    line-height: 1;
+    cursor: pointer;
+
+    &:hover {
+      color: g.$w-color;
+    }
+  }
+}
+
+.acset-profile-modal-body {
+  display: grid;
+  gap: 18px;
+  padding: 22px;
+}
+
+.acset-profile-modal-avatar {
+  width: 92px;
+  height: 92px;
+  border-radius: g.$radius-md;
+  object-fit: cover;
+}
+
+.acset-profile-field {
+  display: grid;
+  gap: 8px;
+
+  span {
+    color: g.$main-menu-color;
+    font-size: g.$text-13;
+  }
+
+  input {
+    width: 100%;
+    border: 1px solid #3a3a3a;
+    border-radius: g.$radius-md;
+    padding: 11px 12px;
+    background: g.$bg-color;
+    color: g.$w-color;
+    font-size: g.$text-14;
+    outline: none;
+
+    &:focus {
+      border-color: g.$w-color;
+    }
+  }
+}
+
+.acset-profile-avatar-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  button {
+    width: 54px;
+    height: 54px;
+    border: 2px solid transparent;
+    border-radius: g.$radius-md;
+    padding: 0;
+    background: transparent;
+    overflow: hidden;
+    cursor: pointer;
+
+    &.is-selected {
+      border-color: g.$w-color;
+    }
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.acset-profile-avatar-options-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  span {
+    color: g.$main-menu-color;
+    font-size: g.$text-13;
+  }
+
+  button {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: g.$w-color;
+    font-size: g.$text-13;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+
+    &:hover {
+      color: g.$main-color;
+    }
+  }
+}
+
+.acset-profile-picker {
+  max-height: calc(100vh - 138px);
+  overflow-y: auto;
+  padding: 22px;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  h3 {
+    margin-top: 14px;
+    color: g.$w-color;
+    font-size: g.$text-24;
+    font-weight: 800;
+  }
+}
+
+.acset-profile-picker-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: g.$main-menu-color;
+  font-size: g.$text-13;
+  cursor: pointer;
+
+  &:hover {
+    color: g.$w-color;
+  }
+
+  span {
+    width: 9px;
+    height: 9px;
+    border-left: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+  }
+}
+
+.acset-profile-picker-current {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  color: g.$main-menu-color;
+  font-size: g.$text-13;
+
+  img {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    object-fit: cover;
+  }
+}
+
+.acset-profile-picker-section {
+  display: grid;
+  gap: 10px;
+  margin-top: 24px;
+
+  h4 {
+    color: g.$w-color;
+    font-size: g.$text-14;
+    font-weight: 800;
+  }
+}
+
+.acset-profile-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(62px, 1fr));
+  gap: 10px;
+
+  button {
+    aspect-ratio: 1;
+    overflow: hidden;
+    border: 2px solid transparent;
+    border-radius: g.$radius-md;
+    padding: 0;
+    background: #242424;
+    cursor: pointer;
+
+    &:hover,
+    &.is-selected {
+      border-color: g.$w-color;
+    }
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+}
+
+.acset-profile-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 18px 22px;
+  border-top: 1px solid #2e2e2e;
+
+  button {
+    border: 1px solid #3a3a3a;
+    border-radius: g.$radius-md;
+    padding: 9px 18px;
+    background: transparent;
+    color: g.$w-color;
+    font-size: g.$text-13;
+    cursor: pointer;
+
+    &:hover {
+      background: #2a2a2a;
+    }
+
+    &.is-primary {
+      border-color: g.$main-color;
+      background: g.$main-color;
+
+      &:hover {
+        background: #f40612;
+      }
+    }
+  }
+}
+
+/* ===== 반응형: 사이드메뉴(nav) 좌측 여백 확보 ===== */
+@include g.respond(laptop) {
+  .acset-page {
+    padding-left: 80px;
+  }
+}
+
+@include g.respond(tablet) {
+  .acset-page {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+@include g.respond(mobile) {
+  .acset-page {
+    padding-left: 56px;
+    padding-right: 16px;
+  }
+}

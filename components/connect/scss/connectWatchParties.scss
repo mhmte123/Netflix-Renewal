@@ -1,0 +1,401 @@
+@use "../../../app/globals.scss" as g;
+
+.connect-watch-parties {
+  position: relative;
+  margin-top: 20px;
+  overflow: hidden; // 👈 [추가] 브라우저 전체 창에 가로 스크롤바가 생기는 것을 원천 차단합니다.
+
+  &__inner {
+    width: calc(100vw - #{g.$main-menu-width});
+    padding-right: 0;
+    position: relative;
+  }
+}
+
+.cwp-swiper-shell {
+  position: relative;
+}
+
+.cwp-list {
+  width: 100%;
+  // 👈 [주의/원복] 리스트는 무조건 visible이어야 카드가 우측 화면 밖으로 쭉 나열됩니다!
+  overflow: visible !important;
+  padding: 6px 0 20px;
+
+  .swiper-wrapper {
+    align-items: stretch;
+  }
+}
+
+.cwp-slide {
+  height: auto;
+  display: flex;
+  // TSX 파일에서 slidesPerView={"auto"} 설정과 맞물려 각 카드의 고정 크기를 완벽하게 유지시킵니다.
+  width: clamp(330px, 20vw, 380px) !important;
+
+  .cwp-card {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.cwp-edge-nav {
+  --swiper-navigation-color: #fff;
+  --swiper-theme-color: #fff;
+  position: absolute;
+  top: calc(50% + 26px);
+  width: 44px;
+  height: 44px;
+  margin-top: -22px;
+  transform: none;
+  padding: 0;
+  background: none;
+  border: none;
+  color: #fff !important;
+  z-index: 150;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+
+  &::after {
+    display: none;
+  }
+
+  .swiper-navigation-icon {
+    display: block;
+    color: #fff !important;
+
+    path {
+      fill: #fff !important;
+    }
+  }
+
+  &:disabled {
+    opacity: 0 !important;
+    pointer-events: none;
+  }
+}
+
+.cwp-edge-nav--prev {
+  left: calc(#{g.$main-menu-width}) !important;
+  //left: 20px;
+
+  .swiper-navigation-icon {
+    transform: rotate(180deg);
+  }
+}
+
+.cwp-edge-nav--next {
+  right: 20px;
+}
+
+.connect-watch-parties:hover .cwp-edge-nav:not(:disabled) {
+  opacity: 1;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+/* --- 아래 카드 컴포넌트 세부 스타일은 기존과 동일 (유지) --- */
+.cwp-card {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  outline: none;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.035), transparent 42%),
+    #171717;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  scroll-snap-align: start;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: rgba(255, 255, 255, 0.34);
+    box-shadow: 0 24px 54px rgba(0, 0, 0, 0.42);
+
+    .cwp-thumb {
+      background-size: 104%;
+    }
+
+    .cwp-enter {
+      color: #fff;
+      background: rgba(0, 0, 0, 0.72);
+      span {
+        transform: translateX(3px);
+      }
+    }
+  }
+}
+
+.cwp-thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: #1a1a1a;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  transition: background-size 0.35s ease;
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      #e50914 0 22%,
+      rgba(255, 255, 255, 0.18) 22%
+    );
+  }
+}
+
+.cwp-thumb__shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.14), transparent 48%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.5), transparent 38%);
+}
+
+.cwp-status,
+.cwp-enter,
+.cwp-lock {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 5px;
+  background: rgba(5, 5, 7, 0.7);
+  backdrop-filter: blur(10px);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.cwp-lock {
+  top: 9px;
+  right: 9px;
+  gap: 5px;
+  padding: 5px 7px;
+  color: rgba(255, 255, 255, 0.9);
+
+  svg {
+    width: 12px;
+    height: 12px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+  }
+}
+
+.cwp-status {
+  top: 9px;
+  left: 9px;
+  gap: 6px;
+  padding: 5px 7px;
+  color: rgba(255, 255, 255, 0.88);
+  letter-spacing: 0.02em;
+}
+
+.cwp-status__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #e50914;
+  box-shadow: 0 0 10px rgba(229, 9, 20, 0.9);
+}
+
+.cwp-enter {
+  right: 9px;
+  bottom: 10px;
+  gap: 5px;
+  padding: 5px 7px;
+  color: rgba(255, 255, 255, 0.72);
+  background: rgba(0, 0, 0, 0.5);
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
+  span {
+    transition: transform 0.2s ease;
+  }
+}
+
+.cwp-body {
+  padding: 12px 13px 13px;
+}
+.cwp-kicker {
+  display: block;
+  margin-bottom: 5px;
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.cwp-title {
+  overflow: hidden;
+  margin: 0;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cwp-media-title {
+  overflow: hidden;
+  margin: 3px 0 0;
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cwp-meta {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 11px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cwp-host-block {
+  display: grid;
+  flex: 1 1 auto;
+  gap: 6px;
+  min-width: 0;
+}
+
+.cwp-host {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+
+  strong {
+    flex: 0 1 auto;
+    max-width: 70px;
+    overflow: hidden;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 12px;
+    font-weight: 800;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .rep-badge {
+    flex: 0 0 auto;
+    max-width: 150px;
+  }
+}
+
+.cwp-host__avatar {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.cwp-host__label {
+  color: rgba(255, 255, 255, 0.38);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.cwp-participants {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex: 0 0 auto;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 10px;
+  white-space: nowrap;
+
+  strong {
+    color: rgba(255, 255, 255, 0.86);
+    font-weight: 900;
+  }
+}
+
+.cwp-participants__avatars {
+  display: none;
+}
+
+@include g.respond(tablet) {
+  .connect-watch-parties__inner {
+    width: 100vw;
+    margin-left: 0;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .cwp-edge-nav--prev {
+    left: 0;
+  }
+
+  .cwp-edge-nav {
+    top: calc(50% + 22px);
+  }
+}
+
+@media (max-width: 768px) {
+  .cwp-edge-nav {
+    display: none !important;
+  }
+}
+
+@include g.respond(mobile) {
+  .connect-watch-parties {
+    margin-top: 12px;
+  }
+  .connect-watch-parties__inner {
+    padding-left: 20px;
+    padding-right: 12px;
+  }
+  .cwp-list {
+    padding-bottom: 12px;
+  }
+
+  .cwp-card {
+    border-radius: 8px;
+  }
+  .cwp-thumb {
+    aspect-ratio: 16 / 9;
+  }
+  .cwp-body {
+    padding: 14px;
+  }
+  .cwp-title {
+    font-size: 16px;
+  }
+  .cwp-meta {
+    align-items: flex-end;
+    margin-top: 13px;
+    padding-top: 12px;
+  }
+  .cwp-host {
+    gap: 7px;
+  }
+  .cwp-host .rep-badge {
+    max-width: 140px;
+  }
+  .cwp-host__avatar {
+    width: 30px;
+    height: 30px;
+  }
+}

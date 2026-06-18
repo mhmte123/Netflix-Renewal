@@ -1,0 +1,51 @@
+@use "@/app/globals" as g;
+
+.app-toast {
+  position: fixed;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(90vw, 440px);
+  background: #1f1f1f;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 12px 20px;
+  color: g.$w-color;
+  font-size: 14px;
+  line-height: 1.4;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  animation: appToastIn 0.2s ease;
+
+  &--hiding {
+    animation: appToastOut 0.2s ease forwards;
+  }
+
+  img {
+    filter: brightness(0) invert(1);
+    flex-shrink: 0;
+  }
+
+  span {
+    white-space: normal;
+    word-break: keep-all;
+  }
+}
+
+@keyframes appToastIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes appToastOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

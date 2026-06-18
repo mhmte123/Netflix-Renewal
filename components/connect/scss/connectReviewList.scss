@@ -1,0 +1,433 @@
+@use "@/app/globals" as g;
+
+.connect-review-list {
+    width: 100%;
+    overflow: hidden;
+    background: #141414;
+    padding: 44px 0 52px;
+}
+
+.connect-review-list__inner {
+    width: calc(100vw - #{g.$main-menu-width});
+    margin: 0;
+    margin-left: g.$main-menu-width;
+    padding-left: 0;
+}
+
+.connect-review-list .section-header {
+    padding-right: clamp(24px, calc((100vw - #{g.$main-menu-width} - 1920px) / 2), 80px);
+}
+
+.connect-review-list__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 22px;
+
+    h2 {
+        color: #fff;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    p {
+        margin-top: 8px;
+        color: rgba(255, 255, 255, 0.58);
+        font-size: 0.875rem;
+    }
+}
+
+.connect-review-list__swiper-shell {
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+.connect-review-list__swiper {
+    overflow: visible !important;
+
+    .swiper-button-prev,
+    .swiper-button-next {
+        background: none;
+        border: none;
+        color: #fff;
+        z-index: 10;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+
+        &::after {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        &.swiper-button-disabled {
+            opacity: 0 !important;
+            pointer-events: none;
+        }
+    }
+
+    &:hover {
+
+        .swiper-button-prev,
+        .swiper-button-next {
+            opacity: 1;
+
+            &:hover {
+                opacity: 0.7;
+            }
+        }
+    }
+
+    .swiper-button-prev {
+        left: 10px;
+    }
+
+    .swiper-button-next {
+        right: clamp(24px, calc((100vw - #{g.$main-menu-width} - 1920px) / 2), 10px);
+    }
+
+}
+
+.connect-review-list__swiper .connect-review-list__slide {
+    width: auto;
+}
+
+.connect-review-list__slide {
+    width: auto;
+}
+
+.review-card {
+    position: relative;
+    width: 360px;
+    min-height: auto;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    border-radius: 8px;
+    cursor: pointer;
+    color: #fff;
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.34);
+    transition: border-color 0.2s ease;
+
+    &:hover {
+        border-color: rgba(255, 255, 255, 0.45);
+    }
+}
+
+.review-card__glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.review-card .review-card__rep-badge.rep-badge {
+    display: flex;
+    width: fit-content;
+    margin-bottom: 6px;
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.07);
+    color: rgba(255, 255, 255, 0.75);
+    padding: 4px 8px;
+    gap: 4px;
+    opacity: 0.6;
+    font-weight: 400;
+}
+
+.review-card__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    min-height: inherit;
+    flex-direction: column;
+    gap: 17px;
+    padding: 25px;
+}
+
+.review-card__user-row,
+.review-card__movie-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.review-card__profile,
+.review-card__movie {
+    display: flex;
+    min-width: 0;
+    gap: 12px;
+}
+
+.review-card__avatar {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 auto;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 50%;
+    object-fit: cover;
+    background: #2a2a2a;
+}
+
+.review-card__avatar--text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.review-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.review-card__profile p {
+    margin-top: 2px;
+    color: rgba(255, 255, 255, 0.58);
+    font-size: 0.75rem;
+}
+
+.review-card__follow {
+    flex: 0 0 auto;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 8px 13px;
+    transition:
+        background 0.18s ease,
+        border-color 0.18s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.22);
+        border-color: rgba(255, 255, 255, 0.55);
+    }
+
+    &.review-card__follow--active {
+        opacity: 0.5;
+        cursor: default;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.14);
+            border-color: rgba(255, 255, 255, 0.4);
+            opacity: 0.5;
+        }
+    }
+}
+
+.review-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    span {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 999px;
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 0.75rem;
+        padding: 5px 10px;
+    }
+}
+
+.review-card__movie-row {
+    align-items: center;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.review-card__poster {
+    width: 76px;
+    height: 112px;
+    flex: 0 0 auto;
+    overflow: hidden;
+    border-radius: 6px;
+    background: #171717;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.review-card__poster-fallback {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(150deg, #2a2a2a, #111);
+    padding: 8px;
+    text-align: center;
+
+    span {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.8rem;
+        font-weight: 900;
+        line-height: 1;
+    }
+
+    strong {
+        color: rgba(255, 255, 255, 0.76);
+        font-size: 0.68rem;
+        line-height: 1.2;
+    }
+}
+
+.review-card__movie-text {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    p {
+        margin-bottom: 5px;
+        color: rgba(255, 255, 255, 0.42);
+        font-size: 0.75rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    h4 {
+        color: #fff;
+        font-size: 1.24rem;
+        font-weight: 500;
+        line-height: 1.15;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+.review-card__movie-text .review-card__predicted-rating {
+    margin-bottom: 4px;
+    color: #eb7979;
+    font-size: 0.78rem;
+    font-weight: 500;
+}
+
+.review-card__analysis-badge {
+    display: flex;
+    align-self: flex-end;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 8px;
+    transition: background 0.15s ease, color 0.15s ease;
+
+    &:hover {
+        background: none;
+        color: #eb7979;
+
+        svg { color: #eb7979; }
+    }
+
+    svg {
+        width: 22px;
+        height: 22px;
+        color: rgba(255, 255, 255, 0.38);
+        transition: color 0.15s ease;
+    }
+}
+
+.connect-review-list__skeleton {
+    display: flex;
+    gap: 24px;
+    overflow: hidden;
+}
+
+.connect-review-list__skeleton-card {
+    width: 360px;
+    height: 200px;
+    flex: 0 0 auto;
+    border-radius: 14px !important;
+}
+
+@media (max-width: 768px) {
+    .connect-review-list__inner {
+        padding: 0;
+    }
+
+    .connect-review-list__swiper-shell {
+        margin: 0;
+        padding: 0;
+    }
+
+    .connect-review-list__swiper {
+
+        .swiper-button-prev,
+        .swiper-button-next {
+            display: none;
+        }
+    }
+
+    .review-card {
+        width: min(82vw, 340px);
+    }
+
+    .connect-review-list__skeleton-card {
+        width: min(82vw, 340px);
+    }
+}
+
+/* ===== 반응형: 사이드메뉴 오프셋 보정 ===== */
+@include g.respond(tablet) {
+    .connect-review-list__inner {
+        width: calc(100vw - 64px);
+        margin-left: 64px;
+    }
+
+    .connect-review-list .section-header {
+        padding-right: 16px;
+    }
+}
+
+@include g.respond(mobile) {
+
+    // 사이드바 숨김 → 전체 너비 사용 (좌측 20px 기준선 통일)
+    // 카드 디자인은 데스크탑과 동일하게 유지
+    /* 섹션 간격 통일 — 자체 상하 패딩(44px/52px) 제거 */
+    .connect-review-list {
+        margin: 32px 0 0;
+        padding: 0;
+    }
+
+    .connect-review-list__inner {
+        width: 100vw;
+        margin-left: 0;
+        padding-left: 20px;
+    }
+
+    .connect-review-list .section-header {
+        padding-right: 12px;
+    }
+
+    /* 카드 1.2개 노출 */
+    .connect-review-list__swiper .connect-review-list__slide,
+    .connect-review-list__slide,
+    .review-card,
+    .connect-review-list__skeleton-card {
+        width: calc((100vw - 52px) / 1.2);
+        max-width: none;
+    }
+}
+
+/* 대표 칭호 칩 (RisingReviewCard) */
+.review-card .review-card__rep-badge {
+    margin: 4px 0 2px;
+}

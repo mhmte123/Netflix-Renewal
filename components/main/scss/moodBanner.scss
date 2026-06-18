@@ -1,0 +1,341 @@
+@use "@/app/globals" as g;
+
+.mood-banner-section {
+  padding-top: 40px;
+  padding-bottom: 0;
+  padding-left: g.$main-menu-width;
+  padding-right: clamp(24px, calc((100vw - #{g.$main-menu-width} - 1920px) / 2), 80px);
+
+  @include g.respond(tablet) {
+    padding-top: 40px;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  @include g.respond(mobile) {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 12px;
+    padding-bottom: 0;
+  }
+}
+
+.mood-banner {
+  position: relative;
+  margin: 0;
+  padding: 36px 60px 0;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #0f0c29 0%, #1a0533 50%, #24243e 100%);
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  // 좌·우·하단은 배너 경계에서 클리핑, 상단만 이미지 overflow 허용
+  clip-path: inset(-400px 0 0 0 round 0 0 20px 20px);
+
+  @include g.respond(tablet) {
+    width: min(100%, 1480px);
+    margin-left: auto;
+    margin-right: auto;
+    padding: 36px 56px 0;
+  }
+
+  @media (max-width: 768px) {
+    padding: 28px 28px;
+    margin: 0 0 40px;
+    clip-path: none;
+  }
+
+  @include g.respond(mobile) {
+    padding: 24px 20px 6px;
+    border-radius: 14px;
+    margin: 0;
+    clip-path: inset(-300px 0 0 0 round 0 0 14px 14px);
+    overflow: visible;
+  }
+}
+
+// inner: 텍스트+이미지를 하나의 그룹으로 묶어 flex center로 정확히 가운데 정렬
+.mood-banner__inner {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  z-index: 1;
+  width: 100%;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  @include g.respond(mobile) {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 16px;
+  }
+}
+
+// 배경 발광 orb들
+.mood-banner__bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 20px;
+  overflow: hidden;
+  clip-path: inset(0 round 20px);
+
+  @include g.respond(mobile) {
+    clip-path: inset(0 round 14px);
+  }
+}
+
+.mood-banner__orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.45;
+
+  &--1 {
+    width: 360px;
+    height: 360px;
+    background: radial-gradient(circle, #7b2ff7, transparent 70%);
+    top: -80px;
+    right: 120px;
+    animation: orb-float 8s ease-in-out infinite;
+  }
+
+  &--2 {
+    width: 260px;
+    height: 260px;
+    background: radial-gradient(circle, #e040fb, transparent 70%);
+    bottom: -60px;
+    right: 60px;
+    animation: orb-float 10s ease-in-out infinite reverse;
+  }
+
+  &--3 {
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, #00bcd4, transparent 70%);
+    top: 20px;
+    left: 40%;
+    opacity: 0.25;
+    animation: orb-float 12s ease-in-out infinite;
+  }
+}
+
+@keyframes orb-float {
+
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-18px) scale(1.05);
+  }
+}
+
+// 우측 floating 태그들
+.mood-banner__tags {
+  position: absolute;
+  right: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 300px;
+  justify-content: flex-end;
+  pointer-events: none;
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
+}
+
+.mood-banner__tag {
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  backdrop-filter: blur(4px);
+  white-space: nowrap;
+}
+
+// 이미지 래퍼: inner 안에서 align-self:stretch로 배너 content 높이만큼 확장
+// padding-bottom:0으로 inner bottom = 배너 시각적 하단
+// img는 래퍼 안에서 position:absolute; bottom:0 → 배너 하단에 딱 고정 + 위로 overflow
+.mood-banner__image {
+  position: relative;
+  flex-shrink: 0;
+  width: 331px; // 실제 이미지 비율(2229×1885) × height 280px
+  align-self: stretch;
+
+  img {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 200px;
+    width: auto;
+    filter: drop-shadow(0 8px 32px rgba(123, 47, 247, 0.4));
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease 0.2s, transform 0.7s ease 0.2s;
+  }
+
+  // 스크롤로 진입 시 애니메이션
+  .is-visible & img {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  // 페이지 로드 시 이미 뷰포트 안에 있을 때 → 트랜지션 없이 즉시 표시
+  .is-visible--instant & img {
+    opacity: 1;
+    transform: translateY(0);
+    transition: none;
+  }
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
+
+  @include g.respond(mobile) {
+    display: block;
+    position: relative;
+    flex-shrink: 0;
+    width: 80px;
+    align-self: stretch;
+
+    img {
+      position: absolute;
+      bottom: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 110px;
+      width: auto;
+      max-width: none;
+      filter: none;
+    }
+
+    .is-visible & img {
+      transform: translateX(-50%);
+    }
+
+    .is-visible--instant & img {
+      transform: translateX(-50%);
+      transition: none;
+    }
+  }
+}
+
+// 텍스트 콘텐츠
+.mood-banner__content {
+  position: relative;
+  z-index: 1;
+  max-width: 520px;
+  padding-bottom: 36px;
+
+  @include g.respond(mobile) {
+    flex: 1;
+    min-width: 0;
+    max-width: none;
+    padding-bottom: 0;
+    padding-left: 5px;
+  }
+}
+
+.mood-banner__eyebrow {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #c084fc;
+  margin: 0 0 12px;
+
+  @include g.respond(mobile) {
+    font-size: 10px;
+    margin: 0 0 4px;
+  }
+}
+
+.mood-banner__title {
+  font-size: clamp(26px, 3.5vw, 24px);
+  font-weight: 800;
+  line-height: 1;
+  color: #fff;
+  margin: 0 0 14px;
+
+  @include g.respond(mobile) {
+    font-size: 15px;
+    line-height: 1.25;
+    margin: 0 0 6px;
+  }
+
+  em {
+    font-style: normal;
+    background: linear-gradient(90deg, #c084fc, #e879f9, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+.mood-banner__desc {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+  line-height: 1.5;
+
+  @include g.respond(mobile) {
+    font-size: 11px;
+    line-height: 1.5;
+    margin: 0 0 14px;
+  }
+}
+
+.mood-banner__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 28px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #7b2ff7, #e040fb);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.2px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  box-shadow: 0 4px 24px rgba(123, 47, 247, 0.45);
+
+  @include g.respond(mobile) {
+    padding: 10px 20px;
+    font-size: 12px;
+  }
+
+  svg {
+    transition: transform 0.2s ease;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(123, 47, 247, 0.6);
+    opacity: 0.92;
+
+    svg {
+      transform: translateX(4px);
+    }
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}

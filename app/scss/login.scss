@@ -1,0 +1,542 @@
+@use "@/app/globals" as g;
+
+// ─── 전체 레이아웃 ────────────────────────────────────────────────────────────
+
+.login-page {
+  display: flex;
+  min-height: calc(100vh - g.$header-height);
+  background-color: g.$bg-color;
+}
+
+// ─── 왼쪽: 포스터 그리드 (가로 줄, 3D 원근감) ─────────────────────────────────
+
+.login-poster {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  perspective: 1000px;
+  perspective-origin: right center;
+
+  // 전체적으로 흐려지는 오버레이 + 오른쪽 페이드 + 비네팅
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to right, rgba(g.$bg-color, 0.4) 0%, rgba(g.$bg-color, 0.6) 50%, g.$bg-color 95%),
+      linear-gradient(to bottom, rgba(g.$d-color, 0.5) 0%, transparent 25%, transparent 75%, rgba(g.$d-color, 0.5) 100%);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+.login-poster .poster-grid {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  right: -10%;
+  bottom: -10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 5px;
+  transform: rotateY(-15deg) rotateX(2deg);
+  transform-style: preserve-3d;
+}
+
+.login-poster .poster-row {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  flex-shrink: 0;
+  flex: 1;
+
+  &:nth-child(1) {
+    animation: poster-right 50s linear infinite;
+  }
+
+  &:nth-child(2) {
+    animation: poster-left 45s linear infinite;
+  }
+
+  &:nth-child(3) {
+    animation: poster-right 55s linear infinite;
+  }
+
+  &:nth-child(4) {
+    animation: poster-left 40s linear infinite;
+  }
+
+  &:nth-child(5) {
+    animation: poster-right 48s linear infinite;
+  }
+
+  &:nth-child(6) {
+    animation: poster-left 52s linear infinite;
+  }
+
+  &:nth-child(7) {
+    animation: poster-right 44s linear infinite;
+  }
+
+  &:nth-child(8) {
+    animation: poster-left 56s linear infinite;
+  }
+}
+
+.login-poster .poster-item {
+  border-radius: g.$radius-md;
+  overflow: hidden;
+  height: 100%;
+  aspect-ratio: 16 / 9;
+  flex-shrink: 0;
+  position: relative;
+  background-color: #1a1a1a;
+  box-shadow: 0 4px 12px rgba(g.$d-color, 0.5);
+
+  .poster-img {
+    object-fit: cover;
+    transition: opacity 0.3s ease;
+  }
+}
+
+.login-poster .poster-skeleton {
+  background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease infinite;
+}
+
+// ─── 오른쪽: 로그인 패널 ──────────────────────────────────────────────────────
+
+.login-panel {
+  flex: 0 0 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  position: relative;
+  z-index: 5;
+  margin-top: -81px;
+
+  @media (max-width: 768px) {
+    flex: 1;
+    padding: 32px 24px;
+  }
+}
+
+.login-card {
+  width: 100%;
+  max-width: 460px;
+  animation: fade-up 0.45s ease both;
+}
+
+.login-title {
+  font-size: g.$text-32;
+  font-weight: 700;
+  color: g.$w-color;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.login-subtitle {
+  font-size: g.$text-14;
+  color: #a0a0a0;
+  margin-bottom: 32px;
+}
+
+// ─── 에러 배너 ────────────────────────────────────────────────────────────────
+
+.login-error {
+  background-color: rgba(229, 9, 20, 0.1);
+  border: 1px solid rgba(229, 9, 20, 0.35);
+  border-radius: g.$radius-md;
+  color: #ff6b6b;
+  font-size: g.$text-13;
+  padding: 10px 14px;
+  margin-bottom: 18px;
+  animation: fade-up 0.2s ease both;
+}
+
+// ─── 폼 ──────────────────────────────────────────────────────────────────────
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+}
+
+.form-label {
+  font-size: g.$text-13;
+  font-weight: 500;
+  color: #a0a0a0;
+
+  span {
+    color: #555555;
+    margin-left: 10px;
+    font-weight: 400;
+  }
+}
+
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.form-input {
+  width: 100%;
+  padding: 13px 16px;
+  background-color: #1e1e1e;
+  border: 1px solid #3a3a3a;
+  border-radius: g.$radius-md;
+  color: g.$w-color;
+  font-size: g.$text-16;
+  outline: none;
+  transition: border-color .15s, background-color .15s, box-shadow .15s;
+
+  &::placeholder {
+    color: #5a5a5a;
+  }
+
+  &:hover {
+    background-color: #232323;
+    border-color: #555;
+  }
+
+  &:focus {
+    background-color: #232323;
+    border-color: g.$main-color;
+    box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.25);
+  }
+
+  &.has-icon {
+    padding-right: 3rem;
+  }
+}
+
+.pw-toggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #6b6b6b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  transition: color .15s;
+
+  &:hover {
+    color: #aaa;
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+// ─── 옵션 행 ─────────────────────────────────────────────────────────────────
+
+.form-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: g.$text-13;
+  color: #a0a0a0;
+  user-select: none;
+}
+
+.form-checkbox {
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid #3a3a3a;
+  border-radius: 4px;
+  background-color: #1e1e1e;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  flex-shrink: 0;
+  transition: border-color .15s, background-color .15s;
+
+  &:checked {
+    background-color: g.$main-color;
+    border-color: g.$main-color;
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 3px;
+      top: 1px;
+      width: 4px;
+      height: 8px;
+      border: 2px solid g.$w-color;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
+    }
+  }
+}
+
+.forgot-link {
+  font-size: g.$text-13;
+  color: g.$main-color;
+  font-weight: 500;
+  transition: opacity .15s;
+
+  &:hover {
+    opacity: 0.75;
+    text-decoration: underline;
+  }
+}
+
+// ─── 로그인 버튼 ──────────────────────────────────────────────────────────────
+
+.login-btn {
+  min-height: 55px;
+  width: 100%;
+  padding: 14px;
+  background-color: g.$main-color;
+  color: g.$w-color;
+  font-size: g.$text-18;
+  font-weight: 700;
+  border: none;
+  border-radius: g.$radius-md;
+  cursor: pointer;
+  transition: background-color .15s, transform .15s, box-shadow .15s;
+
+  &:hover:not(:disabled) {
+    background-color: #f40612;
+    box-shadow: 0 4px 20px rgba(229, 9, 20, 0.4);
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &.is-loading {
+    color: transparent;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: g.$w-color;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+    }
+  }
+}
+
+// ─── 구분선 ───────────────────────────────────────────────────────────────────
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #666;
+  font-size: g.$text-13;
+  margin: 20px 0;
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: #2e2e2e;
+  }
+}
+
+// ─── 소셜 버튼 (브랜드 가이드라인: 아이콘 왼쪽 + 텍스트 중앙) ────────────────
+
+.social-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.social-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  padding: 0 18px;
+  border: none;
+  border-radius: g.$radius-md;
+  font-size: g.$text-14;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  transition: filter .15s, transform .15s, box-shadow .15s;
+
+  &:hover {
+    filter: brightness(0.95);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(g.$d-color, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+    filter: brightness(0.9);
+  }
+
+  // 구글: 흰 배경 + 검정 텍스트 + 회색 테두리
+  &.social-google {
+    background-color: g.$w-color;
+    color: #1f1f1f;
+    border: 1px solid #dadce0;
+  }
+
+  // 네이버: 초록 배경 + 흰 텍스트
+  &.social-naver {
+    background-color: #03c75a;
+    color: g.$w-color;
+  }
+
+  // 카카오: 노랑 배경 + 검정 텍스트
+  &.social-kakao {
+    background-color: #fee500;
+    color: #181600;
+  }
+}
+
+// 아이콘 영역 (왼쪽 고정)
+.social-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+// 텍스트 (가운데 정렬: flex: 1로 남은 공간 차지하고 가운데로)
+.social-label {
+  flex: 1;
+  text-align: center;
+  // 아이콘 너비만큼 오른쪽에서 빼서 시각적 균형 (가운데 정렬을 위해)
+  padding-right: 24px;
+}
+
+// ─── 회원가입 링크 ────────────────────────────────────────────────────────────
+
+.login-signup {
+  text-align: center;
+  font-size: g.$text-13;
+  color: #8a8a8a;
+
+  a {
+    color: g.$main-color;
+    font-weight: 600;
+    margin-left: 4px;
+    transition: opacity .15s;
+
+    &:hover {
+      opacity: 0.75;
+      text-decoration: underline;
+    }
+  }
+}
+
+// ─── 애니메이션 ───────────────────────────────────────────────────────────────
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes poster-right {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes poster-left {
+  from {
+    transform: translateX(-50%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== 반응형: ≤768에서 포스터가 숨겨져 폼이 풀폭이 될 때 nav 가림 방지 ===== */
+@media (max-width: 768px) {
+  .login-page {
+    padding-left: 64px;
+  }
+}
+
+@media (max-width: 600px) {
+  .login-page {
+    padding-left: 56px;
+  }
+}

@@ -1,0 +1,345 @@
+@use "@/app/globals" as g;
+
+/* ============================================================
+   RUN WITH RUMI 홈 프로모션 배너 — 레트로 도트 스타일
+   (무드 배너와 동일한 섹션 레이아웃)
+   ============================================================ */
+
+/* 무드 배너와 동일한 가로 레이아웃 (사이드메뉴 오프셋 + 풀폭) */
+.game-banner-section {
+  margin: g.$section-gap 0 0;
+  padding-left: g.$main-menu-width;
+  padding-right: clamp(24px, calc((100vw - #{g.$main-menu-width} - 1920px) / 2), 80px);
+  opacity: 0;
+  transform: translateY(46px);
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  &.is-visible--instant {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.game-banner {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+
+  border: none;
+  border-radius: 18px;
+  background: #07030f;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.6);
+
+  &:hover {
+    .game-banner__rumi,
+    .game-banner__demon {
+      animation-duration: 0.4s;
+    }
+  }
+}
+
+/* ─── 배경: 도트 마을 야경 ─── */
+.game-banner__bg {
+  position: absolute;
+  inset: 0;
+  background-image: url("/images/game/bg-far.png");
+  background-size: auto 130%;
+  background-position: left 30%;
+  image-rendering: pixelated;
+  opacity: 0.8;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(7, 3, 15, 0.82) 0%,
+      rgba(7, 3, 15, 0.5) 45%,
+      rgba(7, 3, 15, 0.1) 100%
+    );
+  }
+}
+
+/* CRT 스캔라인 */
+.game-banner__scanline {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.16) 0 2px,
+    transparent 2px 4px
+  );
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ─── 내부 레이아웃 (무드 배너 구조) ─── */
+.game-banner__inner {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 텍스트+스프라이트 가운데 정렬 */
+  gap: 56px;
+  min-height: 150px;
+  padding: 22px 56px;
+}
+
+.game-banner__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+}
+
+.game-banner__eyebrow {
+  margin-bottom: -3px; /* 타이틀과 밀착 */
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  color: #e50914;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+}
+
+.game-banner__title {
+  font-size: clamp(26px, 3.4vw, 44px);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: #fff;
+  line-height: 1.15;
+  text-shadow:
+    3px 3px 0 #2a1a4a,
+    6px 6px 0 rgba(0, 0, 0, 0.55);
+
+  em {
+    font-style: normal;
+    color: #8b5cf6;
+    text-shadow:
+      3px 3px 0 #1a0f2e,
+      0 0 22px rgba(139, 92, 246, 0.9);
+  }
+}
+
+.game-banner__desc {
+  color: #b3b3b3;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+
+/* ─── 스프라이트 연출 ─── */
+.game-banner__visual {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+  flex-shrink: 0;
+  height: 104px;
+  padding-right: 12px;
+}
+
+.game-banner__visual .game-banner__rumi {
+  --bw: 68px;
+  height: 88px;
+}
+
+.game-banner__visual .game-banner__demon--small {
+  --bw: 46px;
+  height: 53px;
+}
+
+.game-banner__visual .game-banner__demon--medium {
+  --bw: 68px;
+  height: 65px;
+}
+
+.game-banner__rumi {
+  --bw: 84px;
+  width: var(--bw);
+  height: 109px;
+  background: url("/images/game/rumi-run.png") no-repeat;
+  background-size: calc(var(--bw) * 6) 100%;
+  image-rendering: pixelated;
+  animation: banner-rumi-run 0.55s steps(6) infinite;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.6));
+}
+
+@keyframes banner-rumi-run {
+  from { background-position-x: 0; }
+  to { background-position-x: calc(var(--bw) * -6); }
+}
+
+.game-banner__demon {
+  background-repeat: no-repeat;
+  background-size: calc(var(--bw) * 2) 100%;
+  image-rendering: pixelated;
+  transform: scaleX(-1);
+  filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.45));
+  animation: banner-demon-walk 0.45s steps(2) infinite;
+
+  &--small {
+    --bw: 56px;
+    width: var(--bw);
+    height: 64px;
+    background-image: url("/images/game/demon-small.png");
+  }
+
+  &--medium {
+    --bw: 84px;
+    width: var(--bw);
+    height: 80px;
+    background-image: url("/images/game/demon-medium.png");
+    animation-duration: 0.5s;
+  }
+}
+
+@keyframes banner-demon-walk {
+  from { background-position-x: 0; }
+  to { background-position-x: calc(var(--bw) * -2); }
+}
+
+/* ============================================================
+   게임 모달
+   ============================================================ */
+.game-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100000; /* 헤더/하단네비 위 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(5, 2, 12, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: game-modal-in 0.25s ease both;
+}
+
+@keyframes game-modal-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.game-modal__body {
+  position: relative;
+  width: min(1140px, 100%);
+  max-height: 94vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.game-modal__close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 50;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #160e26;
+  border: 3px solid #0a0612;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.45), 3px 3px 0 rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+
+  &:hover {
+    transform: translate(-1px, -1px);
+  }
+}
+
+/* 임베드 모드: 페이지 패딩/배경 제거 */
+.game-page--embedded {
+  min-height: 0;
+  padding: 54px 0 0; /* 닫기 버튼 자리 */
+  background: transparent;
+}
+
+/* ─── 반응형 ─── */
+@include g.respond(tablet) {
+  .game-banner-section {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .game-banner__inner {
+    padding: 20px 32px;
+    min-height: 130px;
+  }
+
+  .game-banner__visual {
+    height: 100px;
+
+    .game-banner__rumi { --bw: 66px; height: 86px; }
+  }
+}
+
+@include g.respond(mobile) {
+  .game-banner-section {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .game-banner {
+    border-radius: 14px;
+  }
+
+  .game-banner__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    min-height: 0;
+    padding: 22px 20px 20px;
+  }
+
+  .game-banner__eyebrow { font-size: 9px; }
+  .game-banner__desc { font-size: 12px; }
+
+  /* 모바일: 루미만 우측 하단에 작게 */
+  .game-banner__visual {
+    position: absolute;
+    right: 10px;
+    bottom: 12px;
+    height: auto;
+    gap: 8px;
+
+    .game-banner__demon--small,
+    .game-banner__demon--medium {
+      display: none;
+    }
+
+    .game-banner__rumi {
+      --bw: 52px;
+      height: 67px;
+    }
+  }
+
+  .game-modal {
+    padding: 10px;
+  }
+
+  .game-page--embedded {
+    padding-top: 48px;
+  }
+}
+

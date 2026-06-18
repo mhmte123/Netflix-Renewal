@@ -1,0 +1,233 @@
+@use "@/app/globals" as g;
+
+.login-banner {
+  position: fixed;
+  // 헤더(60px) + 사이드nav(60px) 고려해서 왼쪽 패딩 처리
+  // 였으나 그냥 풀로 채움
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(860px, calc(100vw - 32px)); /* 가로 폭 제한 */
+  bottom: 16px;
+  z-index: 100;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 -4px 20px rgba(g.$d-color, 0.4);
+  overflow: hidden;
+
+  /* 글라스 재질: transform 애니메이션과 분리하기 위해 가상요소에 적용
+     (배너 자체에 backdrop-filter + transform 이 같이 있으면 블러가 무시되는 크로미움 버그 우회) */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: rgba(5, 5, 5, 0.9);
+    backdrop-filter: blur(28px) saturate(170%);
+    -webkit-backdrop-filter: blur(28px) saturate(170%);
+  }
+  animation: banner-slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+
+  @include g.respond(mobile) {
+    // MobileBottomNav 위에 띄워서 겹침 방지
+    bottom: calc(90px + env(safe-area-inset-bottom)); // 하단 네비와 10px 간격
+    z-index: 99995; // MobileBottomNav(99996) 바로 아래
+    border-top: none;
+    box-shadow: 0 -2px 12px rgba(g.$d-color, 0.5);
+  }
+}
+
+.banner-inner {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 16px 32px;
+  position: relative;
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 20px 16px 20px;
+  }
+}
+
+// ─── 로고 ─────────────────────────────────────────────────────────────────────
+
+.banner-logo {
+  flex-shrink: 0;
+  object-fit: contain;
+
+  @media (max-width: 900px) {
+    width: 72px;
+    height: auto;
+  }
+}
+
+// ─── 텍스트 영역 ──────────────────────────────────────────────────────────────
+
+.banner-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.banner-title {
+  font-size: g.$text-16;
+  font-weight: 700;
+  color: g.$w-color;
+  margin-bottom: 4px;
+  line-height: 1.3;
+
+  // 좌측 아이콘 느낌 (선택)
+  // &::before {
+  //   content: "🎬";
+  //   margin-right: 8px;
+  // }
+}
+
+.banner-desc {
+  font-size: g.$text-13;
+  color: rgba(g.$w-color, 0.6);
+  line-height: 1.4;
+}
+
+// ─── 버튼 영역 ────────────────────────────────────────────────────────────────
+
+.banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+
+  @media (max-width: 900px) {
+    width: 100%;
+  }
+}
+
+.banner-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 22px;
+  border-radius: g.$radius-md;
+  font-size: g.$text-13;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  border: 1.5px solid transparent;
+
+  @media (max-width: 900px) {
+    flex: 1;
+  }
+}
+
+// 흰 외곽선만 (보조 버튼)
+.banner-btn-ghost {
+  background-color: transparent;
+  color: g.$w-color;
+  border-color: rgba(g.$w-color, 0.6);
+
+  &:hover {
+    background-color: rgba(g.$w-color, 0.15);
+    border-color: g.$w-color;
+  }
+}
+
+// 빨간 배경 + 흰 텍스트 (메인 CTA)
+.banner-btn-primary {
+  background-color: g.$main-color;
+  color: g.$w-color;
+
+  &:hover {
+    background-color: darken(#e50914, 8%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(g.$d-color, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// ─── 닫기 버튼 ────────────────────────────────────────────────────────────────
+
+.banner-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  color: rgba(g.$w-color, 0.8);
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    background-color: rgba(g.$w-color, 0.15);
+    color: g.$w-color;
+  }
+
+  @media (max-width: 900px) {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+  }
+}
+
+// ─── 애니메이션 ───────────────────────────────────────────────────────────────
+
+@keyframes banner-slide-up {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(calc(100% + 110px)); /* 하단 네비 높이까지 고려해 화면 밖에서 시작 */
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+// ─── 모바일: 컴팩트 한 줄 배너 ─────────────────────────────────────────────
+@include g.respond(mobile) {
+  .login-banner {
+    width: calc(100vw - 20px); /* 좌우 10px 여백 */
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .banner-inner {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+  }
+
+  .banner-logo,
+  .banner-desc {
+    display: none;
+  }
+
+  .banner-title {
+    margin-bottom: 0;
+    font-size: g.$text-13;
+    line-height: 1.35;
+  }
+
+  .banner-actions {
+    width: auto;
+    flex-shrink: 0;
+  }
+
+  .banner-btn {
+    flex: none;
+    padding: 8px 14px;
+    font-size: g.$text-12;
+  }
+}

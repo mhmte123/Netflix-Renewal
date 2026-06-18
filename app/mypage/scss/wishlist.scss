@@ -1,0 +1,388 @@
+@use "@/app/globals" as g;
+
+.wishlist-page {
+  min-height: calc(100vh - g.$header-height);
+  background-color: g.$bg-color;
+  color: g.$w-color;
+  padding: 40px 0 80px;
+}
+
+.wishlist-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 40px;
+
+  @media (max-width: 768px) {
+    padding: 0 20px;
+  }
+}
+
+// ─── 헤더 ─────────────────────────────────────────────────────────────────────
+
+.wishlist-header {
+  margin-bottom: 28px;
+}
+
+.wishlist-title {
+  font-size: g.$text-32;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.wishlist-subtitle {
+  font-size: g.$text-14;
+  color: g.$main-menu-color;
+}
+
+// ─── 툴바 (탭 + 정렬) ─────────────────────────────────────────────────────────
+
+.wishlist-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(g.$w-color, 0.1);
+  margin-bottom: 28px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+}
+
+.wishlist-tabs {
+  display: flex;
+  gap: 28px;
+
+  @media (max-width: 600px) {
+    gap: 18px;
+    overflow-x: auto;
+  }
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 0 14px;
+  background: none;
+  border: none;
+  color: g.$main-menu-color;
+  font-size: g.$text-16;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    height: 2px;
+    background-color: g.$main-color;
+    transform: scaleX(0);
+    transition: transform 0.2s ease;
+  }
+
+  &:hover {
+    color: rgba(g.$w-color, 0.85);
+  }
+
+  &.is-active {
+    color: g.$w-color;
+    font-weight: 700;
+
+    &::after {
+      transform: scaleX(1);
+    }
+  }
+}
+
+.tab-count {
+  font-size: g.$text-12;
+  color: g.$main-menu-color;
+  font-weight: 500;
+}
+
+.tab-btn.is-active .tab-count {
+  color: g.$main-color;
+}
+
+.wishlist-sort {
+  position: relative;
+  padding-bottom: 14px;
+
+  @media (max-width: 600px) {
+    align-self: flex-end;
+    padding-bottom: 8px;
+  }
+}
+
+.sort-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: g.$main-menu-color;
+  font-size: g.$text-13;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: g.$w-color;
+  }
+
+  .sort-arrow {
+    transition: transform 0.2s ease;
+
+    &.is-open {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.sort-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  min-width: 130px;
+  background-color: #1e1e1e;
+  border: 1px solid #2e2e2e;
+  border-radius: g.$radius-md;
+  box-shadow: 0 8px 24px rgba(g.$d-color, 0.5);
+  overflow: hidden;
+  z-index: 10;
+  list-style: none;
+  padding: 4px;
+}
+
+.sort-option {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  background: none;
+  border: none;
+  color: rgba(g.$w-color, 0.8);
+  font-size: g.$text-13;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background-color: rgba(g.$w-color, 0.08);
+    color: g.$w-color;
+  }
+
+  &.is-selected {
+    color: g.$main-color;
+    font-weight: 600;
+  }
+}
+
+// ─── 카드 그리드 ──────────────────────────────────────────────────────────────
+
+.wishlist-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.wish-card {
+  position: relative;
+}
+
+.wish-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+
+  &:hover {
+    .wish-poster img {
+      transform: scale(1.04);
+    }
+
+    .wish-remove {
+      opacity: 1;
+    }
+
+    .wish-card-title {
+      color: g.$main-color;
+    }
+  }
+}
+
+.wish-poster {
+  position: relative;
+  aspect-ratio: 2 / 3;
+  border-radius: g.$radius-md;
+  overflow: hidden;
+  background-color: #2a2a32;
+  margin-bottom: 10px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+}
+
+.wish-poster-empty {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #2a2a32, #1e1e24);
+}
+
+// 찜 해제 버튼 (호버 시 등장)
+.wish-remove {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(g.$d-color, 0.6);
+  border: none;
+  border-radius: 50%;
+  color: g.$main-color;
+  cursor: pointer;
+  opacity: 0;
+  backdrop-filter: blur(4px);
+  transition: opacity 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
+
+  &:hover {
+    background-color: rgba(g.$d-color, 0.85);
+    transform: scale(1.1);
+  }
+
+  @media (max-width: 768px) {
+    opacity: 1;
+  }
+}
+
+.wish-info {
+  padding: 0 2px;
+}
+
+.wish-card-title {
+  font-size: g.$text-14;
+  font-weight: 600;
+  color: g.$w-color;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.wish-added {
+  font-size: g.$text-12;
+  color: g.$main-menu-color;
+}
+
+// ─── 스켈레톤 (로딩 중) ───────────────────────────────────────────────────────
+
+.wish-poster-skeleton {
+  background: linear-gradient(90deg, #1e1e24 25%, #2a2a32 50%, #1e1e24 75%);
+  background-size: 200% 100%;
+  animation: wish-shimmer 1.4s ease infinite;
+}
+
+.skeleton-line {
+  height: 14px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #1e1e24 25%, #2a2a32 50%, #1e1e24 75%);
+  background-size: 200% 100%;
+  animation: wish-shimmer 1.4s ease infinite;
+  margin-bottom: 6px;
+
+  &.short {
+    width: 60%;
+  }
+}
+
+@keyframes wish-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// ─── 빈 상태 ──────────────────────────────────────────────────────────────────
+
+.wishlist-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 100px 0;
+  text-align: center;
+}
+
+.empty-text {
+  font-size: g.$text-16;
+  color: g.$main-menu-color;
+}
+
+.empty-cta {
+  padding: 12px 28px;
+  background-color: g.$main-color;
+  color: g.$w-color;
+  font-size: g.$text-14;
+  font-weight: 700;
+  border-radius: g.$radius-md;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: #f40612;
+  }
+}
+
+/* ===== 반응형: 사이드메뉴(nav) 좌측 여백 확보 ===== */
+@include g.respond(laptop) {
+  .wishlist-page { padding-left: 80px; }
+}
+@include g.respond(tablet) {
+  .wishlist-page { padding-left: 64px; }
+}
+@include g.respond(mobile) {
+  .wishlist-page { padding-left: 56px; padding-right: 16px; }
+}
+
+/* ===== 반응형: 사이드메뉴(nav) 좌측 여백 확보 ===== */
+@include g.respond(laptop) {
+  .wishlist-page { padding-left: 80px; }
+}
+@include g.respond(tablet) {
+  .wishlist-page { padding-left: 64px; }
+}
+@include g.respond(mobile) {
+  .wishlist-page { padding-left: 56px; padding-right: 16px; }
+}

@@ -1,0 +1,630 @@
+@use "@/app/globals" as g;
+
+.contact-page {
+  min-height: 100vh;
+  padding: 40px 0 80px;
+
+  .inner {
+    width: 900px;
+  }
+
+  .page-head {
+    margin-bottom: 32px;
+
+    h1 {
+      font-size: g.$text-32;
+      font-weight: 700;
+    }
+
+    p {
+      color: g.$g-color;
+      font-size: g.$text-14;
+    }
+  }
+
+  .contact-tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid #2a2a2a;
+    margin-bottom: 32px;
+
+    button {
+      padding: 14px 22px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      color: g.$g-color;
+      font-size: g.$text-14;
+      cursor: pointer;
+
+      &.active {
+        color: g.$w-color;
+        border-bottom-color: #888;
+        font-weight: 600;
+      }
+    }
+  }
+
+  /* FAQ 검색 */
+  .faq-search {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 52px;
+    padding: 0 20px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: g.$radius-md;
+    margin-bottom: 24px;
+
+    .icon {
+      color: g.$g-color;
+      font-size: g.$text-16;
+    }
+
+    input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: g.$w-color;
+      font-size: g.$text-14;
+
+      &::placeholder {
+        color: g.$g-color;
+      }
+    }
+  }
+
+  /* FAQ 카테고리 */
+  .faq-categories {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
+
+    @media (max-width: 700px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .faq-category {
+    padding: 18px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid #2a2a2a;
+    border-radius: g.$radius-md;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &.active {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: #777;
+    }
+
+    &:hover:not(.active) {
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .cat-icon {
+      margin: 0 auto 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: g.$text-18;
+    }
+
+    h3 {
+      font-size: g.$text-13;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    p {
+      font-size: g.$text-12;
+      color: g.$g-color;
+    }
+  }
+
+  .section-h {
+    font-size: g.$text-16;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  /* FAQ 리스트 */
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .faq-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid #2a2a2a;
+    border-radius: g.$radius-md;
+    overflow: hidden;
+
+    &.open {
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .faq-q {
+      width: 100%;
+      padding: 16px 20px;
+      background: transparent;
+      border: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: g.$w-color;
+      font-size: g.$text-14;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+
+      .arrow {
+        color: g.$g-color;
+        font-size: g.$text-12;
+        flex-shrink: 0;
+        margin-left: 12px;
+      }
+    }
+
+    .faq-a {
+      padding: 0 20px 18px;
+      font-size: g.$text-13;
+      color: g.$g-color;
+      line-height: 1.7;
+    }
+  }
+
+  /* 1:1 문의 폼 */
+  // .inquiry-form-wrap {
+  //   max-width: 700px;
+  // }
+
+  .form-info {
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid #333;
+    border-radius: g.$radius-md;
+    margin-bottom: 24px;
+    font-size: g.$text-13;
+    color: g.$g-color;
+    line-height: 1.6;
+  }
+
+  .inquiry-form {
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid #2a2a2a;
+    border-radius: g.$radius-md;
+
+    .form-field {
+      margin-bottom: 18px;
+
+      label {
+        display: block;
+        font-size: g.$text-13;
+        color: g.$g-color;
+        margin-bottom: 8px;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 12px 14px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: g.$radius-md;
+        color: g.$w-color;
+        font-size: g.$text-14;
+        outline: none;
+        font-family: inherit;
+
+        &:focus {
+          border-color: #888;
+        }
+        &::placeholder {
+          color: #555;
+        }
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 120px;
+        line-height: 1.6;
+        resize: none;
+      }
+    }
+  }
+
+  .form-attach {
+    padding: 24px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.08);
+    border-radius: g.$radius-md;
+    color: g.$g-color;
+    font-size: g.$text-13;
+    cursor: pointer;
+
+    &:hover {
+      border-color: #888;
+      color: #fff;
+    }
+  }
+
+  .btn-submit {
+    width: 100%;
+    height: 52px;
+    background: #4a4a4a;
+    border: none;
+    border-radius: g.$radius-md;
+    color: g.$w-color;
+    font-size: g.$text-14;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+
+    &:hover {
+      background: #5a5a5a;
+    }
+  }
+
+  /* 상태 필터 */
+  .status-filter {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .status-chip {
+    padding: 8px 18px;
+    background: transparent;
+    border: 1px solid #3a3a3a;
+    color: g.$g-color;
+    border-radius: 100px;
+    font-size: g.$text-13;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &.active {
+      background: #4a4a4a;
+      border-color: #777;
+      color: g.$w-color;
+      font-weight: 600;
+    }
+
+    &:hover:not(.active) {
+      border-color: g.$w-color;
+      color: g.$w-color;
+    }
+  }
+
+  /* 문의 내역 리스트 */
+  .history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .history-item {
+    padding: 18px 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid #2a2a2a;
+    border-radius: g.$radius-md;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .history-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .category-tag {
+      display: inline-block;
+      padding: 3px 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+      font-size: g.$text-12;
+      color: g.$g-color;
+    }
+
+    .head-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status {
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: g.$text-12;
+      font-weight: 600;
+      border: 1px solid;
+
+      // 답변 완료: 처리 끝난 상태 → 회색으로 약화 (DS gray1 + 구분선 토큰)
+      &.answered {
+        background: rgba(255, 255, 255, 0.05);
+        color: g.$g-color;
+        border-color: #2a2a2a;
+      }
+
+      // 처리 중: 진행 상태 → 중립 흰색(반투명)으로 표시
+      &.processing {
+        background: rgba(255, 255, 255, 0.1);
+        color: g.$w-color;
+        border-color: rgba(255, 255, 255, 0.25);
+      }
+
+      // 답변 대기: 가장 주목 필요 → 강조색 빨강 (DS red)
+      &.pending {
+        background: rgba(255, 255, 255, 0.08);
+        color: #d0d0d0;
+        border-color: #666;
+      }
+    }
+
+    .date {
+      font-size: g.$text-12;
+      color: g.$g-color;
+    }
+
+    h3 {
+      font-size: g.$text-14;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    p {
+      font-size: g.$text-13;
+      color: g.$g-color;
+      line-height: 1.5;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      line-clamp: 1;
+      -webkit-box-orient: vertical;
+    }
+  }
+
+  .new-inquiry-cta {
+    text-align: center;
+    margin-top: 24px;
+
+    button {
+      padding: 12px 24px;
+      background: #4a4a4a;
+      color: g.$w-color;
+      border: none;
+      border-radius: 100px;
+      font-size: g.$text-13;
+      font-weight: 600;
+      cursor: pointer;
+
+      &:hover {
+        background: #5a5a5a;
+      }
+    }
+  }
+}
+
+/* ── 리팩토링 보강: 공통 타이틀/내역 영역 ───────────────────────── */
+.contact-page {
+  .tab-content-panel {
+    animation: contactFade 0.2s ease;
+  }
+
+  .section-title-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+
+    h2 {
+      font-size: g.$text-18;
+      font-weight: 700;
+    }
+
+    &.sub-title h2 {
+      font-size: g.$text-16;
+    }
+
+    .total-count {
+      font-size: g.$text-12;
+      color: g.$g-color;
+      flex-shrink: 0;
+    }
+
+    .view-all-link {
+      font-size: g.$text-13;
+      color: g.$g-color;
+      flex-shrink: 0;
+      transition: color 0.2s;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+
+  .faq-results-wrapper {
+    margin-top: 28px;
+  }
+
+  .btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .history-empty {
+    padding: 48px 0;
+    text-align: center;
+
+    p {
+      font-size: g.$text-14;
+      color: g.$g-color;
+      margin-bottom: 16px;
+    }
+  }
+}
+
+@keyframes contactFade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 내 문의 내역 — 삭제 버튼 */
+.contact-page .history-item .history-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+
+  .history-delete-btn {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: transparent;
+    color: #b3b3b3;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      color 0.15s ease,
+      border-color 0.15s ease,
+      background 0.15s ease;
+
+    &:hover {
+      color: #fff;
+      border-color: #888;
+      background: rgba(255, 255, 255, 0.08);
+    }
+  }
+
+  /* 데모/관리자: 답변 달기 트리거 */
+  .history-answer-btn {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: transparent;
+    color: #b3b3b3;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+
+    &:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.08);
+    }
+  }
+}
+
+/* 펼친 항목: 본문 전체 노출 (line-clamp 해제) */
+.contact-page .history-item p.expanded {
+  display: block;
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+/* 내 문의 내역 — 답변 패널 */
+.contact-page .history-item .history-answer {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: g.$radius-md;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid #2a2a2a;
+  border-left: 2px solid g.$main-color;
+  animation: contactFade 0.2s ease;
+
+  .answer-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .answer-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 4px;
+    background: rgba(229, 9, 20, 0.15);
+    color: g.$main-color;
+    font-size: g.$text-12;
+    font-weight: 700;
+  }
+
+  .answer-date {
+    font-size: g.$text-12;
+    color: g.$g-color;
+  }
+
+  .answer-body {
+    font-size: g.$text-13;
+    color: g.$w-color;
+    line-height: 1.6;
+    white-space: pre-line; // 답변 본문의 줄바꿈 유지
+    // 본문 p 의 line-clamp 영향 차단
+    display: block;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+    overflow: visible;
+    text-overflow: clip;
+  }
+}
+
+/* ===== 반응형: 사이드메뉴(nav) 좌측 여백 확보 ===== */
+@include g.respond(laptop) {
+  .contact-page {
+    padding-left: 80px;
+  }
+}
+@include g.respond(tablet) {
+  .contact-page {
+    padding-left: 64px;
+    .page-head {
+      h1 {
+        font-size: g.$text-24;
+      }
+      h2 {
+        font-size: g.$text-18;
+      }
+    }
+  }
+}
+@include g.respond(mobile) {
+  .contact-page {
+    padding: 40px 16px 80px 56px;
+    .page-head {
+      h1 {
+        font-size: g.$text-20;
+      }
+      h2 {
+        font-size: g.$text-16;
+      }
+    }
+  }
+}

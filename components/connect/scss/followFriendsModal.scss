@@ -1,0 +1,330 @@
+@use "../../../app/globals.scss" as g;
+
+.follow-friends-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    animation: fFmBackdropIn 0.2s ease both;
+  }
+
+  &__panel {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    width: min(520px, calc(100vw - 32px));
+    max-height: min(640px, calc(100dvh - 64px));
+    flex-direction: column;
+    border-radius: 12px;
+    background: #181818;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.08),
+      0 24px 64px rgba(0, 0, 0, 0.6);
+    animation: fFmPanelIn 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+    overflow: hidden;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 24px 24px 0;
+    flex-shrink: 0;
+
+    h2 {
+      margin: 0 0 4px;
+      color: #fff;
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.45);
+      font-size: 0.825rem;
+    }
+  }
+
+  &__close {
+    display: flex;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 50%;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.55);
+    cursor: pointer;
+    margin-left: 12px;
+    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+      color: #fff;
+    }
+  }
+
+  &__search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 16px 24px 0;
+    padding: 10px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    flex-shrink: 0;
+    transition: border-color 0.18s ease;
+
+    &:focus-within {
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.875rem;
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+      }
+    }
+  }
+
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 0 16px;
+    overscroll-behavior: contain;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 2px;
+    }
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 24px;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.04);
+    }
+  }
+
+  &__avatar {
+    display: grid;
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    place-items: center;
+    overflow: hidden;
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    border-radius: 50%;
+    background: #2b2b2b;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    span {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.875rem;
+      font-weight: 800;
+    }
+  }
+
+  &__info {
+    flex: 1;
+    min-width: 0;
+
+    .name-box{
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    strong {
+      display: block;
+      margin-bottom: 2px;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.9rem;
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+  }
+
+  &__match {
+    display: block;
+    margin-bottom: 4px;
+    color: #e50914;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  &__tag {
+    padding: 2px 7px;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 100px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.7rem;
+  }
+
+  &__follow-btn {
+    flex-shrink: 0;
+    padding: 7px 16px;
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.85);
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+
+    &:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: #fff;
+      color: #fff;
+    }
+
+    &.is-following {
+      border-color: rgba(255, 255, 255, 0.2);
+      color: rgba(255, 255, 255, 0.4);
+      cursor: default;
+    }
+  }
+
+  &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.9rem;
+  }
+
+  &__skeleton-list {
+    padding: 0;
+  }
+
+  &__skeleton-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 24px;
+  }
+
+  &__skeleton-avatar {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 50% !important;
+  }
+
+  &__skeleton-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  &__skeleton-name {
+    width: 110px;
+    height: 13px;
+    border-radius: 4px;
+  }
+
+  &__skeleton-tags {
+    width: 160px;
+    height: 11px;
+    border-radius: 4px;
+  }
+
+  &__skeleton-btn {
+    width: 68px;
+    height: 32px;
+    flex-shrink: 0;
+    border-radius: 5px;
+  }
+}
+
+@keyframes fFmBackdropIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fFmPanelIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+
+@media (max-width: 540px) {
+  .follow-friends-modal {
+    align-items: flex-end;
+
+    &__panel {
+      width: 100%;
+      max-height: 80dvh;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+
+  @keyframes fFmPanelIn {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+}

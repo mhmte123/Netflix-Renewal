@@ -1,0 +1,47 @@
+@use "../../../app/globals.scss" as g;
+
+@keyframes skeleton-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-pulse {
+  background: linear-gradient(90deg, #1e1e1e 25%, #2a2a2a 50%, #1e1e1e 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.6s infinite linear;
+  border-radius: 4px;
+}
+
+.connect-section {
+  position: relative;
+  color: #fff;
+}
+
+.connect-section__inner {
+  position: relative;
+  width: min(1920px, calc(100vw - #{g.$main-menu-width}));
+  margin-left: g.$main-menu-width;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: clamp(24px, calc((100vw - #{g.$main-menu-width} - 1920px) / 2), 80px);
+}
+
+/* ===== 반응형: 사이드메뉴 오프셋 보정 ===== */
+@include g.respond(tablet) {
+  .connect-section__inner {
+    width: 100vw;
+    margin-left: 0;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+@include g.respond(mobile) {
+  // 모바일에서 사이드바가 숨겨지므로(display:none) 오프셋 제거
+  .connect-section__inner {
+    width: 100vw;
+    margin-left: 0;
+    /* TOP10(ThemeRow)·섹션 타이틀과 동일한 20px 좌측 기준선으로 통일 */
+    padding-left: 20px;
+    padding-right: 12px;
+  }
+}

@@ -1,0 +1,460 @@
+@use "@/app/globals" as g;
+
+/* 추천 섹션 - 풀폭 배경 영역 */
+.recommend-section {
+  position: relative;
+  padding: 60px 0 80px;
+  overflow: hidden;
+
+  /* 배경 레이어: 현재 활성 작품 backdrop */
+  .recommend-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center 30%;
+    background-repeat: no-repeat;
+    opacity: 0.5;
+    filter: blur(4px) grayscale(100%);
+    transform: scale(1.05);
+    animation: bgFadeIn 0.8s ease forwards;
+    z-index: 0;
+  }
+
+  /* 배경 위 오버레이 - 상하단 그라데이션 */
+  .recommend-bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+        rgba(#141414, 1) 0%,
+        rgba(#141414, 0.2) 30%,
+        rgba(#141414, 0.2) 70%,
+        rgba(#141414, 1) 100%);
+    z-index: 0;
+  }
+
+  /* 안쪽 컨텐츠는 배경 위로 */
+  .inner,
+  .section-title-outer {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Swiper 컨테이너 */
+  .recommend-swiper {
+    width: 100%;
+    overflow: visible;
+    padding: 20px clamp(24px, calc((100vw - 80px - 1920px) / 2), 80px) 40px g.$main-menu-width;
+    position: relative;
+  }
+
+  /* 페이징 버튼 — 카테고리 섹션과 동일 */
+  .swiper-button-prev,
+  .swiper-button-next {
+    background: none;
+    border: none;
+    color: g.$w-color;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    position: absolute;
+
+    &::after {
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    &.swiper-button-disabled {
+      opacity: 0 !important;
+      pointer-events: none;
+    }
+  }
+
+  .swiper-button-prev{
+    left: g.$main-menu-width;
+  }
+
+  &:hover {
+
+    .swiper-button-prev,
+    .swiper-button-next {
+      opacity: 1;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+
+  /* 좌우 슬라이드는 작게, 가운데(active)만 크게 */
+  .swiper-slide {
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    transform: scale(0.82);
+    opacity: 0.75;
+  }
+
+  .swiper-slide-active {
+    transform: scale(1.06);
+    opacity: 1;
+    z-index: 2;
+  }
+
+  /* 슬라이드 한 장 - 이미지 풀카드 + 하단 오버레이 */
+  .recommend-slide {
+    position: relative;
+    aspect-ratio: 16 / 13;
+    max-height: clamp(500px, 38vw, 640px);
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(g.$w-color, 0.08);
+  }
+
+  /* 이미지가 카드 전체를 채움 */
+  .slide-poster {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  /* 미디어 타입 뱃지 - DS 4-3 기준 */
+  .slide-platform {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    padding: 3px 8px;
+    background: rgba(g.$w-color, 0.10);
+    color: rgba(g.$w-color, 0.50);
+    font-size: g.$text-12;
+    font-weight: 500;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    z-index: 1;
+  }
+
+  /* 하단 정보 오버레이 */
+  .slide-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    background: linear-gradient(to top, rgba(10, 10, 10, 0.96) 0%, rgba(10, 10, 10, 0.6) 70%, transparent 100%);
+    padding: clamp(28px, 3vw, 48px) clamp(20px, 2.4vw, 40px) clamp(14px, 1.4vw, 22px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: clamp(4px, 0.45vw, 6px);
+    overflow: hidden;
+  }
+
+  /* 타이틀 + 연령 뱃지 행 */
+  .slide-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow: hidden;
+  }
+
+  /* 타이틀 - 랭킹 .ranking-detail-title 기준 */
+  .slide-title {
+    max-width: 100%;
+    color: #ffffff;
+    font-size: clamp(1.2rem, 1.6vw, 1.9rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* 정보 바 - 스크린샷 레이아웃 */
+  .slide-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+
+  /* 별점 */
+  .meta-stars {
+    display: inline-flex;
+    gap: 2px;
+    flex-shrink: 0;
+
+    .star {
+      font-size: 14px;
+      line-height: 1;
+
+      &.filled {
+        color: g.$main-color;
+      }
+
+      &.empty {
+        color: rgba(g.$w-color, 0.25);
+      }
+    }
+  }
+
+  /* 점수 숫자 */
+  .meta-score {
+    color: g.$w-color;
+    font-size: g.$text-14;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  /* 구분선 */
+  .meta-sep {
+    color: rgba(g.$w-color, 0.3);
+    font-size: g.$text-14;
+    flex-shrink: 0;
+  }
+
+  /* 연도 */
+  .meta-year {
+    color: rgba(g.$w-color, 0.85);
+    font-size: g.$text-14;
+    flex-shrink: 0;
+  }
+
+  /* 장르 */
+  .meta-genres {
+    color: rgba(g.$w-color, 0.85);
+    font-size: g.$text-14;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* 연령 등급 뱃지 */
+  .meta-cert {
+    flex-shrink: 0;
+    padding: 2px 8px;
+    border: 1px solid rgba(g.$w-color, 0.4);
+    border-radius: 3px;
+    color: rgba(g.$w-color, 0.85);
+    font-size: g.$text-12;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  /* 개요 텍스트 - 랭킹 .ranking-detail-overview 기준 */
+  .slide-overview {
+    display: -webkit-box;
+    max-width: 100%;
+    overflow: hidden;
+    color: rgba(g.$w-color, 0.72);
+    font-size: g.$text-14;
+    line-height: 1.72;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+  }
+
+  /* 버튼 영역 - 랭킹 .ranking-detail-actions 기준 */
+  .slide-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: clamp(6px, 0.7vw, 14px);
+  }
+
+  /* 버튼 공통 — 히어로 .btn-play / .btn-info 와 동일 */
+  .btn-play,
+  .btn-info {
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    font-size: g.$text-13;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    color: g.$w-color;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+
+  .btn-play {
+    gap: 6px;
+    height: 36px;
+    padding: 0 14px;
+    background: g.$main-color;
+
+    &:hover {
+      background: #B00710;
+      transform: scale(1.02);
+    }
+  }
+
+  .btn-info {
+    gap: 5px;
+    height: 36px;
+    padding: 0 12px;
+    background: rgba(g.$w-color, 0.10);
+    border: 1px solid rgba(g.$w-color, 0.25);
+    backdrop-filter: blur(4px);
+
+    &:hover {
+      background: rgba(g.$w-color, 0.2);
+    }
+  }
+
+  /* active 아닌 슬라이드: 텍스트는 보이되 흐리게 */
+  .swiper-slide:not(.swiper-slide-active) {
+
+    /* 흐림은 텍스트 요소에만 적용 (slide-info 전체에 주면 자식 opacity가 누적되어
+       버튼만 또렷하게 만들 수 없음) */
+    .slide-title,
+    .slide-meta,
+    .slide-overview {
+      opacity: 0.6;
+    }
+
+    /* 버튼은 보이면 항상 클릭 가능 + 또렷하게 */
+    .slide-actions {
+      pointer-events: auto;
+      opacity: 1;
+    }
+  }
+}
+
+
+
+/* 배경 페이드 인 애니메이션 */
+@keyframes bgFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 0.3;
+  }
+}
+/* ===== 반응형: 넷플릭스 추천작 ===== */
+@include g.respond(tablet) {
+  .recommend-section {
+    padding: 40px 0 56px;
+    .section-title-outer { padding-left: 24px; padding-right: 24px; }
+    .recommend-swiper { padding-left: 24px; padding-right: 24px; }
+    .swiper-button-prev { left: 24px; }
+
+    /* 카드 높이: 고정 비율(2/1.8) 해제 → 내용 기준 자동 높이
+       (비율 높이 < 내용 높이라서 justify-content:center + overflow:hidden 에
+       타이틀·별점이 위아래로 잘리던 문제 해결) */
+    .swiper-slide { height: auto; }
+    .recommend-slide {
+      aspect-ratio: auto;
+      max-height: none;
+      height: 100%;          // 가장 높은 카드 기준으로 줄 맞춤
+    }
+    .slide-poster { flex: none; aspect-ratio: 16 / 9; }
+    .slide-info {
+      justify-content: flex-start;
+      gap: 6px;
+      padding: 14px 16px 16px;
+    }
+    .slide-title { font-size: 18px; line-height: 1.25; }
+    .slide-overview { -webkit-line-clamp: 1; line-clamp: 1; }
+
+    .slide-actions {
+      gap: 8px;
+      flex-wrap: wrap;       // 안전장치: 그래도 넘치면 줄바꿈(클리핑 방지)
+      row-gap: 8px;
+      min-width: 0;
+    }
+
+    .btn-play, .btn-info {
+      height: 38px;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .btn-play { padding: 0 12px; gap: 6px; }
+    .btn-info { padding: 0 11px; gap: 5px; }
+    .btn-play svg, .btn-info svg { width: 13px; height: 13px; }
+
+    /* 찜/공유 원형 버튼 축소 */
+    .card-wish { width: 36px; height: 36px; flex-shrink: 0; }
+  }
+}
+@include g.respond(mobile) {
+  .recommend-section {
+    padding: 26px 0 36px;
+    .section-title-outer { padding-left: 20px; }
+    .recommend-swiper {
+      /* 부모의 padding/margin 오프셋을 무력화하고 뷰포트 정중앙에 배치 */
+      width: 100vw;
+      margin-left: calc(-1 * (100vw - 100%) / 2);
+      padding: 16px 0;
+    }
+    .swiper-button-prev { left: 20px; }
+    .swiper-button-prev,
+    .swiper-button-next { display: none; }
+
+    /* 카드: 이미지가 전체 영역을 채우고 정보는 하단에 오버레이 */
+    .swiper-slide { height: auto; }
+    .recommend-slide {
+      aspect-ratio: 3 / 3.2;
+      max-height: none;
+      height: 100%;
+    }
+    .slide-poster {
+      position: absolute;
+      inset: 0;
+      flex: none;
+      aspect-ratio: auto;
+      width: 100%;
+      height: 100%;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+    }
+    .slide-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1;
+      justify-content: flex-end;
+      gap: 5px;
+      padding: 28px 14px 14px;
+      background: linear-gradient(
+        to top,
+        rgba(10, 10, 10, 0.92) 0%,
+        rgba(10, 10, 10, 0.5) 65%,
+        transparent 100%
+      );
+    }
+    .slide-title { font-size: 17px; line-height: 1.25; }
+    .meta-stars .star { font-size: 12px; }
+    .meta-score,
+    .meta-sep,
+    .meta-year,
+    .meta-genres { font-size: 12px; }
+    .meta-cert { font-size: 10px; padding: 1px 6px; }
+    .slide-overview {
+      font-size: 12px;
+      line-height: 1.55;
+      -webkit-line-clamp: 1;
+      line-clamp: 1;
+    }
+    /* 모바일: 카드 안 액션 버튼(재생/상세/찜/공유) 숨김 */
+    .slide-actions { display: none; }
+    .btn-play, .btn-info { height: 34px; font-size: 13px; white-space: nowrap; }
+    .btn-play { padding: 0 13px; gap: 6px; }
+    .btn-info { padding: 0 11px; gap: 5px; }
+    .btn-play svg, .btn-info svg { width: 12px; height: 12px; }
+    .card-wish { width: 34px; height: 34px; flex-shrink: 0; }
+  }
+}

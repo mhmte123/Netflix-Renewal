@@ -1,0 +1,217 @@
+@use "@/app/globals" as g;
+
+.release-section {
+  position: relative;
+  width: 100%;
+  overflow-x: clip;
+
+  .release-swiper-outer {
+    position: relative;
+    padding-left: g.$main-menu-width;
+    overflow-x: clip;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 80px;
+      z-index: 5;
+      pointer-events: none;
+      background: linear-gradient(to left, rgba(g.$d-color, 0.8), transparent);
+    }
+
+    .release-swiper {
+      position: relative;
+      z-index: 6;
+      width: 100%;
+      overflow: visible;
+    }
+  }
+
+  // Swiper 네비게이션 버튼
+  .swiper-button-prev,
+  .swiper-button-next {
+    background: none;
+    border: none;
+    color: g.$w-color;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+
+    &::after {
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    &.swiper-button-disabled {
+      opacity: 0 !important;
+      pointer-events: none;
+    }
+  }
+
+  &:hover {
+
+    .swiper-button-prev,
+    .swiper-button-next {
+      opacity: 1;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+
+  /* ── 카드 ── */
+  .release-card {
+    display: block;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #111;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+
+      .card-image {
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  .card-image {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    aspect-ratio: 16 / 9;
+    filter: brightness(0.85);
+    transition: transform 0.5s ease;
+  }
+
+  /* D-day 배지 */
+  .card-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.72);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    padding: 5px 9px;
+    border-radius: 5px;
+    backdrop-filter: blur(4px);
+    line-height: 1;
+    z-index: 2;
+  }
+
+  /* 하단 텍스트 오버레이 + 그라데이션 */
+  .card-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 32px 14px 14px;
+    box-sizing: border-box;
+    background: linear-gradient(to bottom,
+        transparent 0%,
+        rgba(0, 0, 0, 0.55) 30%,
+        rgba(0, 0, 0, 0.88) 65%,
+        rgba(0, 0, 0, 0.97) 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    z-index: 1;
+  }
+
+  .card-meta {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 2px;
+  }
+
+  .card-type {
+    display: inline-block;
+    font-size: 0.7rem;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  .card-title {
+    font-size: clamp(0.9rem, 1.1vw, 1.1rem);
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+    color: g.$w-color;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+  }
+
+  .card-date {
+    font-size: 0.8rem;
+    color: #aaa;
+    font-weight: 400;
+    margin: 0;
+    line-height: 1.4;
+  }
+}
+
+/* ===== 반응형 ===== */
+@include g.respond(tablet) {
+  .release-section {
+    .section-title-outer {
+      padding-left: 64px;
+    }
+
+    .release-swiper-outer {
+      padding-left: 64px;
+    }
+  }
+}
+
+@include g.respond(mobile) {
+  .release-section {
+    .section-title-outer {
+      padding-left: 20px;
+    }
+
+    .release-swiper-outer {
+      padding-left: 20px;
+    }
+
+    .swiper-button-prev,
+    .swiper-button-next {
+      display: none;
+    }
+
+    .card-image {
+      aspect-ratio: 3 / 4;
+    }
+
+    .card-info {
+      padding: 24px 10px 10px;
+      gap: 4px;
+    }
+
+    .card-title {
+      font-size: 0.8rem;
+    }
+
+    .card-date,
+    .card-type,
+    .card-badge {
+      font-size: 0.66rem;
+    }
+  }
+}

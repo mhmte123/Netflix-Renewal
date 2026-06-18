@@ -1,0 +1,73 @@
+@use "@/app/globals" as g;
+
+@keyframes wishToastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(16px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@keyframes wishToastOut {
+  from { opacity: 1; transform: translateX(-50%) translateY(0); }
+  to   { opacity: 0; transform: translateX(-50%) translateY(16px); }
+}
+
+.wish-toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1f1f1f;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: g.$w-color;
+  font-size: 14px;
+  z-index: 9999;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+  animation: wishToastIn 0.25s ease;
+
+  &--hiding {
+    animation: wishToastOut 0.25s ease forwards;
+  }
+
+  img {
+    filter: brightness(0) invert(1);
+    flex-shrink: 0;
+  }
+}
+
+.wishlist-heart-btn {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: g.$w-color;
+  cursor: pointer;
+  transition: transform 0.15s;
+
+  .wishlist-icon path {
+    fill: none;
+    transition: fill 0.15s;
+  }
+
+  &:hover {
+    transform: scale(1.08);
+  }
+
+  &.is-wished .wishlist-icon path {
+    fill: currentColor;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+}

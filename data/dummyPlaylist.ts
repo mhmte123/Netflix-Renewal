@@ -1,0 +1,236 @@
+// 커넥트 모드 "추천하는 플레이리스트" 더미 데이터
+// - 카드 콜라주는 posters 사용
+// - 카드 클릭 시 /playlist/{userId}/{listId} 상세로 이동하며, videoIds(실제 TMDB ID)로 작품을 resolve
+//   videoIds 형식: "movie-{id}" / "tv-{id}"  (유명 작품 ID라 상세/재생하기까지 연결됨. 필요시 교체 가능)
+
+const IMG = "https://image.tmdb.org/t/p/w342";
+
+export interface DummyPlaylist {
+  userId: string;
+  listId: string;
+  nickname: string;
+  badge: string;
+  imgUrl: string;
+  category: "영화" | "시리즈" | "애니메이션";
+  name: string;
+  content: string;
+  featuredMovieTitle: string;
+  tags: string[];
+  isShare: boolean;
+  posters: string[];
+  videoIds: string[];
+  genreStats: Record<string, number>;
+}
+
+export const dummyPlaylists: DummyPlaylist[] = [
+  {
+    userId: "dummy-1",
+    listId: "dummy-list-1",
+    nickname: "햅번공주",
+    badge: "취향 공유러",
+    imgUrl: "/images/profile/image/squid_game/1.png",
+    category: "영화",
+    name: "햅번공주님의 추천작품",
+    content: "여운이 오래 남는 인생 영화 모음.",
+    featuredMovieTitle: "기생충",
+    tags: ["감성적인", "심오한"],
+    isShare: true,
+    posters: [
+      `${IMG}/jjHccoFjbqlfr4VGLVLT7yek0Xn.jpg`,
+      `${IMG}/9ICUbdveP56jRoMMVkXSOr3ceyV.jpg`,
+      `${IMG}/atSxEGstxXRoSKDQFBgqQ5lpGSt.jpg`,
+      `${IMG}/evoEi8SBSvIIEveM3V6nCJ6vKj8.jpg`,
+    ],
+    videoIds: ["movie-496243", "movie-155", "movie-27205", "movie-157336"],
+    genreStats: { "18": 9, "10749": 7, "9648": 5, "14": 3, "53": 2 },
+  },
+  {
+    userId: "dummy-2",
+    listId: "dummy-list-2",
+    nickname: "시네마중독",
+    badge: "정주행 마스터",
+    imgUrl: "/images/profile/image/stranger_things/1.png",
+    category: "시리즈",
+    name: "시네마중독님의 추천작품",
+    content: "정주행 각 나오는 시리즈만 모았어요.",
+    featuredMovieTitle: "기묘한 이야기",
+    tags: ["어두운", "신나는"],
+    isShare: true,
+    posters: [
+      `${IMG}/mpOQpOKdo2XJnTqRzo1lTmDNsc1.jpg`,
+      `${IMG}/yACIAqAkSLkX4coHafpyLWAtQjw.jpg`,
+      `${IMG}/oCpvKD0yuRV9OAZ8xklRy9HWc6l.jpg`,
+      `${IMG}/4e8FR7ORN7XtJm5TsGKGtyTQah6.jpg`,
+    ],
+    videoIds: ["tv-66732", "tv-93405", "tv-119051", "tv-70523"],
+    genreStats: { "53": 10, "28": 8, "18": 6, "9648": 4, "878": 3 },
+  },
+  {
+    userId: "dummy-3",
+    listId: "dummy-list-3",
+    nickname: "새벽두시",
+    badge: "애니 덕후",
+    imgUrl: "/images/profile/image/arcane/1.png",
+    category: "애니메이션",
+    name: "새벽두시님의 추천작품",
+    content: "잠 안 오는 밤에 보는 애니메이션.",
+    featuredMovieTitle: "아케인",
+    tags: ["감성적인", "잔잔한"],
+    isShare: true,
+    posters: [
+      `${IMG}/1PeuDHoxfvgTaNIrJzM6vKmJarD.jpg`,
+      `${IMG}/lMWTlGr9jVUC18T515hPRKym5QQ.jpg`,
+      `${IMG}/u1L4qxIu5sC2P082uMHYt7Ifvnj.jpg`,
+      `${IMG}/bzEpxah8vLNzPDrvswwgJ9rZQGX.jpg`,
+    ],
+    videoIds: ["tv-94605", "movie-569094", "movie-129", "movie-508883"],
+    genreStats: { "16": 12, "14": 8, "18": 5, "10749": 4, "35": 3 },
+  },
+  {
+    userId: "dummy-4",
+    listId: "dummy-list-4",
+    nickname: "필름고양이",
+    badge: "취향 공유러",
+    imgUrl: "/images/profile/image/wednesday/1.png",
+    category: "영화",
+    name: "필름고양이님의 추천작품",
+    content: "한 번쯤은 꼭 봐야 할 명작들.",
+    featuredMovieTitle: "조커",
+    tags: ["어두운", "심오한"],
+    isShare: true,
+    posters: [
+      `${IMG}/6OnFzi7nU6t4j1rmX9QI8EYDWb4.jpg`,
+      `${IMG}/fxBxoXFAYKWde6lKzXxSusn18Av.jpg`,
+      `${IMG}/eKZ07Ted7VHxQjbuZrRBFOamcKJ.jpg`,
+      `${IMG}/1yvBkSv4ZLS1GohlmMDmdpSgfYo.jpg`,
+    ],
+    videoIds: ["movie-475557", "movie-603", "movie-550", "movie-238"],
+    genreStats: { "18": 10, "9648": 8, "53": 7, "27": 4, "878": 2 },
+  },
+  {
+    userId: "dummy-5",
+    listId: "dummy-list-5",
+    nickname: "무비테라스",
+    badge: "취향 공유러",
+    imgUrl: "/images/profile/image/money_heist/1.png",
+    category: "시리즈",
+    name: "무비테라스님의 추천작품",
+    content: "몰입감 최고의 화제작 시리즈.",
+    featuredMovieTitle: "브레이킹 배드",
+    tags: ["어두운", "신나는"],
+    isShare: true,
+    posters: [
+      `${IMG}/ztkUQFLlC19CCMYHW9o1zWhJRNq.jpg`,
+      `${IMG}/zmK5G0JdkL637VbaVPYFeEQ52qi.jpg`,
+      `${IMG}/bIH4B1PIaQkZk15tJDFBRMgwhhS.jpg`,
+      `${IMG}/5rPQiz9ql0KdlTr21WDcL85va3H.jpg`,
+    ],
+    videoIds: ["tv-1396", "tv-1399", "tv-71446", "tv-71912"],
+    genreStats: { "53": 11, "18": 9, "28": 6, "9648": 5, "878": 3 },
+  },
+  {
+    userId: "dummy-6",
+    listId: "dummy-list-6",
+    nickname: "엔딩크레딧",
+    badge: "애니 덕후",
+    imgUrl: "/images/profile/image/one_piece/1.png",
+    category: "애니메이션",
+    name: "엔딩크레딧님의 추천작품",
+    content: "엔딩까지 완벽한 애니메이션.",
+    featuredMovieTitle: "너의 이름은.",
+    tags: ["신나는", "감성적인"],
+    isShare: true,
+    posters: [
+      `${IMG}/2DJCufz3Oa703PbLjNX1pM6MCG2.jpg`,
+      `${IMG}/iR6T6QxSJpSQi1S4GGjGWLQkSva.jpg`,
+      `${IMG}/kTYFXRdvo7GZWULKjeD4YZ929NC.jpg`,
+      `${IMG}/pnn223i9v5kfYku6TbqdSbPePJp.jpg`,
+    ],
+    videoIds: ["movie-372058", "tv-85937", "tv-1429", "tv-95479"],
+    genreStats: { "16": 14, "14": 7, "35": 6, "10749": 5, "18": 4 },
+  },
+  {
+    userId: "dummy-7",
+    listId: "dummy-list-7",
+    nickname: "포스터수집가",
+    badge: "취향 공유러",
+    imgUrl: "/images/profile/image/peaky_blinders/1.png",
+    category: "영화",
+    name: "포스터수집가님의 추천작품",
+    content: "감독의 색깔이 진한 작품들.",
+    featuredMovieTitle: "위플래쉬",
+    tags: ["감성적인", "심오한"],
+    isShare: true,
+    posters: [
+      `${IMG}/oKNkhmyIBiDENivK6ELZxfBWa3q.jpg`,
+      `${IMG}/ad9ndytwOckyShSc0A6tx1rZRkW.jpg`,
+      `${IMG}/l8wvbQQIBV8LBHmx3Wx9xbE2kzt.jpg`,
+      `${IMG}/qV9BQZdiM8foEzDz0Ag5hGWE5qM.jpg`,
+    ],
+    videoIds: ["movie-244786", "movie-313369", "movie-13", "movie-278"],
+    genreStats: { "18": 8, "9648": 7, "53": 6, "10749": 5, "14": 3 },
+  },
+  {
+    userId: "dummy-8",
+    listId: "dummy-list-8",
+    nickname: "심야상영",
+    badge: "정주행 마스터",
+    imgUrl: "/images/profile/image/lucifer/1.png",
+    category: "시리즈",
+    name: "심야상영님의 추천작품",
+    content: "밤새 정주행하게 되는 시리즈.",
+    featuredMovieTitle: "미스터 로봇",
+    tags: ["어두운", "무서운"],
+    isShare: true,
+    posters: [
+      `${IMG}/ej7Br2B8dkZZBGa6vDE8HqATgU7.jpg`,
+      `${IMG}/lXQh6FJGbo1xe4vE9WpyQDEUGU2.jpg`,
+      `${IMG}/oCpvKD0yuRV9OAZ8xklRy9HWc6l.jpg`,
+      `${IMG}/mpOQpOKdo2XJnTqRzo1lTmDNsc1.jpg`,
+    ],
+    videoIds: ["tv-42009", "tv-100088", "tv-119051", "tv-66732"],
+    genreStats: { "53": 12, "9648": 9, "27": 7, "878": 5, "18": 3 },
+  },
+  {
+    userId: "dummy-9",
+    listId: "dummy-list-9",
+    nickname: "씨네필",
+    badge: "애니 덕후",
+    imgUrl: "/images/profile/image/bridgerton/1.png",
+    category: "애니메이션",
+    name: "씨네필님의 추천작품",
+    content: "지브리 감성 가득한 명작 모음.",
+    featuredMovieTitle: "센과 치히로의 행방불명",
+    tags: ["잔잔한", "감성적인"],
+    isShare: true,
+    posters: [
+      `${IMG}/u1L4qxIu5sC2P082uMHYt7Ifvnj.jpg`,
+      `${IMG}/xiz6TiSduvR1U3VLfWVlBEdT9fO.jpg`,
+      `${IMG}/lLftgg4iFyDwuodra3Isr41y2Lq.jpg`,
+      `${IMG}/c9zCkL0rTkNQ1HB9cmeFIqbkS50.jpg`,
+    ],
+    videoIds: ["movie-129", "movie-4935", "movie-128", "movie-8392"],
+    genreStats: { "16": 10, "18": 8, "14": 6, "10749": 5, "35": 4 },
+  },
+  {
+    userId: "dummy-10",
+    listId: "dummy-list-10",
+    nickname: "무드등",
+    badge: "취향 공유러",
+    imgUrl: "/images/profile/image/witcher/1.png",
+    category: "영화",
+    name: "무드등님의 추천작품",
+    content: "분위기 잡고 싶을 때 보는 영화.",
+    featuredMovieTitle: "인터스텔라",
+    tags: ["심오한", "어두운"],
+    isShare: true,
+    posters: [
+      `${IMG}/evoEi8SBSvIIEveM3V6nCJ6vKj8.jpg`,
+      `${IMG}/atSxEGstxXRoSKDQFBgqQ5lpGSt.jpg`,
+      `${IMG}/i91wnVqkJf5ykDJq0XmIusvPFL3.jpg`,
+      `${IMG}/nLQpUxLulXpIvN7FwREWjRNRBRI.jpg`,
+    ],
+    videoIds: ["movie-157336", "movie-27205", "movie-577922", "movie-374720"],
+    genreStats: { "878": 11, "18": 7, "53": 5, "9648": 4, "28": 3 },
+  },
+];

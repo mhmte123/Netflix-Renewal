@@ -1,0 +1,45 @@
+@keyframes posterGridSkeletonShimmer {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: 0 0;
+  }
+}
+
+.poster-grid-skeleton {
+  pointer-events: none;
+}
+
+.poster-skeleton-card {
+  min-width: 0;
+}
+
+.poster-skeleton-card__poster,
+.poster-skeleton-card__line {
+  background: linear-gradient(90deg, #1f1f1f 25%, #2a2a2a 37%, #1f1f1f 63%);
+  background-size: 400% 100%;
+  animation: posterGridSkeletonShimmer 1.4s ease infinite;
+}
+
+.poster-skeleton-card__poster {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  border-radius: 5px;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.28);
+}
+
+.poster-skeleton-card__line {
+  width: 74%;
+  height: 12px;
+  margin-top: 12px;
+  border-radius: 999px;
+}
+
+.poster-skeleton-card__line--short {
+  width: 42%;
+  height: 10px;
+  margin-top: 8px;
+  opacity: 0.75;
+}

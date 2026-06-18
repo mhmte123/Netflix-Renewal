@@ -1,0 +1,226 @@
+@use "@/app/globals" as g;
+
+/* 시청중 섹션 */
+.watching-section {
+  padding: 40px 0;
+
+  .watching-swiper-wrap {
+    position: relative;
+    padding-left: g.$main-menu-width;
+    overflow: hidden;
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    background: none;
+    border: none;
+    color: g.$w-color;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+
+    &::after {
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    &.swiper-button-disabled {
+      opacity: 0 !important;
+      pointer-events: none;
+    }
+  }
+
+  &:hover {
+    .swiper-button-prev,
+    .swiper-button-next {
+      opacity: 1;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+
+  /* Swiper 영역 */
+  .watching-swiper {
+    width: 100%;
+    overflow: visible;
+
+    }
+
+  /* 카드 */
+  .watching-card {
+    display: block;
+    color: g.$w-color;
+  }
+
+  /* 썸네일 박스 */
+  .watching-thumb {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #222;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+  }
+
+  .watching-play-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 1;
+  }
+
+  .watching-play-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    color: #fff;
+  }
+
+  .watching-card:hover {
+    .watching-thumb {
+      transform: scale(1.03);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    }
+    .watching-thumb img { transform: scale(1.05); }
+    .watching-play-overlay { opacity: 1; }
+  }
+
+  /* 시청률 진행바 (와이어프레임의 빨간 하단 바) */
+  .progress-bar {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 3px;
+    background-color: rgba(255, 255, 255, 0.18);
+    z-index: 3;
+
+    .progress-fill {
+      display: block;
+      height: 100%;
+      background-color: g.$main-color;
+      /* 넷플릭스 레드 */
+    }
+  }
+
+  /* 카드 제목 행 */
+  .watching-title-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 8px;
+  }
+
+  .watching-title {
+    flex: 1;
+    font-size: g.$text-18;
+    font-weight: 700;
+    color: #e5e5e5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* 시청중인 회차 표시 */
+  .watching-episode {
+    margin-left: 6px;
+    color: #999;
+    font-size: g.$text-13;
+    font-weight: 500;
+  }
+
+  .watching-more-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 2px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.15s;
+
+    &:hover { opacity: 1; }
+
+    img { display: block; filter: invert(1); }
+  }
+
+  .watching-more-btn.active {
+    opacity: 1;
+  }
+}
+
+.watching-menu {
+    position: fixed;
+    z-index: 99997;
+    background: #1f1f1f;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    min-width: 176px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 12px 16px;
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 13px;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+
+      &:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+    }
+
+    &__delete {
+      color: #e87c7c !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+
+      &:hover { background: rgba(232, 124, 124, 0.1) !important; }
+    }
+  }
+
+/* ===== 반응형 ===== */
+@include g.respond(tablet) {
+  .watching-section {
+    padding: 28px 0;
+    .watching-swiper-wrap { padding-left: 64px; }
+    .watching-title { font-size: g.$text-16; }
+  }
+}
+@include g.respond(mobile) {
+  .watching-section {
+    padding: 20px 0;
+    .watching-swiper-wrap { padding-left: 20px; padding-right: 10px; }
+    .watching-title { font-size: g.$text-14; }
+    .watching-title-row { margin-top: 6px; }
+    .watching-play-btn { width: 40px; height: 40px; font-size: 17px; }
+    .swiper-button-prev,
+    .swiper-button-next { display: none !important; }
+  }
+}

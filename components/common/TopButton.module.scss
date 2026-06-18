@@ -1,0 +1,66 @@
+.topBtn {
+  position: fixed;
+  right: 32px;
+  bottom: 98px;
+
+  @media (max-width: 1024px) {
+    // MobileBottomNav(80px) + safe-area + AI버튼(48px) + 여유
+    bottom: calc(80px + env(safe-area-inset-bottom) + 68px);
+    right: 16px;
+    width: 40px;
+    height: 40px;
+  }
+
+  z-index: 9999;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: rgba(30, 30, 30, 0.85);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: background-color 0.2s, transform 0.2s;
+
+  &:hover {
+    background-color: rgba(60, 60, 60, 0.95);
+    transform: translateY(-3px);
+  }
+
+  img {
+    display: block;
+  }
+}
+
+
+.enter {
+  animation: toastIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.exit {
+  animation: toastOut 0.22s ease-in forwards;
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes toastOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(16px) scale(0.88);
+  }
+}

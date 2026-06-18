@@ -1,0 +1,61 @@
+@use "@/app/globals" as g;
+
+.mobile-bottom-nav {
+    display: none;
+}
+
+@include g.respond(tablet) {
+    .mobile-bottom-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 99996;
+        height: calc(80px + env(safe-area-inset-bottom));
+        padding-bottom: env(safe-area-inset-bottom);
+        background: rgba(14, 14, 12, 0.97);
+        backdrop-filter: blur(16px) saturate(160%);
+        -webkit-backdrop-filter: blur(16px) saturate(160%);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 15px 15px 0 0;
+        align-items: stretch;
+    }
+
+    .mobile-bottom-nav__item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        color: rgba(255, 255, 255, 0.5);
+        transition: color 0.15s;
+        padding-bottom: 2px;
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+
+        &.active {
+            color: g.$main-color;
+        }
+
+        &:active {
+            opacity: 0.7;
+        }
+    }
+
+    .mobile-bottom-nav__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+    }
+
+    .mobile-bottom-nav__label {
+        font-size: 10px;
+        font-weight: 500;
+        letter-spacing: 0.1px;
+        line-height: 1;
+    }
+}

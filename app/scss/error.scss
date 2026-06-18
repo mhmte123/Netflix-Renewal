@@ -1,0 +1,261 @@
+@use "@/app/globals" as g;
+
+.error-page {
+  min-height: 100vh;
+  padding: 60px 0 80px;
+  display: flex;
+  align-items: center;
+
+  .inner {
+    width: 800px;
+    max-width: 95%;
+  }
+
+  .error-container {
+    text-align: center;
+    padding: 40px 20px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .error-graphic {
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(229, 9, 20, 0.15), transparent);
+    border: 2px solid #2a2a2a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 56px;
+    color: g.$g-color;
+
+    &.network {
+      border-color: g.$main-color;
+      color: g.$main-color;
+      background: linear-gradient(135deg, rgba(229, 9, 20, 0.2), transparent);
+    }
+
+    @media (max-width: 600px) {
+      width: 100px;
+      height: 100px;
+      font-size: g.$text-32;
+    }
+  }
+
+  .error-code {
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: g.$text-12;
+    color: g.$g-color;
+    letter-spacing: 0.15em;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-size: g.$text-32;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    line-height: 1.2;
+
+    @media (max-width: 600px) {
+      font-size: g.$text-24;
+    }
+  }
+
+  .error-desc {
+    font-size: g.$text-14;
+    color: g.$g-color;
+    line-height: 1.7;
+    margin-bottom: 32px;
+
+    @media (max-width: 600px) {
+      font-size: g.$text-13;
+    }
+  }
+
+  .error-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 48px;
+
+    @media (max-width: 500px) {
+      flex-direction: column;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 28px;
+      background: g.$main-color;
+      color: g.$w-color;
+      border: none;
+      border-radius: g.$radius-md;
+      font-weight: 600;
+      font-size: g.$text-14;
+      cursor: pointer;
+
+      &:hover { background: #b81017; }
+    }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 28px;
+      background: transparent;
+      color: g.$w-color;
+      border: 1px solid #3a3a3a;
+      border-radius: g.$radius-md;
+      font-size: g.$text-14;
+      cursor: pointer;
+
+      &:hover {
+        border-color: g.$w-color;
+      }
+    }
+  }
+
+  /* 추천 링크 */
+  .error-suggest {
+    padding-top: 32px;
+    border-top: 1px solid #2a2a2a;
+    text-align: left;
+
+    h3 {
+      font-size: g.$text-12;
+      color: g.$g-color;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .suggest-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    li {
+      a,
+      > span {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 18px;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid #2a2a2a;
+        border-radius: g.$radius-md;
+        font-size: g.$text-13;
+        color: g.$w-color;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+          border-color: g.$main-color;
+          background: rgba(229, 9, 20, 0.05);
+        }
+
+        .arrow {
+          color: g.$g-color;
+        }
+      }
+    }
+  }
+
+  /* 인기 작품 미리보기 */
+  .popular-preview {
+    margin-top: 40px;
+
+    h3 {
+      font-size: g.$text-12;
+      color: g.$g-color;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .popular-row {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+
+      @media (max-width: 600px) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .poster-mini {
+      aspect-ratio: 2 / 3;
+      background: #1a1a1a;
+      border-radius: g.$radius-md;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s;
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+
+  /* 개발용 에러 상세 */
+  .error-detail {
+    margin-top: 32px;
+    padding: 16px;
+    background: rgba(229, 9, 20, 0.05);
+    border: 1px solid rgba(229, 9, 20, 0.2);
+    border-radius: g.$radius-md;
+    text-align: left;
+
+    summary {
+      cursor: pointer;
+      font-size: g.$text-13;
+      color: g.$main-color;
+      font-weight: 600;
+    }
+
+    pre {
+      margin-top: 12px;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 4px;
+      font-size: g.$text-12;
+      color: g.$g-color;
+      white-space: pre-wrap;
+      word-break: break-all;
+      font-family: monospace;
+    }
+
+    .digest {
+      margin-top: 8px;
+      font-size: g.$text-12;
+      color: g.$g-color;
+      font-family: monospace;
+    }
+  }
+}
+
+/* ===== 반응형: 사이드메뉴(nav) 좌측 여백 확보 ===== */
+@include g.respond(laptop) {
+  .error-page { padding-left: 80px; }
+}
+@include g.respond(tablet) {
+  .error-page { padding-left: 64px; }
+}
+@include g.respond(mobile) {
+  .error-page { padding-left: 56px; padding-right: 16px; }
+}

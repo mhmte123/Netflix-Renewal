@@ -1,0 +1,91 @@
+@use "@/app/globals" as g;
+
+// 모든 페이지 공통 FAQ 아코디언 디자인
+.faq-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.faq-acc-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid #2a2a2a;
+  border-radius: g.$radius-md;
+  overflow: hidden;
+  transition: border-color 0.2s, background 0.2s;
+
+  &:hover {
+    border-color: #3a3a3a;
+  }
+
+  &.open {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: #3a3a3a;
+  }
+
+  .faq-acc-q {
+    width: 100%;
+    padding: 16px 20px;
+    background: transparent;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    color: g.$w-color;
+    font-size: g.$text-14;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+
+    .q-text {
+      flex: 1;
+      line-height: 1.5;
+    }
+
+    .q-arrow {
+      flex-shrink: 0;
+      color: g.$g-color;
+      transition: transform 0.25s ease, color 0.2s;
+
+      &.is-open {
+        transform: rotate(180deg);
+        color: #d0d0d0;
+      }
+    }
+  }
+
+  // 펼침 애니메이션 (grid-template-rows 트릭)
+  .faq-acc-a {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.25s ease;
+
+    p {
+      overflow: hidden;
+      margin: 0;
+      padding: 0 20px;
+      font-size: g.$text-13;
+      color: g.$g-color;
+      line-height: 1.7;
+    }
+
+    &.open {
+      grid-template-rows: 1fr;
+
+      p {
+        padding: 0 20px 18px;
+      }
+    }
+  }
+}
+
+.faq-accordion-empty {
+  padding: 40px 0;
+  text-align: center;
+  color: g.$g-color;
+  font-size: g.$text-13;
+}

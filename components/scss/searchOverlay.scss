@@ -1,0 +1,613 @@
+@use "@/app/globals" as g;
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.search-overlay {
+  position: fixed;
+  top: g.$header-height;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - #{g.$header-height});
+  z-index: 99998;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+  isolation: isolate;
+
+  // 💡 처음엔 블러를 0으로 대기하다가
+  .search-overlay__backdrop {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0);
+    -webkit-backdrop-filter: blur(0px);
+    backdrop-filter: blur(0px);
+    z-index: 1;
+    pointer-events: auto;
+    // 변화가 부드럽게 일어나도록 transition 부여
+    transition:
+      background 0.25s ease,
+      backdrop-filter 0.25s ease,
+      -webkit-backdrop-filter 0.25s ease;
+  }
+
+  // 💡 .show 클래스가 붙는 순간(마운트 직후 0.01초 뒤) 블러를 활성화하여 연산을 깨웁니다.
+  &.show {
+    .search-overlay__backdrop {
+      background: rgba(0, 0, 0, 0.4);
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+    }
+  }
+
+  .search-overlay__content {
+    position: relative;
+    width: 100%;
+    max-height: calc(100vh - #{g.$header-height});
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: rgba(20, 20, 20, 0.95);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 24px 6vw 40px;
+    z-index: 2;
+    pointer-events: auto;
+    animation: slideDown 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+  }
+
+  .search-overlay__close {
+    display: none;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.68);
+    cursor: pointer;
+    font-size: 1.65rem;
+    line-height: 1;
+    transition:
+      background 0.18s ease,
+      color 0.18s ease;
+
+    &:hover,
+    &:focus-visible {
+      background: rgba(255, 255, 255, 0.16);
+      color: #fff;
+      outline: none;
+    }
+  }
+
+  .search-overlay__inner {
+    width: min(100%, 1400px);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  // 1. 검색창 필드 수정
+  .search-overlay__field {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 56px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    padding: 0 0 0 4px;
+
+    &:focus-within {
+      border-color: g.$main-color;
+    }
+
+    input {
+      min-width: 0;
+      flex: 1;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: #fff;
+      font-size: 1.3rem;
+      font-weight: bold;
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      &::-webkit-search-decoration,
+      &::-webkit-search-cancel-button,
+      &::-webkit-search-results-button,
+      &::-webkit-search-results-decoration {
+        display: none;
+      }
+    }
+
+    .search-overlay__clear {
+      display: grid;
+      width: 26px;
+      height: 26px;
+      flex: 0 0 auto;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.14);
+      color: rgba(255, 255, 255, 0.7);
+      cursor: pointer;
+      font-size: 1rem;
+      line-height: 1;
+      transition:
+        background 0.18s ease,
+        color 0.18s ease;
+
+      &:hover,
+      &:focus-visible {
+        background: rgba(255, 255, 255, 0.24);
+        color: #fff;
+        outline: none;
+      }
+    }
+
+    .search-overlay__submit {
+      margin-left: auto;
+      flex: 0 0 auto;
+      min-height: 38px;
+      border: 0;
+      border-radius: 6px;
+      background: g.$main-color;
+      color: #fff;
+      cursor: pointer;
+      font: inherit;
+      font-size: g.$text-13;
+      font-weight: 800;
+      padding: 0 16px;
+      white-space: nowrap;
+      transition:
+        background 0.18s ease,
+        opacity 0.18s ease;
+
+      &:hover:not(:disabled),
+      &:focus-visible:not(:disabled) {
+        background: #f40612;
+        outline: none;
+      }
+
+      &:disabled {
+        cursor: default;
+        opacity: 0.42;
+      }
+    }
+  }
+
+  // 공통 타이틀 속성
+  .overlay-block h3,
+  .overlay-finder h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 12px;
+  }
+
+  .overlay-block__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+
+    h3 {
+      margin-bottom: 0;
+    }
+
+    button {
+      border: 0;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.42);
+      cursor: pointer;
+      font-size: g.$text-12;
+
+      &:hover,
+      &:focus-visible {
+        color: #fff;
+        outline: none;
+      }
+    }
+  }
+
+  // 2. 최근/추천 태그 정렬형태 (가로 2열 래핑 구조)
+  .search-overlay__top-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  .horizontal-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    .tag-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 34px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.04);
+      color: rgba(255, 255, 255, 0.7);
+      padding: 0 12px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.15s;
+
+      em {
+        font-style: normal;
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      &:hover,
+      &.active {
+        border-color: g.$main-color;
+        background: rgba(229, 9, 20, 0.08);
+        color: #fff;
+      }
+      &.active {
+        color: #ff4c57;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .horizontal-tags--recent {
+    li {
+      display: inline-flex;
+      align-items: center;
+      height: 34px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.04);
+      overflow: hidden;
+      transition:
+        border-color 0.15s ease,
+        background 0.15s ease;
+
+      &:hover {
+        border-color: g.$main-color;
+        background: rgba(229, 9, 20, 0.08);
+      }
+    }
+
+    .tag-item--keyword {
+      height: 100%;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      padding-right: 6px;
+    }
+
+    .tag-remove-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 100%;
+      border: 0;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.38);
+      cursor: pointer;
+      font-size: g.$text-14;
+      line-height: 1;
+
+      &:hover,
+      &:focus-visible {
+        color: #fff;
+        outline: none;
+      }
+    }
+  }
+
+  .overlay-recent-empty {
+    display: flex;
+    align-items: center;
+    min-height: 34px;
+    color: rgba(255, 255, 255, 0.42);
+    font-size: g.$text-13;
+  }
+
+  // 3, 4. 스크롤 로우 (장르, 무드 카드 콤팩트화)
+  .scroll-row {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    padding-bottom: 8px;
+
+    // 스크롤바 커스텀 슬림화
+    &::-webkit-scrollbar {
+      height: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+    }
+
+    .slim-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 0 0 auto;
+      height: 48px;
+      padding: 0 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.02);
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+
+      img {
+        width: 20px;
+        height: 20px;
+      } // 크기 슬림화
+
+      &:hover,
+      &.active {
+        border-color: rgba(229, 9, 20, 0.6);
+        background: rgba(229, 9, 20, 0.1);
+        color: #fff;
+        // transform: translateY(-1px);
+      }
+    }
+  }
+
+  // 5. 인물 슬라이드 섹션
+  .scroll-row--creator {
+    gap: 20px;
+
+    .creator-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 0 0 auto;
+      border: 0;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.7);
+      cursor: pointer;
+
+      &:hover {
+        color: #fff;
+        .avatar {
+          border-color: #fff;
+        }
+      }
+
+      .avatar {
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        font-size: 0.95rem;
+        font-weight: bold;
+      }
+      strong {
+        font-size: 0.88rem;
+        font-weight: 500;
+      }
+    }
+  }
+
+  // 반응형 대응
+  @media (max-width: 1024px) {
+    .search-overlay__content {
+      padding: 56px 24px 32px;
+    }
+
+    .search-overlay__close {
+      top: 14px;
+      right: 18px;
+    }
+
+    .search-overlay__inner {
+      gap: 24px;
+    }
+
+    .search-overlay__top-row {
+      gap: 28px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .search-overlay__content {
+      padding: 56px 16px 32px;
+    }
+    .search-overlay__close {
+      top: 12px;
+      right: 12px;
+    }
+    .search-overlay__field {
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      min-height: 0;
+      border-bottom-width: 1px;
+      padding: 0 0 12px 0;
+
+      img {
+        margin-top: 0;
+      }
+
+      input {
+        width: 100%;
+        font-size: 1rem;
+        line-height: 40px;
+      }
+
+      .search-overlay__clear {
+        margin-top: 0;
+      }
+
+      .search-overlay__submit {
+        grid-column: 1 / -1;
+        width: 100%;
+        min-height: 42px;
+        margin-left: 0;
+      }
+    }
+    .search-overlay__top-row {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .search-overlay__content {
+      padding: 52px 14px 28px;
+    }
+
+    .search-overlay__inner {
+      gap: 22px;
+    }
+
+    .overlay-block__header {
+      margin-bottom: 10px;
+    }
+
+    .horizontal-tags {
+      gap: 8px;
+
+      .tag-item {
+        max-width: 100%;
+        height: 32px;
+        font-size: g.$text-13;
+      }
+    }
+
+    .scroll-row {
+      gap: 8px;
+
+      .slim-card {
+        height: 42px;
+        padding: 0 12px;
+        font-size: g.$text-13;
+      }
+    }
+  }
+}
+
+/* ===== 태블릿/모바일: 아래에서 올라오는 검색창 ===== */
+@include g.respond(tablet) {
+  .search-overlay {
+    top: 0;
+    height: 100vh;
+    /* 위에서 내려오는 패널: 키보드가 올라와도 패널 위치가 밀리지 않음 */
+    justify-content: flex-start;
+
+    .search-overlay__content {
+      display: flex;
+      flex-direction: column;
+      padding: 16px 14px 24px;
+      max-height: 90vh;
+      border-top: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0 0 20px 20px;
+      animation: slideDown 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .search-overlay__close {
+      display: grid;
+      position: static;
+      align-self: flex-end;
+      flex-shrink: 0;
+      margin: 0 0 12px;
+    }
+
+    .search-overlay__inner {
+      gap: 20px;
+    }
+
+    .search-overlay__field {
+      display: grid;
+      grid-template-columns: 22px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      min-height: 0;
+      border-bottom-width: 1px;
+      padding: 0 0 12px 0;
+
+      input {
+        font-size: 1rem;
+      }
+
+      .search-overlay__submit {
+        grid-column: 1 / -1;
+        width: 100%;
+        min-height: 44px;
+        margin-left: 0;
+        font-size: 0.95rem;
+      }
+    }
+
+    .search-overlay__top-row {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .overlay-block h3,
+    .overlay-finder h3 {
+      font-size: 0.85rem;
+    }
+
+    .scroll-row .slim-card {
+      height: 40px;
+      padding: 0 12px;
+      font-size: 0.82rem;
+    }
+
+    .horizontal-tags .tag-item {
+      height: 32px;
+      font-size: 0.82rem;
+    }
+
+    .overlay-finder {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,254 @@
+@use "../../../app/globals.scss" as g;
+
+.connect-following-users {
+  margin: 50px 0 0;
+
+  &__list {
+    width: 100%;
+    padding: 8px 0 10px;
+    overflow: visible !important;
+    cursor: pointer;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    .connect-following-users__slide {
+      width: 100px;
+    }
+  }
+
+  &__slide {
+    width: 100px;
+  }
+
+  &__item {
+    width: 100px;
+    border: 0;
+    color: rgba(255, 255, 255, 0.72);
+    text-align: center;
+    background: transparent;
+    cursor: pointer;
+
+    strong {
+      display: block;
+      margin-top: 12px;
+      overflow: hidden;
+      font-size: 0.95rem;
+      font-weight: 800;
+      line-height: 1.25;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      transition: color 0.2s ease;
+    }
+
+    &:hover {
+      strong {
+        color: #fff;
+      }
+
+      .connect-following-users__avatar {
+        border-color: rgba(255, 255, 255, 0.55);
+        transform: translateY(-4px);
+      }
+    }
+
+    &--me {
+      cursor: pointer;
+
+      strong {
+        color: #fff;
+      }
+    }
+  }
+
+  &__avatar-wrap {
+    position: relative;
+    display: block;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+  }
+
+  &__avatar {
+    position: relative;
+    display: grid;
+    width: 100px;
+    height: 100px;
+    place-items: center;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    background: #2b2b2b;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.34);
+    transition:
+      border-color 0.2s ease,
+      transform 0.2s ease;
+
+    span {
+      position: relative;
+      z-index: 1;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 1rem;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    &--me {
+      border-color: rgba(255, 255, 255, 0.7);
+      box-shadow:
+        0 10px 24px rgba(0, 0, 0, 0.34),
+        0 0 0 3px rgba(255, 255, 255, 0.25);
+
+      .connect-following-users__item--me:hover & {
+        border-color: rgb(255, 255, 255);
+      }
+    }
+  }
+
+  &__avatar-add {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    width: 24px;
+    height: 24px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    background: #000;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1;
+    transition: background 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+      background: #222;
+      transform: scale(1.15);
+    }
+
+  }
+}
+
+.connect-following-users__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px 0 10px;
+}
+
+.connect-following-users__empty-desc {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.9rem;
+}
+
+.connect-following-users__empty-btn {
+  padding: 10px 22px;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background 0.2s ease;
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff;
+  }
+}
+
+.connect-following-users__skeleton {
+  display: flex;
+  gap: 30px;
+  padding: 8px 0 10px;
+  overflow: hidden;
+}
+
+.connect-following-users__skeleton-item {
+  display: flex;
+  width: 100px;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.connect-following-users__skeleton-avatar {
+  width: 100px;
+  height: 100px;
+  flex: 0 0 auto;
+  border-radius: 50% !important;
+}
+
+.connect-following-users__skeleton-name {
+  width: 64px;
+  height: 14px;
+}
+
+@media (max-width: 860px) {
+  .connect-following-users {
+    margin: -6px 0 52px;
+
+    &__slide,
+    &__item {
+      width: 82px;
+    }
+
+    &__list .connect-following-users__slide {
+      width: 82px;
+    }
+
+    &__avatar-wrap,
+    &__avatar {
+      width: 82px;
+      height: 82px;
+    }
+  }
+
+  .connect-following-users__skeleton {
+    gap: 15px;
+  }
+
+  .connect-following-users__skeleton-item {
+    width: 82px;
+  }
+
+  .connect-following-users__skeleton-avatar {
+    width: 82px;
+    height: 82px;
+  }
+}
+/* ===== 반응형: 아바타 크기 축소 ===== */
+@include g.respond(tablet) {
+  .connect-following-users__slide,
+  .connect-following-users__item { width: 86px; }
+}
+@include g.respond(mobile) {
+  /* 섹션 간격 통일 (위 40px, 아래 0) */
+  .connect-following-users { margin: 32px 0 0; }
+
+  .connect-following-users__slide,
+  .connect-following-users__item { width: 72px; }
+  .connect-following-users__avatar-wrap,
+  .connect-following-users__avatar { width: 72px; height: 72px; }
+  .connect-following-users__skeleton-item { width: 72px; }
+  .connect-following-users__skeleton-avatar { width: 72px; height: 72px; }
+}
+
+/* 대표 칭호 칩 (팔로잉 유저 슬라이드) */
+.connect-following-users__rep-badge {
+  margin-top: 5px;
+  max-width: 100%;
+}

@@ -1,0 +1,90 @@
+@use "@/app/globals" as g;
+
+.custom-select {
+  position: relative;
+  width: 100%;
+
+  .cs-trigger {
+    width: 100%;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: g.$radius-md;
+    color: g.$w-color;
+    font-size: g.$text-14;
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.15s;
+
+    &.is-placeholder {
+      color: #555;
+    }
+
+    .cs-arrow {
+      flex-shrink: 0;
+      color: g.$g-color;
+      transition: transform 0.2s ease;
+    }
+  }
+
+  &.open .cs-trigger {
+    border-color: g.$main-color;
+  }
+
+  &.open .cs-arrow {
+    transform: rotate(180deg);
+    color: g.$main-color;
+  }
+
+  .cs-list {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: 20;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: g.$radius-md;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+    max-height: 280px;
+    overflow-y: auto;
+    animation: csFade 0.15s ease;
+  }
+
+  .cs-option {
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: g.$text-14;
+    color: g.$w-color;
+    cursor: pointer;
+    transition: background 0.12s;
+
+    &:hover {
+      background: rgba(229, 9, 20, 0.15);
+    }
+
+    &.selected {
+      background: g.$main-color;
+      color: g.$w-color;
+    }
+  }
+}
+
+@keyframes csFade {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

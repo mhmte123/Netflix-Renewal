@@ -1,0 +1,109 @@
+@use "@/app/globals" as g;
+
+/* 넷플릭스 오리지널 섹션 */
+.netflix-original-section {
+  padding: 40px 0;
+
+  .section-title {
+    font-size: g.$text-32;
+    font-weight: 700;
+    color: g.$w-color;
+    margin-bottom: 14px;
+    padding-left: 4px;
+  }
+
+  /* 와이어프레임처럼: 왼쪽 로고 + 오른쪽 슬라이더 */
+  .original-wrap {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 24px;
+    align-items: center;
+    padding-left: g.$main-menu-width;
+  }
+
+  /* 로고 영역: 배경 투명, 페이지 배경이 그대로 비치도록 */
+  .original-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+
+    img {
+      background-color: transparent;
+    }
+  }
+
+  .original-slider {
+    min-width: 0;
+    /* grid 안에서 swiper가 넘치지 않도록 */
+  }
+
+  .original-swiper {
+    width: 100%;
+    overflow: hidden;
+
+    /* Swiper 화살표 */
+    .swiper-button-next,
+    .swiper-button-prev {
+      color: g.$w-color;
+
+      &::after {
+        font-size: g.$text-24;
+      }
+    }
+  }
+
+  /* 카드 */
+  .original-card {
+    display: block;
+    color: g.$w-color;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
+    }
+  }
+
+  .original-thumb {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #222;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .thumb-empty {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: g.$text-14;
+      color: g.$g-color;
+    }
+  }
+}
+
+
+/* ===== 반응형 ===== */
+@include g.respond(tablet) {
+  .netflix-original-section {
+    .original-wrap { grid-template-columns: 150px 1fr; gap: 16px; padding-left: 64px; }
+    .original-logo img { max-width: 130px; }
+  }
+}
+@include g.respond(mobile) {
+  .netflix-original-section {
+    .original-wrap { grid-template-columns: 64px 1fr; gap: 10px; padding-left: 16px; padding-right: 12px; align-items: center; }
+    .original-logo { justify-content: flex-start; }
+    .original-logo img { max-width: 64px; }
+  }
+}

@@ -1,0 +1,248 @@
+@use "@/app/globals" as g;
+
+.info-page {
+  min-height: 100vh;
+  padding: 40px 0 80px;
+  color: g.$w-color;
+
+  .inner {
+    width: 900px;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .info-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: g.$text-13;
+    color: g.$g-color;
+    margin-bottom: 20px;
+
+    a {
+      color: g.$g-color;
+      text-decoration: none;
+
+      &:hover {
+        color: g.$w-color;
+      }
+    }
+
+    .sep {
+      color: #555;
+    }
+
+    .current {
+      color: g.$w-color;
+    }
+  }
+
+  .info-head {
+    padding-bottom: 24px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid #2a2a2a;
+
+    h2 {
+      font-size: g.$text-32;
+      font-weight: 700;
+      margin-bottom: 32px;
+    }
+
+    .info-intro {
+      font-size: g.$text-16;
+      line-height: 1.6;
+      color: #cfcfcf;
+    }
+
+    .info-updated {
+      margin-top: 14px;
+      font-size: g.$text-12;
+      color: g.$g-color;
+    }
+  }
+
+  .info-body {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .info-section {
+    h3 {
+      font-size: g.$text-20;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: g.$text-14;
+      line-height: 1.75;
+      color: #c4c4c4;
+      margin-bottom: 10px;
+    }
+
+    .info-list {
+      list-style: none;
+      padding: 0;
+      margin: 4px 0 10px;
+
+      li {
+        position: relative;
+        padding-left: 16px;
+        font-size: g.$text-14;
+        line-height: 1.7;
+        color: #c4c4c4;
+
+        &::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 11px;
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          background: g.$main-color;
+        }
+      }
+    }
+  }
+
+  .info-foot {
+    margin-top: 40px;
+    padding: 20px 22px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid #2a2a2a;
+    border-radius: g.$radius-md;
+
+    p {
+      font-size: g.$text-14;
+      color: #c4c4c4;
+      line-height: 1.6;
+    }
+
+    .info-link {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 700;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+/* ===== 반응형 =====
+   좌측 고정 사이드 네비 폭만큼 본문을 밀어 메뉴와 겹치지 않게 한다.
+   nav 폭: laptop 80px → tablet 64px → mobile 56px */
+
+/* 중간 모니터: 본문이 좁아지면 사이드 네비 폭만큼 좌측 여백 확보 */
+@include g.respond(laptop) {
+  .info-page {
+    padding-left: 80px;
+
+    .inner {
+      width: 100%;
+      max-width: 820px;
+    }
+  }
+}
+
+/* 태블릿: 본문을 화면 폭에 맞추고 타이포·간격을 한 단계 축소 */
+@include g.respond(tablet) {
+  .info-page {
+    padding: 40px 0 64px;
+    padding-left: 64px;
+
+    .inner {
+      max-width: none;
+      padding: 0 28px;
+    }
+
+    .info-head {
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+
+      h2 {
+        font-size: g.$text-24;
+        margin-bottom: 24px;
+      }
+
+      .info-intro {
+        font-size: g.$text-14;
+      }
+    }
+
+    .info-body {
+      gap: 26px;
+    }
+
+    .info-section h3 {
+      font-size: g.$text-18;
+    }
+  }
+}
+
+/* 모바일: 단일 칼럼, 여백·폰트 최소화, 브레드크럼 줄바꿈 허용 */
+@include g.respond(mobile) {
+  .info-page {
+    padding: 40px 0 56px;
+    padding-left: 56px;
+    padding-right: 4px;
+
+    .inner {
+      padding: 0 16px;
+    }
+
+    .info-breadcrumb {
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+      font-size: g.$text-12;
+    }
+
+    .info-head {
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+
+      h2 {
+        font-size: g.$text-20;
+      }
+
+      .info-intro {
+        font-size: g.$text-14;
+        line-height: 1.55;
+      }
+
+      .info-updated {
+        margin-top: 12px;
+      }
+    }
+
+    .info-body {
+      gap: 22px;
+    }
+
+    .info-section {
+      h3 {
+        font-size: g.$text-16;
+        margin-bottom: 8px;
+      }
+
+      p,
+      .info-list li {
+        font-size: g.$text-13;
+      }
+    }
+
+    .info-foot {
+      margin-top: 28px;
+      padding: 16px;
+
+      p {
+        font-size: g.$text-13;
+      }
+    }
+  }
+}

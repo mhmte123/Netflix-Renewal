@@ -1,0 +1,787 @@
+/* ============================================================
+   K-POP DEMON HUNTERS — RUN WITH RUMI
+   레트로 도트(픽셀) 스타일 미니게임
+   ============================================================ */
+
+$nf-bg: #141414;
+$nf-red: #e50914;
+$nf-text: #ffffff;
+$nf-sub: #b3b3b3;
+$pixel-purple: #8b5cf6;
+$pixel-purple-deep: #2a1a4a;
+$panel-bg: #160e26;
+$ground-h: 64px;
+
+/* 스프라이트 원본 비율
+   rumi-run:  6f, frame 149x193 → 표시 65x84
+   rumi-jump: 1f, 153x172      → 표시 75x84
+   rumi-dead: 1f, 171x156      → 표시 86x78
+   demon-small:  2f, 115x131   → 56x64
+   demon-medium: 2f, 158x151   → 88x84
+   demon-big:    2f, 227x226   → 110x110 */
+
+/* ─── 페이지 레이아웃 ─── */
+.game-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  min-height: 100vh;
+  padding: 96px 20px 60px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(139, 92, 246, 0.08), transparent 60%),
+    $nf-bg;
+}
+
+.game-page__hint {
+  color: $nf-sub;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  line-height: 1.8;
+  text-align: center;
+}
+
+/* ─── 게임 스테이지 (픽셀 프레임) ─── */
+.game-stage {
+  position: relative;
+  width: min(1100px, 100%);
+  height: clamp(320px, 46vw, 460px);
+  overflow: hidden;
+  border: 4px solid #2a1a4a;
+  outline: 4px solid #0a0612;
+  box-shadow:
+    0 0 0 8px rgba(139, 92, 246, 0.12),
+    0 24px 80px rgba(0, 0, 0, 0.7);
+  user-select: none;
+  touch-action: manipulation;
+  cursor: pointer;
+
+  /* 모든 도트 에셋 픽셀 렌더링 */
+  img,
+  [class*="__sprite"],
+  [class*="game-bg__"] {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+  }
+
+  /* 레트로 CRT 스캔라인 */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.14) 0 2px,
+      transparent 2px 4px
+    );
+    mix-blend-mode: multiply;
+    opacity: 0.55;
+  }
+}
+
+/* ─── 배경 (패럴랙스) ─── */
+.game-bg {
+  position: absolute;
+  inset: 0;
+}
+
+.game-bg__sky {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, #07030f 0%, #170b2b 60%, #241036 100%);
+}
+
+.game-bg__layer {
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat-x;
+  will-change: background-position;
+}
+
+/* 한옥 마을 야경 (도트 원화) */
+.game-bg__village {
+  bottom: $ground-h;
+  background-image: url("/images/game/bg-far.png");
+  background-size: auto 100%;
+  background-position: left bottom;
+}
+
+/* 보라 도깨비불 안개 */
+.game-bg__fog {
+  bottom: $ground-h;
+  background-image:
+    radial-gradient(ellipse 90px 26px at 160px 88%, rgba(139, 92, 246, 0.2), transparent 70%),
+    radial-gradient(ellipse 70px 20px at 430px 92%, rgba(168, 85, 247, 0.16), transparent 70%),
+    radial-gradient(ellipse 110px 30px at 720px 86%, rgba(139, 92, 246, 0.18), transparent 70%);
+  background-size: 900px 100%;
+  mix-blend-mode: screen;
+}
+
+/* 돌바닥 도로 (도트 원화) */
+.game-bg__ground {
+  top: auto;
+  height: $ground-h;
+  bottom: 0;
+  background-image: url("/images/game/bg-ground.png");
+  background-size: auto 100%;
+  border-top: 2px solid rgba(139, 92, 246, 0.4);
+}
+
+/* ─── 플레이어: 루미 (도트 스프라이트) ─── */
+.game-stage__player-anchor {
+  position: absolute;
+  left: 20%;
+  bottom: $ground-h;
+  z-index: 5;
+}
+
+.rumi {
+  --fw: 65px; /* 프레임 너비 (모바일에서 축소) */
+  position: relative;
+  width: var(--fw);
+  height: 84px;
+  will-change: transform;
+
+  &__sprite {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+  }
+
+  /* 달리기: 6프레임 steps */
+  &--run .rumi__sprite {
+    background-image: url("/images/game/rumi-run.png");
+    background-size: calc(var(--fw) * 6) 100%;
+    animation: rumi-run-steps 0.55s steps(6) infinite;
+  }
+
+  /* 점프: 단일 프레임 (살짝 넓은 포즈) */
+  &--jump {
+    width: 75px;
+
+    .rumi__sprite {
+      background-image: url("/images/game/rumi-jump.png");
+      background-size: 100% 100%;
+    }
+  }
+
+  /* 게임오버: 쓰러진 포즈 */
+  &--dead {
+    width: 86px;
+    height: 78px;
+
+    .rumi__sprite {
+      background-image: url("/images/game/rumi-dead.png");
+      background-size: 100% 100%;
+    }
+  }
+
+  &__aura {
+    position: absolute;
+    inset: -14px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+  }
+
+  /* 무적: Glow */
+  &--invincible {
+    filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.95))
+      drop-shadow(0 0 18px rgba(229, 9, 20, 0.55));
+
+    .rumi__aura {
+      opacity: 1;
+      animation: rumi-aura 0.8s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes rumi-run-steps {
+  from { background-position-x: 0; }
+  to { background-position-x: calc(var(--fw) * -6); }
+}
+
+@keyframes rumi-aura {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.18); opacity: 1; }
+}
+
+/* ─── 도깨비 (도트 스프라이트, 2프레임 걷기) ─── */
+.demon {
+  position: absolute;
+  left: 0;
+  bottom: $ground-h;
+  z-index: 4;
+  will-change: transform;
+
+  &[data-active="false"] {
+    visibility: hidden;
+  }
+
+  &__sprite {
+    position: absolute;
+    inset: 0;
+    background-repeat: no-repeat;
+    background-size: calc(var(--dw) * 2) 100%;
+    image-rendering: pixelated;
+    transform: scaleX(-1); /* 플레이어를 향하도록 좌우반전 */
+    animation: demon-walk 0.45s steps(2) infinite;
+    filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.35));
+  }
+
+  &[data-kind="small"] {
+    --dw: 56px;
+    width: var(--dw);
+    height: 64px;
+    .demon__sprite { background-image: url("/images/game/demon-small.png"); }
+  }
+
+  &[data-kind="medium"] {
+    --dw: 88px;
+    width: var(--dw);
+    height: 84px;
+    .demon__sprite { background-image: url("/images/game/demon-medium.png"); }
+  }
+
+  &[data-kind="big"] {
+    --dw: 110px;
+    width: var(--dw);
+    height: 110px;
+    .demon__sprite {
+      background-image: url("/images/game/demon-big.png");
+      animation-duration: 0.6s;
+    }
+  }
+}
+
+@keyframes demon-walk {
+  from { background-position-x: 0; }
+  to { background-position-x: calc(var(--dw) * -2); }
+}
+
+/* ─── 아이템 (픽셀 스타일) ─── */
+.game-item {
+  position: absolute;
+  left: 0;
+  bottom: $ground-h;
+  z-index: 4;
+  will-change: transform;
+
+  &[data-active="false"] {
+    visibility: hidden;
+  }
+
+  &__note,
+  &__mic {
+    display: none;
+  }
+
+  /* 음표 */
+  &[data-kind="note"] {
+    width: 30px;
+    height: 30px;
+
+    .game-item__note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      font-size: 16px;
+      color: #fff;
+      background: $pixel-purple;
+      border: 3px solid #0a0612;
+      box-shadow:
+        0 0 0 2px rgba(139, 92, 246, 0.5),
+        0 0 14px rgba(139, 92, 246, 0.8);
+      animation: item-bob 0.8s steps(3) infinite;
+    }
+  }
+
+  /* 마이크 */
+  &[data-kind="mic"] {
+    width: 30px;
+    height: 46px;
+
+    .game-item__mic {
+      display: block;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      animation: item-bob 0.8s steps(3) infinite;
+    }
+
+    .game-item__mic-head {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 22px;
+      height: 22px;
+      transform: translateX(-50%);
+      background:
+        repeating-conic-gradient(#d9d9e8 0 25%, #9b9bb3 0 50%) 0 0/6px 6px;
+      border: 3px solid $nf-red;
+      box-shadow: 0 0 14px rgba(229, 9, 20, 0.8);
+    }
+
+    .game-item__mic-grip {
+      position: absolute;
+      top: 21px;
+      left: 50%;
+      width: 9px;
+      height: 23px;
+      transform: translateX(-50%);
+      background: #1d1d33;
+      border: 2px solid #0a0612;
+    }
+  }
+}
+
+@keyframes item-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* ─── HUD (픽셀 패널) ─── */
+.game-hud {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  z-index: 10;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.game-hud__scores {
+  display: flex;
+  gap: 18px;
+  padding: 10px 14px;
+  background: rgba(22, 14, 38, 0.92);
+  border: 3px solid #0a0612;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.45), 4px 4px 0 rgba(0, 0, 0, 0.5);
+}
+
+.game-hud__score-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.game-hud__label {
+  font-size: 7px;
+  letter-spacing: 0.08em;
+  color: $nf-sub;
+}
+
+.game-hud__value {
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  color: $nf-text;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.7);
+
+  &--best {
+    color: $nf-red;
+  }
+}
+
+.game-hud__invincible {
+  padding: 9px 12px;
+  font-size: 9px;
+  color: #fff;
+  background: rgba(76, 39, 145, 0.9);
+  border: 3px solid #0a0612;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.8), 0 0 16px rgba(139, 92, 246, 0.6);
+  animation: invincible-pulse 0.7s steps(2) infinite;
+}
+
+@keyframes invincible-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.game-hud__sound {
+  margin-left: auto;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  background: rgba(22, 14, 38, 0.92);
+  border: 3px solid #0a0612;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.45), 3px 3px 0 rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.1s ease;
+
+  &:hover {
+    transform: translate(-1px, -1px);
+  }
+
+  &:active {
+    transform: translate(1px, 1px);
+    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.45), 1px 1px 0 rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* ─── 오버레이 공통 ─── */
+.game-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  text-align: center;
+  padding: 24px;
+  background: rgba(7, 3, 15, 0.86);
+  animation: overlay-fade 0.35s steps(4) both;
+}
+
+@keyframes overlay-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ─── 시작 화면 ─── */
+.game-start__eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: $nf-red;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+}
+
+.game-start__logo {
+  font-size: clamp(20px, 3.6vw, 34px);
+  color: $nf-text;
+  line-height: 1.5;
+  text-shadow:
+    3px 3px 0 $pixel-purple-deep,
+    6px 6px 0 rgba(0, 0, 0, 0.6);
+
+  span {
+    color: $pixel-purple;
+    text-shadow:
+      3px 3px 0 #1a0f2e,
+      0 0 22px rgba(139, 92, 246, 0.9);
+  }
+}
+
+.game-start__desc {
+  color: $nf-sub;
+  font-size: 13px;
+  line-height: 1.8;
+  font-family: var(--font-netflix), sans-serif;
+}
+
+.game-start__keys {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: $nf-sub;
+  font-size: 9px;
+
+  em {
+    font-style: normal;
+    margin-left: 4px;
+    font-family: var(--font-netflix), sans-serif;
+    font-size: 12px;
+  }
+}
+
+.game-start__key {
+  padding: 6px 9px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6);
+  font-size: 8px;
+  color: $nf-text;
+}
+
+/* ─── 게임 오버 ─── */
+.game-over__title {
+  font-size: clamp(24px, 4.4vw, 42px);
+  letter-spacing: 0.06em;
+  color: $nf-red;
+  text-shadow:
+    3px 3px 0 #3d030a,
+    6px 6px 0 rgba(0, 0, 0, 0.7),
+    0 0 30px rgba(229, 9, 20, 0.5);
+  animation: gameover-drop 0.4s steps(5) both;
+}
+
+@keyframes gameover-drop {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.game-over__new-best {
+  color: #facc15;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+  animation: invincible-pulse 0.8s steps(2) infinite;
+}
+
+.game-over__scores {
+  display: flex;
+  gap: 12px;
+}
+
+.game-over__score {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 130px;
+  padding: 14px 20px;
+  background: $panel-bg;
+  border: 3px solid #0a0612;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.45), 4px 4px 0 rgba(0, 0, 0, 0.55);
+
+  span {
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    color: $nf-sub;
+  }
+
+  strong {
+    font-size: 19px;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    color: $nf-text;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.7);
+  }
+
+  &--best strong {
+    color: $nf-red;
+  }
+}
+
+.game-over__point-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 24px;
+  background: $panel-bg;
+  border: 3px solid #0a0612;
+  box-shadow: 0 0 0 2px rgba(255, 200, 0, 0.4), 4px 4px 0 rgba(0, 0, 0, 0.55);
+  min-width: 220px;
+}
+
+.game-over__point-label {
+  font-family: var(--font-netflix), sans-serif;
+  font-size: 11px;
+  color: $nf-sub;
+  letter-spacing: 0.06em;
+}
+
+.game-over__point-value {
+  font-size: 22px;
+  font-weight: 400;
+  color: #ffc800;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.7);
+}
+
+.game-over__point-hint {
+  font-family: var(--font-netflix), sans-serif;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.game-over__point-done {
+  font-family: var(--font-netflix), sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #4ade80;
+  margin-top: 2px;
+}
+
+.game-over__actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ─── 버튼 (픽셀 스타일) ─── */
+.game-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 150px;
+  height: 46px;
+  padding: 0 22px;
+  border: 3px solid #0a0612;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+
+  &--primary {
+    background: $nf-red;
+    color: $nf-text;
+    box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.4), 4px 4px 0 rgba(0, 0, 0, 0.6);
+
+    &:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.4), 6px 6px 0 rgba(0, 0, 0, 0.6);
+    }
+
+    &:active {
+      transform: translate(2px, 2px);
+      box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.4), 1px 1px 0 rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  &--ghost {
+    background: $panel-bg;
+    color: $nf-text;
+    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.45), 4px 4px 0 rgba(0, 0, 0, 0.6);
+
+    &:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.45), 6px 6px 0 rgba(0, 0, 0, 0.6);
+    }
+
+    &:active {
+      transform: translate(2px, 2px);
+      box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.45), 1px 1px 0 rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  &--point {
+    background: #ffc800;
+    color: #0a0612;
+    box-shadow: 0 0 0 2px rgba(255, 200, 0, 0.4), 4px 4px 0 rgba(0, 0, 0, 0.6);
+
+    &:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 0 0 0 2px rgba(255, 200, 0, 0.4), 6px 6px 0 rgba(0, 0, 0, 0.6);
+    }
+
+    &:active {
+      transform: translate(2px, 2px);
+      box-shadow: 0 0 0 2px rgba(255, 200, 0, 0.4), 1px 1px 0 rgba(0, 0, 0, 0.6);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: default;
+      transform: none;
+    }
+  }
+
+  /* 한글 버튼 텍스트는 기본 폰트 (픽셀 폰트에 한글 없음) */
+  &--ko {
+    font-family: var(--font-netflix), sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+  }
+}
+
+/* ─── 반응형 ─── */
+@media (max-width: 1024px) {
+  .game-page {
+    padding-top: 84px;
+  }
+}
+
+@media (max-width: 768px) {
+  .game-stage {
+    height: clamp(300px, 56vw, 420px);
+  }
+
+  .game-hud__value {
+    font-size: 12px;
+  }
+
+  .game-hud__scores {
+    gap: 12px;
+    padding: 8px 10px;
+  }
+
+  /* 도깨비/루미 살짝 축소 */
+  .rumi { transform-origin: bottom left; }
+}
+
+@media (max-width: 600px) {
+  .game-page {
+    padding: 76px 10px 110px; /* 하단 네비 고려 */
+  }
+
+  .game-stage {
+    height: clamp(280px, 64vw, 360px);
+    border-width: 3px;
+    outline-width: 3px;
+  }
+
+  .game-hud {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+  }
+
+  .game-hud__label { font-size: 6px; }
+  .game-hud__value { font-size: 11px; }
+
+  .game-hud__sound {
+    width: 34px;
+    height: 34px;
+    font-size: 13px;
+  }
+
+  .game-hud__invincible {
+    padding: 7px 9px;
+    font-size: 7px;
+  }
+
+  /* 모바일: 스프라이트 75% 축소 (히트박스는 엔진 sizeFactor 가 동일 비율 적용) */
+  .rumi {
+    --fw: 49px;
+    height: 63px;
+
+    &--jump { width: 56px; }
+    &--dead { width: 65px; height: 59px; }
+  }
+
+  .demon[data-kind="small"] { --dw: 42px; height: 48px; }
+  .demon[data-kind="medium"] { --dw: 66px; height: 63px; }
+  .demon[data-kind="big"] { --dw: 83px; height: 83px; }
+
+  .game-start__desc { font-size: 12px; }
+
+  .game-start__key--touch {
+    background: rgba(229, 9, 20, 0.25);
+    border-color: rgba(229, 9, 20, 0.7);
+  }
+
+  .game-over__score {
+    min-width: 105px;
+    padding: 11px 14px;
+
+    strong { font-size: 15px; }
+  }
+
+  .game-btn {
+    min-width: 128px;
+    height: 42px;
+  }
+
+  .game-page__hint { font-size: 8px; }
+}

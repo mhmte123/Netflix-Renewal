@@ -1,0 +1,604 @@
+@use "@/app/globals" as g;
+
+.category-section {
+  position: relative;
+  width: 100%;
+  overflow-x: clip;
+
+  .swiper-outer {
+    position: relative;
+    padding-left: g.$main-menu-width;
+    overflow-x: clip;
+
+    // 오른쪽 그라데이션 오버레이
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 80px;
+      z-index: 5;
+      pointer-events: none;
+      background: linear-gradient(to left, rgba(g.$d-color, 0.8), transparent);
+    }
+
+    .media-swiper {
+      position: relative;
+      z-index: 6;
+      width: 100%;
+      overflow: visible;
+    }
+  }
+
+  // Swiper 네비게이션 버튼
+  .swiper-button-prev,
+  .swiper-button-next {
+    background: none;
+    border: none;
+    color: g.$w-color;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+
+    &::after {
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    &.swiper-button-disabled {
+      opacity: 0 !important;
+      pointer-events: none;
+    }
+  }
+
+  &:hover {
+
+    .swiper-button-prev,
+    .swiper-button-next {
+      opacity: 1;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+
+  // 슬라이드: 호버 시 z-index 올려서 팝업이 이웃 카드 위에 오도록
+  .category-slide {
+    height: auto;
+    overflow: visible;
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+
+    &:has(.category-item:hover) {
+      z-index: 10;
+    }
+  }
+
+  .category-item {
+    list-style: none;
+    width: 100%;
+    position: relative;
+    overflow: visible;
+    cursor: pointer;
+  }
+
+  // 기본 포스터 카드
+  .img-box {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    background: #222;
+    border-radius: 5px;
+    overflow: hidden;
+    will-change: transform, opacity;
+    transition:
+      transform 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      box-shadow 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      opacity 0.18s ease,
+      border-radius 0.38s ease;
+
+    .poster-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* 랭킹 섹션 카드형: 포스터 좌하단 순위 숫자 (데스크탑 랭킹과 동일 톤) */
+    .theme-rank-num {
+      position: absolute;
+      left: 4px;
+      bottom: 2px;
+      z-index: 3;
+      color: #fff;
+      font-size: clamp(2.6rem, 9vw, 3.6rem);
+      font-weight: 800;
+      font-style: italic;
+      line-height: 0.9;
+      pointer-events: none;
+      text-shadow:
+        -2px 0 6px rgba(0, 0, 0, 0.65),
+        0 3px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .netflix-corner-logo {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 44px;
+      height: 44px;
+      z-index: 2;
+
+      .logo-box {
+        position: absolute;
+        inset: 0;
+        background: #0a0a0a;
+        border-radius: 0 0 0 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+          width: 34px;
+          height: 34px;
+          object-fit: contain;
+        }
+      }
+    }
+
+    .netflix-original-badge {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      // gap: 1px;
+      padding: 30px 8px 15px;
+      background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.75) 60%, transparent 100%);
+
+      .badge-logo {
+        width: auto;
+        height: 28px;
+        object-fit: contain;
+        flex-shrink: 0;
+      }
+
+      .badge-text {
+        font-size: 15px;
+        font-weight: 600;
+        color: g.$w-color;
+        letter-spacing: 0.06em;
+        line-height: 1;
+        transform: scaleY(1.7);
+      }
+    }
+  }
+
+  // 호버 시: 살짝 떠오르면서 확대
+  .category-item:hover .img-box {
+    transform: scale(1.07) translateY(-7px);
+    box-shadow: 0 20px 56px rgba(0, 0, 0, 0.72);
+    border-radius: 6px;
+
+    .poster-img {
+      transform: scale(1.03);
+    }
+  }
+
+  /* 터치 기기·태블릿·모바일: 탭이 :hover로 고착되어
+     포스터(순위 숫자 포함)가 위로 떠오르는 현상 차단 → 탭하면 바로 상세 이동 */
+  @media (hover: none), (max-width: 1024px) {
+    .category-item:hover .img-box {
+      transform: none;
+      box-shadow: none;
+      border-radius: 0;
+
+      .poster-img {
+        transform: none;
+      }
+    }
+  }
+
+  // hover-card 등장 후: 포스터 페이드아웃 (hover-card가 덮음)
+  .category-item:has(.hover-card) .img-box {
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 0.2s ease 0.85s,
+      transform 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  // Netflix 스타일 호버 팝업
+  .hover-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200%;
+    z-index: 20;
+    background: #181818;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.9), 0 4px 16px rgba(0, 0, 0, 0.5);
+
+    // 영상 영역 (16:9)
+    .hover-video {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #141414;
+      overflow: hidden;
+
+      iframe {
+        position: absolute;
+        // YouTube UI 요소가 가장자리에 붙기 때문에 iframe을 크게 키우고 중앙 정렬
+        // overflow: hidden 으로 잘라내면 UI가 보이는 영역 밖으로 밀려남
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: calc(100% + 110px);
+        height: calc(100% + 110px);
+        border: 0;
+        pointer-events: none;
+      }
+
+      .fallback-img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    // 하단 정보 영역
+    .hover-info {
+      padding: 20px;
+
+      .hover-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 20px;
+
+        .btn-play,
+        .btn-detail {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          height: 36px;
+          padding: 0 14px;
+          border-radius: 4px;
+          font-size: g.$text-13;
+          font-weight: 700;
+          color: g.$w-color;
+          cursor: pointer;
+          transition: background 0.15s ease, transform 0.1s ease;
+          white-space: nowrap;
+
+          svg {
+            flex-shrink: 0;
+          }
+        }
+
+        .btn-play {
+          background: g.$main-color;
+          border: none;
+
+          svg {
+            width: 13px;
+            height: 13px;
+            fill: g.$w-color;
+          }
+
+          &:hover {
+            background: #b80710;
+            transform: scale(1.02);
+          }
+        }
+
+        .btn-detail {
+          background: rgba(g.$w-color, 0.1);
+          border: 1px solid rgba(g.$w-color, 0.25);
+          backdrop-filter: blur(4px);
+
+          svg {
+            width: 15px;
+            height: 15px;
+            fill: none;
+            stroke: g.$w-color;
+            stroke-width: 2;
+            stroke-linecap: round;
+          }
+
+          &:hover {
+            background: rgba(g.$w-color, 0.2);
+          }
+        }
+      }
+
+      .hover-title-row {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        // padding-top: 10px;
+        // margin-bottom: 6px;
+        overflow: hidden;
+      }
+
+      .hover-title {
+        color: g.$w-color;
+        font-size: g.$text-24;
+        font-weight: 700;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex-shrink: 1;
+        min-width: 0;
+      }
+
+      .hover-age {
+        flex-shrink: 0;
+        padding: 2px 6px;
+        font-size: g.$text-12;
+        font-weight: 600;
+        color: rgba(g.$w-color, 0.8);
+        border: 1px solid rgba(g.$w-color, 0.3);
+        border-radius: 3px;
+        line-height: 1.4;
+      }
+
+      .hover-meta {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-bottom: 8px;
+
+        .meta-star {
+          font-size: g.$text-12;
+          color: #e50914;
+        }
+
+        .meta-score {
+          font-size: g.$text-12;
+          color: g.$w-color;
+          font-weight: 700;
+        }
+
+        .meta-sep {
+          font-size: g.$text-12;
+          color: #555;
+        }
+
+        .meta-year,
+        .meta-genre {
+          font-size: g.$text-12;
+          color: #bbb;
+        }
+      }
+
+      .hover-overview {
+        font-size: g.$text-12;
+        color: #aaa;
+        line-height: 1.55;
+        margin: 0;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+      }
+    }
+  }
+
+  // 왼쪽 끝 카드: translateX 없이 왼쪽 정렬
+  .hover-card.left-edge {
+    left: 0;
+    transform: translateY(-50%);
+  }
+
+  // 오른쪽 끝 카드: 오른쪽 정렬해서 컨테이너 밖으로 안 잘리게
+  .hover-card.right-edge {
+    left: auto;
+    right: 0;
+    transform: translateY(-50%);
+  }
+
+  // 스켈레톤
+  &.skeleton-section {
+    .skeleton-title-bar {
+      width: 220px;
+      height: 30px;
+      border-radius: 4px;
+      margin-bottom: 14px;
+      background: #2a2a2a;
+      overflow: hidden;
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.07) 50%, transparent 100%);
+        background-size: 200% 100%;
+        animation: shimmer 1.4s ease-in-out infinite;
+      }
+    }
+
+    .skeleton-cards {
+      display: flex;
+      gap: 12px;
+      overflow: hidden;
+    }
+
+    .skeleton-card {
+      flex-shrink: 0;
+      width: calc(100% / 8.5);
+      aspect-ratio: 2 / 3;
+      border-radius: 5px;
+      background: #2a2a2a;
+      overflow: hidden;
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.07) 50%, transparent 100%);
+        background-size: 200% 100%;
+        animation: shimmer 1.4s ease-in-out infinite;
+      }
+
+      @for $i from 1 through 9 {
+        &:nth-child(#{$i})::after {
+          animation-delay: #{($i - 1) * 0.08}s;
+        }
+      }
+
+      @media (max-width: 1279px) {
+        width: calc(100% / 6.5);
+      }
+
+      @media (max-width: 1023px) {
+        width: calc(100% / 3.5);
+      }
+
+      @media (max-width: 639px) {
+        width: calc(100% / 3.3);
+      }
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.91) translateY(8px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1) translateY(0);
+    }
+  }
+
+  @keyframes fadeInLeftEdge {
+    from {
+      opacity: 0;
+      transform: translateY(calc(-50% + 8px)) scale(0.91);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+    }
+  }
+
+  @keyframes fadeInRightEdge {
+    from {
+      opacity: 0;
+      transform: translateY(calc(-50% + 8px)) scale(0.91);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s cubic-bezier(0.34, 1.12, 0.64, 1) 0.5s both;
+
+    &.left-edge {
+      animation-name: fadeInLeftEdge;
+    }
+
+    &.right-edge {
+      animation-name: fadeInLeftEdge;
+    }
+  }
+}
+
+@include g.respond(mobile) {
+  .category-section {
+    .section-title-outer {
+      padding-left: 20px;
+    }
+
+    .swiper-outer {
+      padding-left: 20px;
+    }
+
+    .swiper-button-prev,
+    .swiper-button-next {
+      display: none;
+    }
+  }
+}
+
+@include g.respond(tablet) {
+  .category-section {
+    .section-title-outer {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    .swiper-outer {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+  }
+}
+
+@include g.respond(mobile) {
+  .category-section {
+    .section-title-outer {
+      padding-left: 20px;
+      padding-right: 0; /* 전체보기(margin-right 20px)가 화면 끝 20px 라인에 오도록 */
+    }
+
+    .swiper-outer {
+      padding-left: 20px;
+      padding-right: 12px;
+    }
+
+    /* 코너 로고 축소 */
+    .img-box .netflix-corner-logo {
+      width: 28px;
+      height: 28px;
+
+      .logo-box img {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    /* 오리지널 뱃지 축소 */
+    .img-box .netflix-original-badge {
+      padding: 16px 6px 8px;
+
+      .badge-logo {
+        height: 16px;
+      }
+
+      .badge-text {
+        font-size: 9px;
+        transform: scaleY(1.3);
+      }
+    }
+  }
+}

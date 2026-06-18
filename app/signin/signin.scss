@@ -1,0 +1,1697 @@
+@use "../globals" as *;
+
+// ─── 페이지 전체 ───────────────────────────────────────────────────────────────
+
+.signin-page {
+  min-height: calc(100vh - $header-height);
+  // 사이드 메뉴 너비만큼 왼쪽으로 당겨서 화면 정중앙 정렬
+  // margin-left: -$main-menu-width;
+  // width: calc(100% + $main-menu-width);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px 64px;
+  background-color: $bg-color;
+  position: relative; // 뒤로가기 버튼 absolute 기준
+}
+
+// ─── 뒤로가기 버튼 ────────────────────────────────────────────────────────────
+
+.signin-back-btn {
+  position: absolute;
+  top: 3%;
+  left: 20%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  border-radius: 50%;
+  transition:
+    color 0.15s,
+    background-color 0.15s;
+
+  &:hover {
+    color: $w-color;
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+}
+
+// ─── 스텝 인디케이터 ───────────────────────────────────────────────────────────
+
+.step-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 48px;
+  width: 100%;
+  max-width: 480px;
+}
+
+.step-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 53px;
+}
+
+.step-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $text-14;
+  font-weight: 700;
+  transition: background-color 0.2s;
+
+  &.active {
+    background-color: $main-color;
+    color: $w-color;
+    outline: 3px solid rgba(229, 9, 20, 0.25);
+    outline-offset: 2px;
+  }
+
+  &.done {
+    background-color: $main-color;
+    color: $w-color;
+  }
+
+  &.idle {
+    background-color: #2a2a2a;
+    color: #666;
+    border: 1.5px solid #444;
+  }
+}
+
+.step-name {
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+
+  &.active {
+    color: $w-color;
+  }
+
+  &.done {
+    color: $main-color;
+  }
+
+  &.idle {
+    color: #555;
+  }
+}
+
+.step-connector {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding-bottom: 24px;
+}
+
+.step-line {
+  width: 100%;
+  height: 2px;
+  background-color: #333;
+
+  &.done {
+    background-color: $main-color;
+  }
+}
+
+// ─── 폼 래퍼 ──────────────────────────────────────────────────────────────────
+
+.signin-form-wrap {
+  width: 100%;
+  max-width: 480px;
+}
+
+.signin-title {
+  font-size: $text-32;
+  font-weight: 700;
+  color: $w-color;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.signin-subtitle {
+  font-size: $text-14;
+  color: #888;
+  margin-bottom: 32px;
+}
+
+// ─── 에러 배너 ────────────────────────────────────────────────────────────────
+
+.signin-error {
+  background-color: rgba(229, 9, 20, 0.1);
+  border: 1px solid rgba(229, 9, 20, 0.35);
+  border-radius: $radius-md;
+  color: #ff6b6b;
+  font-size: $text-13;
+  padding: 10px 14px;
+  margin-bottom: 18px;
+}
+
+// ─── 폼 필드 ──────────────────────────────────────────────────────────────────
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 18px;
+}
+
+.form-label {
+  font-size: $text-14;
+  font-weight: 500;
+  color: #c0c0c0;
+}
+
+.form-hint {
+  font-size: $text-12;
+  color: #666;
+}
+
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px 16px;
+  background-color: #242424;
+  border: 1px solid #484848;
+  border-radius: $radius-md;
+  color: $w-color;
+  font-size: $text-16;
+  outline: none;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+
+  &::placeholder {
+    color: #5a5a5a;
+  }
+
+  &:hover {
+    border-color: #666;
+  }
+
+  &:focus {
+    border-color: $main-color;
+    box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.2);
+  }
+
+  &.has-icon {
+    padding-right: 44px;
+  }
+}
+
+.pw-toggle {
+  position: absolute;
+  right: 13px;
+  background: none;
+  border: none;
+  color: #777;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  transition: color 0.15s;
+
+  &:hover {
+    color: #bbb;
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+// ─── 약관 동의 ────────────────────────────────────────────────────────────────
+
+.agree-section {
+  margin-bottom: 24px;
+}
+
+.agree-all {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid #2e2e2e;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.agree-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.agree-checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1.5px solid #555;
+  background-color: #242424;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    border-color 0.15s,
+    background-color 0.15s;
+
+  &.checked {
+    background-color: $main-color;
+    border-color: $main-color;
+
+    &::after {
+      content: "";
+      width: 5px;
+      height: 9px;
+      border: 2px solid $w-color;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg) translate(-1px, -1px);
+      display: block;
+    }
+  }
+
+  &.partial {
+    border-color: $main-color;
+  }
+}
+
+.agree-text {
+  font-size: $text-13;
+  color: #c0c0c0;
+
+  &.all {
+    font-size: $text-14;
+    font-weight: 600;
+    color: #eee;
+  }
+}
+
+// ─── 버튼 ─────────────────────────────────────────────────────────────────────
+
+.btn-submit {
+  width: 100%;
+  padding: 16px;
+  background-color: $main-color;
+  color: $w-color;
+  font-size: $text-18;
+  font-weight: 700;
+  border: none;
+  border-radius: $radius-md;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition:
+    background-color 0.15s,
+    transform 0.15s;
+  position: relative;
+  min-height: 56px;
+
+  &:hover:not(:disabled) {
+    background-color: #f40612;
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &.is-loading {
+    color: transparent;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: $w-color;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+  }
+}
+
+.btn-social {
+  width: 100%;
+  padding: 14px 16px;
+  background-color: #2c2c2c;
+  border: 1px solid #606060;
+  border-radius: $radius-md;
+  color: #f0f0f0;
+  font-size: $text-14;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s,
+    transform 0.15s;
+
+  &:hover {
+    background-color: #363636;
+    border-color: #888;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.social-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  &.icon-google {
+    background: linear-gradient(135deg,
+        #ea4335 0%,
+        #fbbc04 40%,
+        #34a853 70%,
+        #4285f4 100%);
+    color: #fff;
+  }
+
+  &.icon-apple {
+    background: #fff;
+    color: #000;
+    font-size: 15px;
+  }
+
+  &.icon-naver {
+    background-color: #03c75a;
+    color: #fff;
+  }
+
+  &.icon-kakao {
+    background-color: #fee500;
+    color: #3a1d1d;
+  }
+}
+
+// ─── 구분선 ───────────────────────────────────────────────────────────────────
+
+.signin-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #666;
+  font-size: $text-13;
+  margin: 4px 0 16px;
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: #333;
+  }
+}
+
+// ─── 로그인 링크 ──────────────────────────────────────────────────────────────
+
+.signin-login-link {
+  text-align: center;
+  font-size: $text-13;
+  color: #777;
+  margin-top: 20px;
+
+  a {
+    color: $main-color;
+    font-weight: 600;
+    margin-left: 4px;
+    transition: opacity 0.15s;
+
+    &:hover {
+      opacity: 0.75;
+      text-decoration: underline;
+    }
+  }
+}
+
+// ─── 애니메이션 ───────────────────────────────────────────────────────────────
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// ─── StepVerify ───────────────────────────────────────────────────────────────
+
+.verify-icon-wrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: rgba(229, 9, 20, 0.1);
+  border: 1px solid rgba(229, 9, 20, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  color: $main-color;
+
+  svg {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.verify-email {
+  color: $w-color;
+  font-weight: 600;
+}
+
+.verify-info-box {
+  background-color: #1e1e1e;
+  border: 1px solid #2e2e2e;
+  border-radius: $radius-md;
+  padding: 20px;
+  margin: 24px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.verify-info-text {
+  font-size: $text-14;
+  color: #aaa;
+  line-height: 1.6;
+}
+
+.verify-spinner {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+
+  span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: $main-color;
+    animation: dot-bounce 1.2s ease-in-out infinite;
+
+    &:nth-child(1) {
+      animation-delay: 0s;
+    }
+
+    &:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+  }
+}
+
+.verify-resend-msg {
+  font-size: $text-13;
+  color: #43a047;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.btn-resend {
+  min-height: 49px;
+  width: 100%;
+  padding: 13px;
+  background-color: #2c2c2c;
+  border: 1px solid #606060;
+  border-radius: $radius-md;
+  color: #f0f0f0;
+  font-size: $text-14;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
+  position: relative;
+
+  &:hover:not(.disabled):not(.is-loading) {
+    background-color: #363636;
+    border-color: #888;
+  }
+
+  &.disabled {
+    color: #555;
+    border-color: #333;
+    cursor: not-allowed;
+  }
+
+  &.is-loading {
+    color: transparent;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+  }
+}
+
+.verify-spam-hint {
+  text-align: center;
+  font-size: $text-12;
+  color: #555;
+}
+
+// ─── StepPlan ─────────────────────────────────────────────────────────────────
+
+.plan-page {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.plan-title {
+  font-size: $text-32;
+  font-weight: 700;
+  color: $w-color;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.plan-subtitle {
+  font-size: $text-14;
+  color: #888;
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.plan-eyebrow {
+  font-size: 20px;
+  font-weight: 700;
+  color: $main-color;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.billing-tab-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.billing-tabs {
+  display: flex;
+  background: #1e1e1e;
+  border: 1px solid #3a3a3a;
+  border-radius: 40px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.billing-tab {
+  padding: 9px 28px;
+  border-radius: 40px;
+  border: none;
+  font-size: $text-14;
+  font-weight: 500;
+  cursor: pointer;
+  background: transparent;
+  color: #888;
+  position: relative;
+  transition:
+    background 0.2s,
+    color 0.2s;
+
+  &.active {
+    background: $main-color;
+    color: $w-color;
+  }
+}
+
+.billing-save-badge {
+  position: absolute;
+  top: -10px;
+  right: -4px;
+  background: #ff9800;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 48px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.plan-card {
+  background: #1e1e1e;
+  border: 1px solid #3a3a3a;
+  border-radius: $radius-lg;
+  padding: 24px 20px 20px;
+  position: relative;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+
+  &:hover {
+    border-color: #555;
+  }
+
+  &.recommended {
+    border-color: $main-color;
+  }
+
+  &.selected {
+    border-color: $main-color;
+    background: rgba(229, 9, 20, 0.06);
+  }
+}
+
+.plan-top-badge {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: $main-color;
+  color: $w-color;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 14px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.plan-name {
+  font-size: $text-16;
+  font-weight: 700;
+  color: $w-color;
+  margin-bottom: 8px;
+}
+
+.price-block {
+  margin-bottom: 4px;
+}
+
+.price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+}
+
+.price-num {
+  font-size: 26px;
+  font-weight: 700;
+  color: $w-color;
+}
+
+.price-unit {
+  font-size: 12px;
+  color: #888;
+}
+
+.price-annual-info {
+  font-size: 12px;
+  color: #888;
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.price-original {
+  text-decoration: line-through;
+  color: #555;
+}
+
+.price-save {
+  color: #ff9800;
+  font-weight: 600;
+}
+
+.plan-divider {
+  border: none;
+  border-top: 1px solid #2e2e2e;
+  margin: 14px 0;
+}
+
+.plan-desc {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 14px;
+}
+
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  list-style: none;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: $text-13;
+
+  &.on {
+    color: #ccc;
+  }
+
+  &.off {
+    color: #555;
+  }
+}
+
+.plan-select-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: $radius-md;
+  font-size: $text-14;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    transform 0.15s;
+
+  &.default {
+    background: transparent;
+    border: 1px solid #555;
+    color: #ccc;
+
+    &:hover {
+      border-color: #888;
+      background: #2a2a2a;
+    }
+  }
+
+  &.hot {
+    background: $main-color;
+    border: none;
+    color: $w-color;
+
+    &:hover {
+      background: #f40612;
+      transform: translateY(-1px);
+    }
+  }
+}
+
+.section-title {
+  font-size: $text-18;
+  font-weight: 700;
+  color: $w-color;
+  margin-bottom: 14px;
+}
+
+.compare-wrap {
+  overflow-x: auto;
+  margin-bottom: 40px;
+  border-radius: $radius-md;
+  border: 1px solid #2a2a2a;
+}
+
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    background: #1e1e1e;
+    font-size: $text-13;
+    font-weight: 700;
+    color: #888;
+    padding: 13px 16px;
+    text-align: left;
+    border-bottom: 1px solid #2a2a2a;
+
+    &:not(:first-child) {
+      text-align: center;
+    }
+  }
+
+  td {
+    font-size: $text-13;
+    color: #aaa;
+    padding: 13px 16px;
+    border-bottom: 1px solid #1e1e1e;
+
+    &:not(:first-child) {
+      text-align: center;
+    }
+
+    &.highlight {
+      color: $main-color;
+      font-weight: 700;
+    }
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tr:hover td {
+    background: #1a1a1a;
+  }
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 44px;
+  list-style: none;
+}
+
+.faq-item {
+  background: #1e1e1e;
+  border: 1px solid #2e2e2e;
+  border-radius: $radius-md;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: #242424;
+  }
+}
+
+.faq-q {
+  font-size: $text-14;
+  color: #ccc;
+}
+
+.faq-icon {
+  color: #555;
+  font-size: 20px;
+  font-weight: 300;
+  transition: transform 0.2s;
+
+  &.open {
+    transform: rotate(45deg);
+  }
+}
+
+.plan-next-wrap {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.plan-next-btn {
+  width: 100%;
+  max-width: 260px; // payment-pay-btn과 동일한 느낌
+  padding: 16px;
+  background: $main-color;
+  color: $w-color;
+  font-size: $text-16;
+  font-weight: 700;
+  border: none;
+  border-radius: $radius-md;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    transform 0.15s;
+
+  &:hover {
+    background: #f40612;
+    transform: translateY(-1px);
+  }
+}
+
+// ─── 추가 애니메이션 ──────────────────────────────────────────────────────────
+
+@keyframes dot-bounce {
+
+  0%,
+  80%,
+  100% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// ─── StepPayment ──────────────────────────────────────────────────────────────
+
+.payment-page {
+  width: 100%;
+  max-width: 480px;
+}
+
+.payment-title {
+  font-size: $text-32;
+  font-weight: 700;
+  color: $w-color;
+  margin-bottom: 24px;
+}
+
+.payment-plan-summary {
+  background-color: #1e1e1e;
+  border: 1px solid #3a3a3a;
+  border-radius: $radius-md;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.pps-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pps-badge {
+  background-color: rgba(229, 9, 20, 0.12);
+  border: 1px solid rgba(229, 9, 20, 0.3);
+  color: $main-color;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 20px;
+  align-self: flex-start;
+}
+
+.pps-name {
+  font-size: $text-16;
+  font-weight: 700;
+  color: $w-color;
+}
+
+.pps-billing {
+  font-size: 12px;
+  color: #888;
+}
+
+.pps-right {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.pps-price {
+  font-size: 19px;
+  font-weight: 700;
+  color: $main-color;
+}
+
+.pps-change {
+  font-size: 12px;
+  color: $main-color;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.15s;
+
+  &:hover {
+    opacity: 0.75;
+  }
+}
+
+.payment-tabs {
+  display: flex;
+  border-bottom: 1px solid #2e2e2e;
+  margin-bottom: 24px;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.payment-tab {
+  padding: 11px 18px;
+  font-size: $text-13;
+  font-weight: 500;
+  color: #888;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+
+  &.active {
+    color: $w-color;
+    border-bottom-color: $main-color;
+  }
+}
+
+.payment-tab-content {
+  margin-bottom: 4px;
+}
+
+.payment-tab-desc {
+  font-size: $text-13;
+  color: #888;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.payment-card-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.payment-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.payment-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.payment-form-label {
+  font-size: $text-13;
+  color: #888;
+}
+
+.payment-form-input {
+  width: 100%;
+  padding: 13px 16px;
+  background-color: #1e1e1e;
+  border: 1px solid #3a3a3a;
+  border-radius: $radius-md;
+  color: $w-color;
+  font-size: $text-14;
+  outline: none;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+  appearance: none;
+
+  &::placeholder {
+    color: #555;
+  }
+
+  &:hover {
+    border-color: #555;
+  }
+
+  &:focus {
+    border-color: $main-color;
+    box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.2);
+  }
+
+  option {
+    background-color: #1e1e1e;
+  }
+}
+
+.payment-select-wrap {
+  position: relative;
+}
+
+.payment-select-btn {
+  width: 100%;
+  padding: 13px 16px;
+  background-color: #1e1e1e;
+  border: 1px solid #3a3a3a;
+  border-radius: $radius-md;
+  color: $w-color;
+  font-size: $text-14;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: border-color 0.15s;
+
+  &:hover {
+    border-color: #555;
+  }
+}
+
+.payment-select-arrow {
+  color: #888;
+  font-size: 12px;
+  transition: transform 0.2s;
+
+  &.open {
+    transform: rotate(180deg);
+  }
+}
+
+.payment-select-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background-color: #1e1e1e;
+  border: 1px solid #3a3a3a;
+  border-radius: $radius-md;
+  overflow: hidden;
+  z-index: 10;
+  list-style: none;
+}
+
+.payment-select-item {
+  padding: 13px 16px;
+  font-size: $text-14;
+  color: #ccc;
+  cursor: pointer;
+  transition: background-color 0.15s;
+
+  &:hover {
+    background-color: #2a2a2a;
+  }
+
+  &.selected {
+    color: $w-color;
+    font-weight: 600;
+    background-color: rgba(229, 9, 20, 0.06);
+  }
+}
+
+.payment-agree-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.payment-agree-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.payment-cb {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  background-color: #1e1e1e;
+  border: 1.5px solid #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
+
+  &.checked {
+    background-color: $main-color;
+    border-color: $main-color;
+
+    &::after {
+      content: "";
+      width: 5px;
+      height: 10px;
+      border: 2px solid $w-color;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg) translate(-1px, -1px);
+      display: block;
+    }
+  }
+}
+
+.payment-agree-text {
+  font-size: $text-13;
+  color: #ccc;
+}
+
+// 간편결제 그리드
+.payment-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.payment-quick-btn {
+  border: none;
+  border-radius: $radius-md;
+  padding: 18px 16px;
+  font-size: $text-16;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition:
+    opacity 0.15s,
+    transform 0.15s;
+  background-repeat: no-repeat;
+  background-position: 20% center;
+
+  &:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+  }
+
+  &.kakao {
+    background-color: #fee500;
+    color: #3a1d1d;
+  }
+
+  &.naver {
+    background-color: #03c75a;
+    color: #fff;
+  }
+
+  &.selected {
+    outline: 2px solid $main-color;
+  }
+}
+
+// 은행 그리드
+.payment-bank-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.payment-bank-btn {
+  background-color: #1e1e1e;
+  border: 1px solid #3a3a3a;
+  border-radius: $radius-md;
+  padding: 16px 8px;
+  font-size: $text-13;
+  font-weight: 500;
+  color: #ccc;
+  cursor: pointer;
+  text-align: center;
+  transition:
+    border-color 0.15s,
+    background-color 0.15s;
+
+  &:hover {
+    border-color: #666;
+    background-color: #242424;
+  }
+
+  &.selected {
+    border-color: $main-color;
+    background-color: rgba(229, 9, 20, 0.06);
+    color: $w-color;
+    font-weight: 700;
+  }
+}
+
+// 결제 금액 요약
+.payment-amount-box {
+  background-color: #1e1e1e;
+  border: 1px solid #3a3a3a;
+  border-radius: $radius-md;
+  padding: 18px 20px;
+  margin-top: 28px;
+  margin-bottom: 20px;
+}
+
+.payment-amount-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.payment-amount-label {
+  font-size: $text-13;
+  color: #888;
+}
+
+.payment-amount-value {
+  font-size: $text-13;
+  color: #ccc;
+
+  &.discount {
+    color: $main-color;
+  }
+}
+
+.payment-amount-divider {
+  border: none;
+  border-top: 1px solid #2a2a2a;
+  margin: 14px 0;
+}
+
+.payment-amount-total-label {
+  font-size: $text-16;
+  font-weight: 700;
+  color: $w-color;
+}
+
+.payment-amount-total-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: $main-color;
+}
+
+.payment-notice {
+  font-size: 12px;
+  color: #555;
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+// 결제하기 버튼
+.payment-pay-btn {
+  width: 100%;
+  padding: 16px;
+  background-color: $main-color;
+  color: $w-color;
+  font-size: $text-18;
+  font-weight: 700;
+  border: none;
+  border-radius: $radius-md;
+  cursor: pointer;
+  margin-bottom: 10px;
+  position: relative;
+  transition:
+    background-color 0.15s,
+    transform 0.15s;
+  min-height: 59px;
+
+  &:hover:not(:disabled) {
+    background-color: #f40612;
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &.is-loading {
+    color: transparent;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: $w-color;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+  }
+}
+
+// 이전으로 버튼
+.payment-back-btn {
+  width: 100%;
+  padding: 13px;
+  background-color: transparent;
+  color: #888;
+  font-size: $text-14;
+  font-weight: 500;
+  border: 1px solid #3a3a3a;
+  border-radius: $radius-md;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+
+  &:hover:not(:disabled) {
+    border-color: #666;
+    color: #ccc;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.payment-secure {
+  text-align: center;
+  font-size: 12px;
+  color: #555;
+}
+
+// ─── StepComplete ─────────────────────────────────────────────────────────────
+
+.complete-page {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.complete-check-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 2px solid #2ecc71;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+
+  svg {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+.complete-title {
+  font-size: $text-32;
+  font-weight: 700;
+  color: $w-color;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.complete-sub {
+  font-size: $text-14;
+  color: #888;
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.complete-receipt {
+  width: 100%;
+  background-color: #1e1e1e;
+  border: 1px solid #2e2e2e;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+
+.receipt-header {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.receipt-order-num {
+  font-size: $text-13;
+  color: #888;
+}
+
+.receipt-status-badge {
+  background-color: rgba(46, 204, 113, 0.12);
+  border: 1px solid rgba(46, 204, 113, 0.3);
+  color: #2ecc71;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.receipt-body {
+  padding: 4px 0;
+}
+
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  border-bottom: 1px solid #242424;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.receipt-label {
+  font-size: $text-13;
+  color: #888;
+}
+
+.receipt-value {
+  font-size: $text-13;
+  color: #ccc;
+}
+
+.receipt-total {
+  padding: 18px 20px;
+  background-color: #242424;
+  border-top: 1px solid #2a2a2a;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.receipt-total-label {
+  font-size: $text-16;
+  font-weight: 700;
+  color: $w-color;
+}
+
+.receipt-total-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: $w-color;
+}
+
+.complete-home-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: $main-color;
+  color: $w-color;
+  font-size: $text-14;
+  font-weight: 700;
+  border: none;
+  border-radius: $radius-md;
+  cursor: pointer;
+  transition:
+    background-color 0.15s,
+    transform 0.15s;
+
+  &:hover {
+    background-color: #f40612;
+    transform: translateY(-1px);
+  }
+}
+
+// 사용중 카드 테두리
+.plan-card.current {
+  border-color: #2ecc71;
+}
+
+// 사용중 뱃지
+.plan-current-badge {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2ecc71;
+  color: #000;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 14px;
+  border-radius: 20px;
+}
+
+/* ===== 반응형: nav가 표시되는 페이지(plan/cancel/payment)에서는
+   화면 정중앙 대신 "nav 오른쪽 영역의 정중앙"에 카드를 배치해 가림 방지.
+   /signin은 레이아웃(nav)을 숨기므로 has-nav가 없어 기존 풀스크린 중앙정렬 유지 ===== */
+.has-nav .signin-page {
+  margin-left: 0;
+  width: 100%;
+  padding-left: calc(#{$main-menu-width} + 24px);
+  padding-right: 24px;
+}
+
+@include respond(tablet) {
+  .has-nav .signin-page {
+    padding-left: calc(64px + 24px);
+  }
+}
+
+@include respond(mobile) {
+  .has-nav .signin-page {
+    padding-left: calc(56px + 16px);
+    padding-right: 16px;
+  }
+}

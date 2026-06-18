@@ -1,0 +1,480 @@
+@use "@/app/globals" as g;
+
+.community-page {
+  min-height: calc(100vh - g.$header-height);
+  background-color: g.$bg-color; // 대개 #141414 등 어두운 넷플릭스 톤
+  color: g.$w-color;
+  padding: 40px 0 80px;
+
+  .community-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 40px;
+
+    @media (max-width: 768px) {
+      padding: 0 20px;
+    }
+  }
+
+  // 대타이틀 헤더
+  .community-header {
+    margin-bottom: 32px;
+    h1 {
+      font-size: g.$text-32;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: g.$g-color;
+      font-size: g.$text-14;
+    }
+  }
+
+  // 이미지 스타일 1:1 구현: 메인 상단 탭메뉴 가로 드롭라인 레이아웃
+  .community-tabs {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    gap: 4px;
+    width: 100%;
+    padding: 0;
+    background: transparent;
+    border-bottom: 1px solid #2a2a2a;
+    margin-bottom: 32px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-btn {
+      position: relative;
+      min-width: 0;
+      padding: 12px 18px;
+      margin-bottom: -1px;
+      background: transparent;
+      border: 0;
+      border-bottom: 1px solid transparent;
+      border-radius: 0;
+      color: g.$g-color;
+      font-size: g.$text-14;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+
+      &.is-active {
+        color: g.$w-color;
+        border-bottom-color: g.$main-color;
+        font-weight: 600;
+      }
+
+      &:hover:not(.is-active) {
+        color: g.$w-color;
+      }
+    }
+  }
+
+  // 중간 서브 타이틀 가로 배치 (예: 위시리스트 1개)
+  .section-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 24px;
+
+    h2 {
+      font-size: g.$text-24;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .total-count {
+      font-size: g.$text-13;
+      color: g.$main-menu-color;
+    }
+  }
+
+  // 이미지 스타일 1:1 구현: 하단 칩스 및 정렬 툴바
+  .community-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    gap: 16px;
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 14px;
+    }
+  }
+
+  // 타원형 넷플릭스 오리지널 칩 디자인
+  .community-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    .chip {
+      padding: 8px 18px;
+      background: transparent;
+      border: 1px solid #3a3a3a;
+      color: g.$g-color;
+      border-radius: 100px;
+      font-size: g.$text-13;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &.is-active {
+        background: g.$main-color;
+        border-color: g.$main-color;
+        color: g.$w-color;
+        font-weight: 600;
+      }
+
+      &:hover:not(.is-active) {
+        border-color: g.$w-color;
+        color: g.$w-color;
+      }
+    }
+  }
+
+  .feed-content-filter {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: -10px 0 28px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .feed-content-filter__label {
+    flex-shrink: 0;
+    color: #777;
+    font-size: g.$text-12;
+    font-weight: 700;
+  }
+
+  .feed-content-filter__chips {
+    display: flex;
+    min-width: 0;
+    gap: 7px;
+    flex-wrap: wrap;
+
+    button {
+      display: inline-flex;
+      min-height: 30px;
+      align-items: center;
+      gap: 6px;
+      padding: 0 11px;
+      border: 1px solid #303030;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.02);
+      color: #999;
+      font-size: g.$text-12;
+      font-weight: 600;
+      cursor: pointer;
+      transition:
+        border-color 0.16s ease,
+        background 0.16s ease,
+        color 0.16s ease;
+
+      > span {
+        color: #666;
+        font-size: 10px;
+        font-weight: 700;
+      }
+
+      &:hover,
+      &:focus-visible {
+        border-color: #555;
+        color: #fff;
+        outline: none;
+      }
+
+      &.is-active {
+        border-color: rgba(229, 9, 20, 0.48);
+        background: rgba(229, 9, 20, 0.09);
+        color: #fff;
+
+        > span {
+          color: #ff777e;
+        }
+      }
+    }
+  }
+
+  // 우측 정렬 드롭다운 시스템
+  .community-sort {
+    position: relative;
+
+    @media (max-width: 600px) {
+      align-self: flex-end;
+    }
+
+    .sort-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      color: rgba(#fff, 0.8);
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: color 0.15s ease;
+
+      &:hover {
+        color: #fff;
+      }
+
+      .sort-arrow {
+        font-size: 10px;
+        margin-left: 2px;
+        transition: transform 0.2s ease;
+        display: inline-block;
+
+        &.is-open {
+          transform: rotate(180deg);
+        }
+      }
+    }
+  }
+
+  // 드롭다운 오버레이 메뉴판 스타일링
+  .sort-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    min-width: 140px;
+    background-color: #181818;
+    border: 1px solid #282828;
+    border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    z-index: 20;
+    list-style: none;
+    padding: 5px;
+
+    .sort-option {
+      display: block;
+      width: 100%;
+      padding: 10px 14px;
+      background: none;
+      border: none;
+      color: #aaa;
+      font-size: 13px;
+      text-align: left;
+      cursor: pointer;
+      border-radius: 3px;
+      transition: all 0.15s ease;
+
+      &:hover {
+        background-color: rgba(#fff, 0.08);
+        color: #fff;
+      }
+
+      &.is-selected {
+        color: g.$main-color;
+        font-weight: 600;
+      }
+    }
+  }
+
+  // 작성 글 빌더 영역 폼 스타일링
+  .feed-builder-form {
+    background-color: #18181c;
+    padding: 30px;
+    border-radius: 6px;
+    border: 1px solid rgba(#fff, 0.05);
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+
+      label {
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      input, textarea {
+        background-color: #2a2a32;
+        border: 1px solid rgba(#fff, 0.1);
+        border-radius: 4px;
+        color: #fff;
+        padding: 12px;
+        font-size: 14px;
+        outline: none;
+
+        &:focus {
+          border-color: g.$main-color;
+        }
+      }
+    }
+    
+    .btn-submit-feed {
+      padding: 12px 32px;
+      background-color: g.$main-color;
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      &:hover { background-color: #f40612; }
+    }
+  }
+
+  // 기본 엠티 홀더 디자인
+  .community-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 120px 0;
+    text-align: center;
+
+    .empty-text {
+      font-size: 15px;
+      color: g.$main-menu-color;
+    }
+
+    .empty-cta {
+      padding: 10px 24px;
+      background-color: g.$main-color;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+  }
+
+  .main-content-area {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .tab-content-panel {
+    width: 100%;
+  }
+
+  .mypage-feed-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+  }
+}
+
+/* ===== 반응형: 사이드메뉴(nav) 좌측 여백 확보 ===== */
+@include g.respond(laptop) {
+  .community-page { padding-left: 80px; }
+}
+@include g.respond(tablet) {
+  .community-page { padding-left: 64px; }
+}
+@include g.respond(mobile) {
+  .community-page { padding-left: 56px; padding-right: 16px; }
+}
+
+@media (max-width: 640px) {
+  .community-page {
+    padding-top: 28px;
+
+    .community-header {
+      margin-bottom: 22px;
+
+      h1 {
+        margin-bottom: 6px;
+        font-size: g.$text-24;
+        line-height: 1.3;
+      }
+
+      p {
+        font-size: g.$text-12;
+        line-height: 1.5;
+      }
+    }
+
+    .community-tabs {
+      margin-bottom: 24px;
+
+      .tab-btn {
+        padding: 10px 14px;
+        font-size: g.$text-13;
+      }
+    }
+
+    .section-title-row {
+      margin-bottom: 18px;
+
+      h2 {
+        font-size: g.$text-18;
+      }
+
+      .total-count {
+        font-size: g.$text-12;
+      }
+    }
+
+    .community-toolbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 8px;
+      margin-bottom: 20px;
+
+      .mobile-filter-accordion {
+        flex: 1 1 0;
+        min-width: 0;
+        max-width: 150px;
+        width: auto;
+      }
+    }
+
+    .community-chips {
+      display: none;
+    }
+
+    .community-sort {
+      display: none;
+    }
+
+    .feed-content-filter {
+      display: block;
+      margin: -4px 0 22px;
+      padding-top: 14px;
+      overflow: hidden;
+    }
+
+    .feed-content-filter__label {
+      display: block;
+      margin-bottom: 9px;
+    }
+
+    .feed-content-filter__chips {
+      flex-wrap: nowrap;
+      padding-bottom: 4px;
+      overflow-x: auto;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      button {
+        flex: 0 0 auto;
+      }
+    }
+  }
+}

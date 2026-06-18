@@ -1,0 +1,282 @@
+@use "../../../app/globals.scss" as g;
+
+.connect-friend-reactions {
+  margin: g.$section-gap 0 0;
+
+  &__inner {
+    width: calc(100vw - #{g.$main-menu-width});
+    padding-right: 0;
+  }
+
+  .section-header {
+    padding-right: clamp(24px, calc((100vw - #{g.$main-menu-width} - 1920px) / 2), 80px);
+  }
+
+  &__swiper-shell {
+    position: relative;
+  }
+
+  &__list {
+    width: 100%;
+    padding: 0 0 16px;
+    overflow: visible !important;
+    cursor: default;
+
+    .connect-friend-reactions__slide {
+      width: 420px;
+    }
+
+    .swiper-button-prev,
+    .swiper-button-next {
+      background: none;
+      border: none;
+      color: #fff;
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+
+      &::after {
+        font-size: 20px;
+        font-weight: 900;
+      }
+
+      &.swiper-button-disabled {
+        opacity: 0 !important;
+        pointer-events: none;
+      }
+    }
+
+    .swiper-button-prev {
+      left: 10px;
+    }
+
+    .swiper-button-next {
+      right: 20px;
+    }
+
+    &:hover {
+
+      .swiper-button-prev,
+      .swiper-button-next {
+        opacity: 1;
+
+        &:hover {
+          opacity: 0.7;
+        }
+      }
+    }
+  }
+
+  &__slide {
+    width: 420px;
+  }
+
+  &__card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 8px;
+
+    &:focus-visible {
+      outline: 2px solid rgba(255, 255, 255, 0.6);
+      outline-offset: 2px;
+    }
+  }
+
+  &__avatar--initial {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fff;
+    background: #444;
+  }
+
+  &__card {
+    width: 420px;
+    background: #1e1e1e;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+    }
+  }
+}
+
+/* 상단: 아바타 + 닉네임 / 별점 */
+.cfr-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px 12px;
+}
+
+.cfr-user {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.cfr-avatar {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #2a2a2a;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.cfr-avatar--initial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.cfr-nickname {
+  font-size: 0.85rem;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cfr-stars {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+
+  .star {
+    font-size: 14px;
+    line-height: 1;
+    &.filled { color: #f5a623; }
+    &.empty  { color: rgba(255, 255, 255, 0.2); }
+  }
+}
+
+/* 중단: 포스터 + 제목 + 리뷰 */
+.cfr-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 0 18px 16px;
+}
+
+.cfr-poster {
+  width: 64px;
+  height: 92px;
+  flex: 0 0 auto;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #111;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.cfr-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 2px;
+}
+
+.cfr-title {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cfr-review {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+}
+
+/* 하단: 구분선 + 좋아요/댓글 */
+.cfr-footer {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 11px 18px 13px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cfr-stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+
+  svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+}
+
+/* ===== 반응형 ===== */
+@media (max-width: 768px) {
+  .connect-friend-reactions__slide,
+  .connect-friend-reactions__card { width: min(82vw, 340px); }
+  .connect-friend-reactions__list .connect-friend-reactions__slide { width: min(82vw, 340px); }
+  .connect-friend-reactions__list .swiper-button-prev,
+  .connect-friend-reactions__list .swiper-button-next { display: none; }
+}
+
+@include g.respond(tablet) {
+  .connect-friend-reactions__inner {
+    width: 100vw;
+    margin-left: 0;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .connect-friend-reactions__slide,
+  .connect-friend-reactions__card { width: 330px; }
+  .connect-friend-reactions .section-header { padding-right: 0; }
+}
+
+@include g.respond(mobile) {
+  .connect-friend-reactions { margin: 32px 0 0; }
+  .connect-friend-reactions__inner { width: 100vw; }
+  .connect-friend-reactions .section-header {
+    padding-right: 0;
+    .see-all { margin-right: 8px; }
+  }
+  .connect-friend-reactions__slide,
+  .connect-friend-reactions__card,
+  .connect-friend-reactions__list .connect-friend-reactions__slide {
+    width: calc((100vw - 52px) / 1.5);
+    max-width: none;
+  }
+  .cfr-poster { width: 54px; height: 78px; }
+  .cfr-title { font-size: 0.82rem; }
+  .cfr-review { font-size: 0.74rem; -webkit-line-clamp: 2; line-clamp: 2; }
+}

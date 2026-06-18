@@ -1,0 +1,395 @@
+.review-container {
+  //   padding: 24px;
+
+  .review-thumb {
+    width: 60px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+    }
+  }
+
+  .review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .review-card-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .review-item {
+    padding: 18px;
+    border: 1px solid #2a2a35;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.025);
+    transition:
+      background 0.18s ease,
+      border-color 0.18s ease,
+      transform 0.18s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.045);
+      border-color: rgba(255, 255, 255, 0.18);
+      transform: translateY(-1px);
+    }
+  }
+
+  .review-item__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+
+    strong {
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+    }
+  }
+
+  .review-stars {
+    margin-left: 10px;
+    color: #e50914;
+    font-size: 13px;
+    letter-spacing: 0;
+  }
+
+  .review-score {
+    margin-left: 8px;
+    color: #aaa;
+    font-size: 12px;
+  }
+
+  .review-content {
+    margin: 0;
+    color: #d4d4d4;
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-wrap: break-word;
+    word-break: keep-all;
+  }
+
+  .review-item__foot {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+    color: #777;
+    font-size: 12px;
+  }
+
+  .spoiler-tag {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 8px;
+    border: 1px solid rgba(229, 9, 20, 0.45);
+    border-radius: 999px;
+    color: #ff6b73;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  // 포스터 링크 및 썸네일 영역 잡아주기
+  .mypage-review-card__poster-link {
+    .review-thumb {
+      width: 90px;
+      aspect-ratio: 2 / 3; // 💡 TMDB 포스터 표준 비율 고정
+      border-radius: 6px;
+      overflow: hidden;
+      background: #222;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; // 이미지 찌그러짐 방지
+        display: block;
+      }
+    }
+  }
+
+  // 텍스트 정보 영역
+  .mypage-review-card__info {
+    min-width: 0;
+    padding-top: 4px;
+
+    // 💡 영화 제목 디자인 스타일링
+    .mypage-review-card__title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.35;
+      letter-spacing: -0.02em;
+
+      // 제목이 너무 길 때 말줄임 처리 (...), 신고 버튼 영역 침범 방지 패딩
+      padding-right: 50px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+    }
+  }
+}
+
+/* ===== 반응형 ===== */
+@media (max-width: 640px) {
+  .review-container {
+    min-width: 0;
+
+    .mypage-review-card {
+      min-width: 0;
+      padding: 14px !important;
+    }
+
+    .mypage-review-card__main {
+      display: grid !important;
+      grid-template-columns: 72px minmax(0, 1fr);
+      align-items: start !important;
+      gap: 12px !important;
+      min-width: 0;
+      margin-bottom: 12px !important;
+    }
+
+    .mypage-review-card__poster-link,
+    .review-thumb {
+      display: block;
+      width: 72px;
+      min-width: 0;
+    }
+
+    .review-thumb {
+      border-radius: 6px;
+    }
+
+    .mypage-review-card__info {
+      min-width: 0;
+      width: 100%;
+
+      > h3 {
+        display: -webkit-box;
+        margin: 0 0 8px;
+        overflow: hidden;
+        color: #fff;
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+        word-break: keep-all;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+      }
+
+      > strong {
+        max-width: 100%;
+        font-size: 13px !important;
+        font-weight: 600;
+        overflow-wrap: anywhere;
+        word-break: keep-all;
+      }
+
+      > span {
+        display: inline-flex;
+        align-items: center;
+        margin-top: 4px;
+        margin-left: 7px !important;
+        font-size: 11px !important;
+        white-space: nowrap;
+      }
+    }
+
+    .mypage-review-card__content {
+      font-size: 13px !important;
+      line-height: 1.6 !important;
+      overflow-wrap: anywhere;
+      word-break: keep-all;
+    }
+
+    .mypage-review-card__date {
+      margin-top: 10px !important;
+      font-size: 11px !important;
+    }
+
+    .mypage-review-card__actions {
+      display: flex !important; // 부모를 플렉스로 확실히 선언
+      flex-direction: row !important; // 무조건 한 줄(가로) 배치
+      justify-content: space-between !important; // 양 끝으로 벌리기
+      align-items: center !important;
+      gap: 8px !important;
+      margin-top: 10px !important;
+      width: 100% !important; // 부모가 가로를 꽉 채워야 양 끝으로 벌어집니다.
+
+      // 왼쪽 일반 버튼들 (좋아요, 댓글 등)
+      > button {
+        height: 30px !important;
+        padding: 0 9px !important;
+        font-size: 11px !important;
+        font-weight: 600 !important;
+      }
+    }
+
+    .mypage-review-card__owner-actions {
+      display: flex !important; // 얘도 가로 정렬
+      align-items: center !important;
+      gap: 6px !important;
+
+      // 중요: 이전 코드에서 넣었던 음수 마진, width: 100%, flex-basis 등이 있다면 여기서 리셋해야 합니다.
+      margin: 0 !important;
+      width: auto !important;
+      flex-basis: auto !important;
+
+      button {
+        height: 30px !important;
+        padding: 0 10px !important;
+        font-size: 11px !important;
+        font-weight: 600 !important;
+      }
+    }
+  }
+}
+
+@media (max-width: 380px) {
+  .review-container {
+    .mypage-review-card__main {
+      grid-template-columns: 60px minmax(0, 1fr);
+      gap: 10px !important;
+    }
+
+    .mypage-review-card__poster-link,
+    .review-thumb {
+      width: 60px;
+    }
+
+    .mypage-review-card__actions {
+      align-items: flex-start !important;
+      flex-direction: column;
+    }
+
+    .mypage-review-card__owner-actions {
+      margin-left: 0;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .review-container {
+    .mypage-review-card__main {
+      grid-template-columns: 72px minmax(0, 1fr);
+      align-items: start !important;
+    }
+
+    .mypage-review-card__poster-link {
+      grid-column: 1;
+      grid-row: 1 / 3;
+      width: 72px;
+
+      .review-thumb {
+        width: 72px;
+      }
+    }
+
+    .mypage-review-card__info {
+      display: contents;
+
+      > .mypage-review-card__title {
+        grid-column: 2;
+        grid-row: 1;
+        align-self: end;
+        margin: 0 0 6px !important;
+        padding-right: 40px;
+        font-size: 14px;
+        line-height: 1.35;
+      }
+
+      > .mypage-review-card__meta {
+        grid-column: 2;
+        grid-row: 2;
+        align-self: start;
+        gap: 4px 6px !important;
+        min-width: 0;
+        margin-bottom: 0 !important;
+
+        strong {
+          max-width: 100%;
+          font-size: 12px !important;
+          overflow-wrap: anywhere;
+          word-break: keep-all;
+        }
+
+        span {
+          display: inline-flex;
+          align-items: center;
+          margin: 0 !important;
+          font-size: 10px !important;
+          white-space: nowrap;
+        }
+      }
+
+      > .mypage-review-card__review-area {
+        grid-column: 1 / -1;
+        grid-row: 3;
+        min-width: 0;
+        margin-top: 8px;
+      }
+    }
+
+    .mypage-review-card__actions {
+      align-items: center !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+
+      > button {
+        flex-shrink: 0;
+      }
+    }
+
+    .mypage-review-card__owner-actions {
+      flex-shrink: 0;
+      margin-left: auto !important;
+    }
+  }
+}
+
+@media (max-width: 380px) {
+  .review-container {
+    .mypage-review-card__main {
+      grid-template-columns: 60px minmax(0, 1fr);
+    }
+
+    .mypage-review-card__poster-link {
+      width: 60px;
+
+      .review-thumb {
+        width: 60px;
+      }
+    }
+
+    .mypage-review-card__actions {
+      flex-direction: row !important;
+      align-items: center !important;
+      flex-wrap: nowrap !important;
+      gap: 6px !important;
+    }
+
+    .mypage-review-card__owner-actions {
+      margin-left: auto !important;
+      justify-content: flex-end;
+      gap: 4px !important;
+
+      button {
+        padding: 0 8px !important;
+      }
+    }
+  }
+}

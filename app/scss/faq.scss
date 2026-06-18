@@ -1,0 +1,190 @@
+@use "@/app/globals" as g;
+
+.faq-page {
+  min-height: 100vh;
+  padding: 40px 0 80px;
+
+  .inner {
+    width: 1400px;
+    max-width: 100%;
+  }
+
+  .page-head {
+    margin-bottom: 28px;
+
+    h1 {
+      font-size: g.$text-32;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: g.$g-color;
+      font-size: g.$text-14;
+      line-height: 1.6;
+    }
+  }
+
+  .faq-search {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 52px;
+    padding: 0 20px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid #3a3a3a;
+    border-radius: g.$radius-md;
+    margin-bottom: 20px;
+
+    .icon {
+      color: g.$g-color;
+      font-size: g.$text-16;
+    }
+
+    input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: g.$w-color;
+      font-size: g.$text-14;
+
+      &::placeholder {
+        color: g.$g-color;
+      }
+    }
+  }
+
+  .faq-cat-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 32px;
+
+    .cat-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid #2a2a2a;
+      border-radius: 100px;
+      color: g.$g-color;
+      font-size: g.$text-13;
+      cursor: pointer;
+      transition:
+        border-color 0.2s,
+        color 0.2s,
+        background 0.2s;
+
+      &:hover:not(.active) {
+        border-color: #3a3a3a;
+        color: g.$w-color;
+      }
+
+      &.active {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: #777;
+        color: g.$w-color;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .faq-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+
+  .faq-section {
+    .faq-section-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+
+      .head-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: g.$text-16;
+      }
+
+      h2 {
+        font-size: g.$text-18;
+        font-weight: 700;
+      }
+
+      .count {
+        font-size: g.$text-12;
+        color: g.$g-color;
+      }
+    }
+  }
+
+  .faq-no-result {
+    padding: 60px 0;
+    text-align: center;
+
+    p {
+      color: g.$g-color;
+      font-size: g.$text-14;
+    }
+  }
+
+  .faq-foot-cta {
+    margin-top: 48px;
+    padding: 32px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid #2a2a2a;
+    border-radius: g.$radius-lg;
+
+    p {
+      font-size: g.$text-14;
+      color: g.$g-color;
+      margin-bottom: 16px;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      padding: 12px 28px;
+      background: #4a4a4a;
+      color: g.$w-color;
+      border-radius: 100px;
+      font-size: g.$text-14;
+      font-weight: 700;
+      transition: background 0.2s;
+
+      &:hover {
+        background: #5a5a5a;
+      }
+    }
+  }
+
+  .faq-total-hint {
+    margin-top: 20px;
+    text-align: center;
+    font-size: g.$text-12;
+    color: g.$g-color;
+  }
+}
+
+@include g.respond(laptop) {
+  .faq-page {
+    padding-left: 80px;
+  }
+}
+
+@include g.respond(tablet) {
+  .faq-page {
+    padding-left: 64px;
+  }
+}
+
+@include g.respond(mobile) {
+  .faq-page {
+    padding: 40px 16px 80px 56px;
+  }
+}

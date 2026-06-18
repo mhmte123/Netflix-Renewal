@@ -1,0 +1,136 @@
+.tam-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tam-panel {
+  position: relative;
+  width: min(480px, 92vw);
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 32px 28px 28px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+}
+
+.tam-close {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 16px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px;
+  transition: color 0.15s ease;
+
+  &:hover { color: #fff; }
+}
+
+.tam-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.tam-avatar {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #2a2a2a;
+}
+
+.tam-avatar--initial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.tam-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.tam-label {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tam-nickname {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.tam-match {
+  font-size: 0.75rem;
+  color: #e50914;
+  font-weight: 600;
+}
+
+.tam-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.tam-empty {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.tam-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tam-bar-label {
+  width: 72px;
+  flex: 0 0 auto;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.75);
+  text-align: right;
+}
+
+.tam-bar-track {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.tam-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tam-bar-pct {
+  width: 36px;
+  flex: 0 0 auto;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.45);
+  text-align: right;
+}

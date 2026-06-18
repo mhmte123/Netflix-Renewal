@@ -1,0 +1,55 @@
+@use "@/app/globals" as g;
+
+.pay-change-page {
+  width: 100%;
+  max-width: 480px;
+}
+
+.pay-change-title {
+  font-size: g.$text-32;
+  font-weight: 700;
+  color: g.$w-color;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+// ─── 현재 구독 정보 요약 ──────────────────────────────────────────────────────
+
+.pay-change-summary {
+  background: #1e1e1e;
+  border: 1px solid #2e2e2e;
+  border-radius: g.$radius-md;
+  padding: 20px;
+  margin-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pay-change-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #2e2e2e;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.pay-change-summary-label {
+  font-size: g.$text-13;
+  color: #888;
+}
+
+.pay-change-summary-value {
+  font-size: g.$text-14;
+  font-weight: 700;
+  color: g.$w-color;
+}
+
+/* ===== 반응형 ===== */
+@include g.respond(mobile) {
+  .pay-change-page { padding-left: 16px; padding-right: 16px; }
+}

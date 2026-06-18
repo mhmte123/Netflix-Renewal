@@ -1,0 +1,67 @@
+@use "@/app/globals" as g;
+
+/* 대표 칭호 칩 — 아이콘 + 이름 (항상 한 줄).
+   부모 페이지의 일반 선택자(.info span, img 리셋 등)에 깨지지 않도록
+   선택자 특이도를 한 단계 높이고(.rep-badge.rep-badge) 내부 요소를 명시적으로 리셋한다. */
+.rep-badge.rep-badge {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: fit-content;
+  max-width: 100%;
+  padding: 4px 10px;
+  border: 1px solid rgba(229, 9, 20, 0.36);
+  border-radius: 999px;
+  background: rgba(229, 9, 20, 0.12);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: g.$text-12;
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* 아이콘: 부모의 img 규칙을 덮어쓰고 항상 작은 정사각 아이콘으로 */
+.rep-badge .rep-badge__icon {
+  display: block;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  object-fit: contain;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  border-radius: 0;
+}
+
+/* 이름: 부모의 span 알약 스타일(.info span 등)을 무력화하고 순수 텍스트로 */
+.rep-badge .rep-badge__name {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  border-radius: 0;
+  color: inherit;
+  font: inherit;
+  line-height: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 작은 칩(목록/카드용) */
+.rep-badge.rep-badge--sm {
+  gap: 5px;
+  padding: 3px 8px;
+  font-size: 11px;
+}
+.rep-badge.rep-badge--sm .rep-badge__icon {
+  width: 14px;
+  height: 14px;
+}

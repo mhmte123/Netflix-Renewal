@@ -1,0 +1,298 @@
+import type { GoodsProduct, GoodsCategory } from "@/types/goods";
+
+// 카테고리 메타 (라벨/아이콘키/그라데이션) — 카드 비주얼에 사용
+export const GOODS_CATEGORIES: {
+  key: GoodsCategory;
+  label: string;
+  emoji: string;
+  iconKey: string;
+  gradient: string;
+}[] = [
+  { key: "apparel",    label: "의류",      emoji: "👕", iconKey: "apparel",    gradient: "linear-gradient(135deg,#3a1c1c,#5b2330)" },
+  { key: "figure",     label: "피규어·키링", emoji: "🧸", iconKey: "figure",     gradient: "linear-gradient(135deg,#1c2a3a,#23405b)" },
+  { key: "poster",     label: "포스터·아트", emoji: "🖼️", iconKey: "poster",     gradient: "linear-gradient(135deg,#2a1c3a,#42235b)" },
+  { key: "stationery", label: "문구",      emoji: "✏️", iconKey: "stationery", gradient: "linear-gradient(135deg,#1c3a2a,#235b3f)" },
+  { key: "lifestyle",  label: "리빙·잡화", emoji: "🏠", iconKey: "lifestyle",  gradient: "linear-gradient(135deg,#3a341c,#5b5223)" },
+];
+
+export function categoryMeta(category: GoodsCategory) {
+  return GOODS_CATEGORIES.find((c) => c.key === category) ?? GOODS_CATEGORIES[0];
+}
+
+
+// ── 굿즈 상품 카탈로그 (포인트 교환 + 배송비) ─────────
+// 추후 Firestore 전환 시: fetchProducts() 본문만 컬렉션 조회로 교체.
+const GOODS_PRODUCTS: GoodsProduct[] = [
+  {
+    id: "g-poster-01",
+    name: "케이팝 데몬 헌터스 프리미엄 포스터",
+    category: "poster",
+    points: 800,
+    shippingFee: 3000,
+    stock: 230,
+    badge: "BEST",
+    themeTitle: "콜라보 굿즈",
+    thumbUrl: "/images/goods/g-poster-01_thumb.webp",
+    detailImages: ["/images/goods/g-poster-01_detail.webp"],
+    relatedTitle: "케이팝 데몬 헌터스",
+    relatedType: "movie",
+    relatedId: 803796,
+    description: "케이팝 데몬 헌터스의 역동적인 세계를 벽에 담아보세요! HUNTR/X 멤버들을 포함한 전체 캐릭터가 담긴 이 포스터는 컬렉터라면 꼭 가져야 할 아이템입니다. 그들의 스릴 넘치는 모험을 담아낸 이 포스터는 방이나 공간을 꾸미기에 완벽합니다.",
+  },
+  {
+    id: "g-poster-02",
+    name: "오징어 게임 마지막 게임 포스터",
+    category: "poster",
+    points: 800,
+    shippingFee: 3000,
+    stock: 47,
+    badge: "LIMITED",
+    themeTitle: "콜라보 굿즈",
+    thumbUrl: "/images/goods/g-poster-02_thumb.webp",
+    detailImages: ["/images/goods/g-poster-02_detail.webp"],
+    relatedTitle: "오징어 게임",
+    relatedType: "tv",
+    relatedId: 93405,
+    description: "끝이 다가옵니다. 오징어 게임 시즌 3의 긴장감과 결말을 완벽하게 담아낸 강렬한 아트 포스터입니다. 시리즈의 시작부터 충격적인 마지막까지, 그 여정을 강렬한 비주얼로 담아낸 컬렉터 필수 아이템입니다. 마지막 게임을 앞두고 자랑스럽게 걸어보세요.",
+  },
+  {
+    id: "g-apparel-01",
+    name: "케이팝 데몬 헌터스 HUNTR/X 후디",
+    category: "apparel",
+    points: 1200,
+    shippingFee: 3000,
+    stock: 180,
+    badge: "BEST",
+    themeTitle: "콜라보 굿즈",
+    thumbUrl: "/images/goods/g-apparel-01_thumb.webp",
+    detailImages: ["/images/goods/g-apparel-01_detail01.webp", "/images/goods/g-apparel-01_detail02.webp"],
+    relatedTitle: "케이팝 데몬 헌터스",
+    relatedType: "movie",
+    relatedId: 803796,
+    optionLabel: "사이즈",
+    options: ["S", "M", "L", "XL"],
+    description: "전설적인 HUNTR/X의 '팬들을 위한 배틀'을 기념하는 케이팝 데몬 헌터스 후디입니다. 차가운 콘서트 대기줄에서도, 초자연적인 존재를 쫓는 순간에도 완벽한 보온과 편안한 핏을 자랑합니다. 음악적 재능과 전투력이 충돌하는 스타디움 결전을 기리는 캐주얼 스트리트웨어의 필수 아이템입니다.",
+  },
+  {
+    id: "g-apparel-02",
+    name: "XO, 키티 KISS 후디",
+    category: "apparel",
+    points: 1200,
+    shippingFee: 3000,
+    stock: 180,
+    themeTitle: "콜라보 굿즈",
+    thumbUrl: "/images/goods/g-apparel-02_thumb.webp",
+    detailImages: ["/images/goods/g-apparel-02_detail01.webp", "/images/goods/g-apparel-02_detail02.webp"],
+    relatedTitle: "엑스오, 키티",
+    relatedType: "tv",
+    relatedId: 195670,
+    optionLabel: "사이즈",
+    options: ["S", "M", "L", "XL"],
+    description: "이번 겨울 XO, 키티 KISS 후디로 따뜻하고 스타일리시하게 보내세요. 쌀쌀한 날씨에 딱 맞는 포근한 후디로, 굵직한 KISS 크레스트 디자인이 팬이라면 꼭 가져야 할 아이템입니다. 부드럽고 편안한 소재로 레이어링하기에도 완벽합니다.",
+  },
+  {
+    id: "g-apparel-03",
+    name: "XO, 키티 KISS 컴포트 티셔츠",
+    category: "apparel",
+    points: 900,
+    shippingFee: 3000,
+    stock: 180,
+    themeTitle: "콜라보 굿즈",
+    thumbUrl: "/images/goods/g-apparel-03_thumb.webp",
+    detailImages: ["/images/goods/g-apparel-03_detail01.webp", "/images/goods/g-apparel-03_detail02.webp"],
+    relatedTitle: "엑스오, 키티",
+    relatedType: "tv",
+    relatedId: 195670,
+    optionLabel: "사이즈",
+    options: ["S", "M", "L", "XL"],
+    description: "XO, 키티의 발랄하고 사랑스러운 분위기를 KISS 컴포트 티셔츠로 표현해보세요. 작품과 캐릭터에 대한 애정을 드러내기 완벽한 스타일리시한 티셔츠입니다. 굵직한 KISS 크레스트 디자인은 상징적인 학교와 학생들에 대한 오마주입니다.",
+  },
+  {
+    id: "g-apparel-04",
+    name: "케이팝 데몬 헌터스 HUNTR/X 오버사이즈 티셔츠",
+    category: "apparel",
+    points: 900,
+    shippingFee: 3000,
+    stock: 180,
+    themeTitle: "콜라보 굿즈",
+    thumbUrl: "/images/goods/g-apparel-04_thumb.webp",
+    detailImages: ["/images/goods/g-apparel-04_detail01.webp", "/images/goods/g-apparel-04_detail02.webp"],
+    relatedTitle: "케이팝 데몬 헌터스",
+    relatedType: "movie",
+    relatedId: 803796,
+    optionLabel: "사이즈",
+    options: ["S", "M", "L", "XL"],
+    description: "악마를 사냥하는 케이팝 그룹 HUNTR/X의 여유로운 쿨함을 이 오버사이즈 페이드 티셔츠로 표현해보세요. 빈티지하고 자연스러운 느낌으로 디자인되어, 그들의 음악과 넷플릭스 영화 속 초자연적 존재와의 비밀 전투에 대한 사랑을 보여주기 완벽합니다.",
+  },
+  {
+    id: "g-apparel-05",
+    name: "케이팝 데몬 헌터스 퍼지 양말",
+    category: "apparel",
+    points: 500,
+    shippingFee: 3000,
+    stock: 50,
+    themeTitle: "콜라보 굿즈",
+    thumbUrl: "/images/goods/g-apparel-05_thumb.webp",
+    detailImages: ["/images/goods/g-apparel-05_detail01.webp", "/images/goods/g-apparel-05_detail02.webp"],
+    relatedTitle: "케이팝 데몬 헌터스",
+    relatedType: "movie",
+    relatedId: 803796,
+    description: "케이팝 데몬 헌터스 퍼지 양말로 집에서의 편안함을 한 단계 업그레이드하세요. 발 옆에 데르피가 웅크리고 있는 듯한 포근함으로, 따뜻하고 초부드러운 소재가 HUNTR/X의 최신 케이팝 히트곡을 들으며 여유를 즐기기에 딱입니다.",
+  },
+  {
+    id: "g-apparel-06",
+    name: "케이팝 데몬 헌터스 지누 코스플레이 모자",
+    category: "apparel",
+    points: 2000,
+    shippingFee: 4000,
+    stock: 20,
+    badge: "LIMITED",
+    themeTitle: "콜라보 굿즈",
+    thumbUrl: "/images/goods/g-apparel-06_thumb.webp",
+    detailImages: ["/images/goods/g-apparel-06_detail01.webp", "/images/goods/g-apparel-06_detail02.webp"],
+    relatedTitle: "케이팝 데몬 헌터스",
+    relatedType: "movie",
+    relatedId: 803796,
+    description: "영화 속 스타일리시한 히어로 지누의 에너지를 그대로 담은 코스플레이 모자입니다. 영화에서 바로 튀어나온 듯한 택티컬 스트리트웨어 무드로 패션을 완성해보세요. 행사, 핼러윈 코스튬, 팬 미팅에 완벽하며 편안한 착용감으로 전설적인 스크린 스타일을 팬들에게 직접 전달합니다.",
+  },
+  {
+    id: "g-apparel-07",
+    name: "오징어 게임 삼각형 심볼 캡모자",
+    category: "apparel",
+    points: 600,
+    shippingFee: 3000,
+    stock: 50,
+    themeTitle: "콜라보 굿즈",
+    thumbUrl: "/images/goods/g-apparel-07_thumb.webp",
+    detailImages: ["/images/goods/g-apparel-07_detail01.webp", "/images/goods/g-apparel-07_detail02.webp"],
+    relatedTitle: "오징어 게임",
+    relatedType: "tv",
+    relatedId: 93405,
+    description: "오징어 게임 관리자들의 권위를 담은 삼각형 심볼 캡모자입니다. 게임을 운영하는 수수께끼의 인물들에 대한 은근하면서도 강렬한 오마주로, 팬이라면 눈길을 뺏길 수밖에 없는 쿨한 액세서리입니다.",
+  },
+  {
+    id: "g-figure-01",
+    name: "브리저튼 폴리 포켓 플레이셋",
+    category: "figure",
+    points: 3000,
+    shippingFee: 4000,
+    stock: 28,
+    badge: "LIMITED",
+    themeTitle: "콜라보 굿즈",
+    thumbUrl: "/images/goods/g-figure-01_thumb.webp",
+    detailImages: ["/images/goods/g-figure-01_detail01.webp", "/images/goods/g-figure-01_detail02.webp", "/images/goods/g-figure-01_detail03.webp"],
+    relatedTitle: "브리저튼",
+    relatedType: "tv",
+    relatedId: 91239,
+    description: "비밀을 지킬 수 있나요? 브리저튼이 폴리 포켓으로 작아졌습니다! 다섯 개의 인형과 테마 액세서리로 좋아하는 장면을 재현해보세요. 아이와 어른 모두를 매료시킬 이 플레이셋은 상징적인 브리저튼 저택을 본떠 만들어졌습니다. 왕좌의 방 커튼을 열어 여왕을 만나고, 샴페인 타워로 무도회를 준비하거나, 페넬로페의 집필 코너를 열어보세요.",
+  },
+  {
+    id: "g-station-01",
+    name: "케이팝 데몬 헌터스 HUNTR/X 스티커 시트",
+    category: "stationery",
+    points: 200,
+    shippingFee: 2500,
+    stock: 280,
+    themeTitle: "콜라보 굿즈",
+    thumbUrl: "/images/goods/g-station-01_thumb.webp",
+    detailImages: ["/images/goods/g-station-01_detail01.webp"],
+    relatedTitle: "케이팝 데몬 헌터스",
+    relatedType: "movie",
+    relatedId: 803796,
+    description: "크게, 당당하게 붙여보세요! 케이팝 데몬 헌터스 HUNTR/X 스티커 시트에는 HUNTR/X 로고와 케이팝 악마 사냥 그룹에서 영감을 받은 역동적인 디자인의 스티커들이 가득합니다. 나만의 물건을 꾸미거나 친구들과 나눠 가지며 루미, 미라, 조이에 대한 변함없는 지지를 보여주세요!",
+  },
+  {
+    id: "g-station-02",
+    name: "브리저튼 명대사 스티커 시트",
+    category: "stationery",
+    points: 200,
+    shippingFee: 2500,
+    stock: 280,
+    themeTitle: "콜라보 굿즈",
+    thumbUrl: "/images/goods/g-station-02_thumb.webp",
+    detailImages: ["/images/goods/g-station-02_detail01.webp"],
+    relatedTitle: "브리저튼",
+    relatedType: "tv",
+    relatedId: 91239,
+    description: "브리저튼의 가장 잊을 수 없는 명대사에서 영감을 받은 스티커 시트입니다. 로맨스, 재치, 약간의 스캔들을 즐기는 팬이라면 누구나 좋아할 이 장식 스티커는 노트북, 물병, 플래너, 다이어리, 폰 케이스 등 어디에나 우아한 분위기를 더해줍니다.",
+  },
+  {
+    id: "g-station-03",
+    name: "원피스 초퍼 홀로그래픽 스티커",
+    category: "stationery",
+    points: 200,
+    shippingFee: 2500,
+    stock: 280,
+    themeTitle: "콜라보 굿즈",
+    thumbUrl: "/images/goods/g-station-03_thumb.webp",
+    detailImages: ["/images/goods/g-station-03_detail01.webp"],
+    relatedTitle: "원피스",
+    relatedType: "tv",
+    relatedId: 111110,
+    description: "원피스 초퍼 홀로그래픽 스티커로 컬렉션에 반짝임을 더해보세요! 사랑스러운 순록 의사 토니토니 쵸파가 생생한 홀로그래픽 디테일로 담긴 공식 라이선스 스티커입니다. 빛에 따라 변하는 환상적인 무지개 효과로 나만의 물건을 꾸미고 해적 자부심을 뽐내보세요.",
+  },
+  {
+    id: "g-life-01",
+    name: "레이디 휘슬다운 범블비 머그컵",
+    category: "lifestyle",
+    points: 600,
+    shippingFee: 3000,
+    stock: 210,
+    themeTitle: "콜라보 굿즈",
+    thumbUrl: "/images/goods/g-life-01_thumb.webp",
+    detailImages: ["/images/goods/g-life-01_detail.webp"],
+    relatedTitle: "브리저튼",
+    relatedType: "tv",
+    relatedId: 91239,
+    description: "우아함과 가십이 만나는 레이디 휘슬다운 범블비 머그컵입니다. 내면의 레이디 휘슬다운을 깨우며 이 매력적인 세라믹 머그컵으로 하루를 시작하세요. 최신 소식을 챙기면서 우아하게 티타임을 즐겨보세요!",
+  },
+  {
+    id: "g-life-02",
+    name: "넷플릭스 아직 보고 계신가요? 투톤 머그컵",
+    category: "lifestyle",
+    points: 600,
+    shippingFee: 3000,
+    stock: 35,
+    badge: "LIMITED",
+    themeTitle: "넷플릭스 컬렉션",
+    thumbUrl: "/images/goods/g-life-02_thumb.webp",
+    detailImages: ["/images/goods/g-life-02_detail.webp"],
+    description: "넷플릭스 정주행의 행복을 이 투톤 머그컵과 함께하세요! 담요에 싸인 포근한 밤, 소파에 늘어져 팝콘을 먹으며 반전을 기다리는 모든 스트리밍 매니아를 위한 머그컵입니다. 한 모금 마실 때마다 다음 에피소드에 대한 기대를 키워보세요.",
+  },
+  {
+    id: "g-life-03",
+    name: "케이팝 데몬 헌터스 HUNTR/X 골든 쉐르파 담요",
+    category: "lifestyle",
+    points: 600,
+    shippingFee: 3000,
+    stock: 35,
+    themeTitle: "콜라보 굿즈",
+    thumbUrl: "/images/goods/g-life-03_thumb.webp",
+    detailImages: ["/images/goods/g-life-03_detail01.webp", "/images/goods/g-life-03_detail02.webp"],
+    relatedTitle: "케이팝 데몬 헌터스",
+    relatedType: "movie",
+    relatedId: 803796,
+    description: "케이팝 데몬 헌터스 쉐르파 담요에는 숨 막히는 \'골든\' 프리미어 룩을 입은 상징적인 HUNTR/X 트리오가 담겨 있습니다. 초부드러운 소재가 집에서 가장 편안한 공간에 포근함과 고급스러운 스타일을 더해줍니다. 소파나 침대에 걸쳐두기 완벽하며, 따뜻하게 지내면서 좋아하는 히어로들을 기리는 스타일리시한 방법입니다.",
+  },
+];
+
+
+// ── 데이터 접근 (Firestore 전환 지점) ───────────────
+export async function fetchProducts(): Promise<GoodsProduct[]> {
+  return GOODS_PRODUCTS;
+  // 예) Firestore 전환 시:
+  // const snap = await getDocs(collection(db, "goodsProducts"));
+  // return snap.docs.map((d) => d.data() as GoodsProduct);
+}
+
+export function fetchProductsSync(): GoodsProduct[] {
+  return GOODS_PRODUCTS;
+}
+
+// 표기 헬퍼
+export function won(n: number): string {
+  return n.toLocaleString("ko-KR") + "원";
+}
+export function pts(n: number): string {
+  return n.toLocaleString("ko-KR") + "P";
+}

@@ -1,0 +1,113 @@
+@use "@/app/globals" as g;
+
+.split-banner {
+  padding: 0 clamp(24px, calc((100vw - 80px - 1920px) / 2), 80px);
+  padding-left: g.$main-menu-width;
+  margin-bottom: 48px;
+
+  .split-panels {
+    display: flex;
+    gap: 5px;
+  }
+
+  .split-panel-wrap {
+    flex: 1;
+    height: clamp(200px, 28vw, 420px);
+    background-repeat: no-repeat;
+    border-radius: 6px;
+    cursor: pointer;
+    filter: brightness(0.8);
+    transition: filter 0.25s ease;
+    position: relative;
+
+    &:hover {
+      filter: brightness(1.05);
+    }
+  }
+
+  .split-panel-still {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    border-radius: 6px;
+    transition: opacity 0.3s ease;
+  }
+
+  .split-panel-logo {
+    position: absolute;
+    bottom: 16px;
+    left: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    z-index: 1;
+  }
+
+  .split-panel-right-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    transition: opacity 0.3s ease;
+
+    img {
+      max-width: unset;
+    }
+  }
+}
+
+/* 태블릿(≤1024px)부터 "넷플릭스 화제작"(스플릿배너) 숨김 */
+@media (max-width: 1024px) {
+  .split-banner {
+    display: block !important;
+    width: calc(100vw - 48px);
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 34px;
+    padding: 0;
+
+    .split-panels {
+      gap: 4px;
+    }
+
+    .split-panel-wrap {
+      height: clamp(150px, 24vw, 240px);
+      border-radius: 4px;
+    }
+
+    .split-panel-still {
+      border-radius: 4px;
+    }
+
+    .split-panel-logo {
+      bottom: 10px;
+      left: 8px;
+      gap: 8px;
+
+      img:first-child {
+        width: 58px;
+        height: auto;
+      }
+
+      img:last-child {
+        width: 110px;
+        height: auto;
+      }
+    }
+
+    .split-panel-right-logo img {
+      width: 150px;
+      height: auto;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .split-banner {
+    display: none !important;
+  }
+}

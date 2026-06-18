@@ -1,0 +1,512 @@
+@use "@/app/globals" as g;
+
+$slide-w: 88%;
+$slide-gap: 14px;
+$side-margin: calc((100% - #{$slide-w}) / 2); // ~6%
+
+$hero-h: clamp(420px, 40vw, 900px);
+
+.connect-hero--loading {
+  height: calc(#{$hero-h} + #{g.$header-height});
+  margin-top: calc(-#{g.$header-height} + 47px) !important;
+  background: #0a0a0a;
+}
+
+.connect-hero {
+  position: relative;
+  width: 100%;
+  height: calc(#{$hero-h} + #{g.$header-height});
+  margin-top: calc(-#{g.$header-height} + 47px) !important;
+  // overflow:hidden 제거 → Swiper peek 슬라이드를 클리핑하지 않도록
+  // 배경 블러(inset:-40px)는 자체 z-index(0)와 section-bg 레이어로 처리
+  overflow: visible;
+  background: transparent;
+
+  // 섹션 전체 배경색을 before 로 처리 (overflow:visible 이어도 배경은 유지)
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 90px;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  // 상단 페이드아웃
+  &::before {
+    top: 0;
+    background: linear-gradient(to bottom, #141414 0%, transparent 100%);
+  }
+
+  // 하단 페이드아웃
+  &::after {
+    bottom: 0;
+    background: linear-gradient(to top, #141414 0%, transparent 100%);
+  }
+}
+
+// ── 섹션 블러 배경 ────────────────────────────────────────
+// overflow:visible 된 hero 안에서 배경 블러가 사방으로 번지지 않도록
+// 별도 래퍼로 clip 처리
+.connect-hero__bg-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden; // 블러만 이 레이어 안에서 클리핑
+  z-index: 0;
+  background: #0a0a0a; // 섹션 기본 배경색
+}
+
+.connect-hero__section-bg {
+  position: absolute;
+  inset: -40px;
+  background-size: cover;
+  background-position: center;
+  filter: blur(32px) brightness(0.22) saturate(0.7);
+  transition: opacity 0.6s ease;
+}
+
+// ── Swiper ──────────────────────────────────────────────
+.connect-hero__swiper {
+  position: absolute;
+  left: 0;
+  right: 0;
+  // transform 대신 명시적 top 계산: 위아래 여백 = (header-height + 16px) / 2
+  top: calc((#{g.$header-height} + 16px) / 2);
+  height: calc(#{$hero-h} - 16px);
+  // Swiper 기본 overflow:hidden 을 덮어씌워 좌우 peek 슬라이드가 잘리지 않도록
+  overflow: visible !important;
+  z-index: 1;
+
+  // Swiper 내부 wrapper 도 clip 하지 않도록 명시
+  .swiper-wrapper {
+    overflow: visible;
+  }
+}
+
+// Swiper에 width를 CSS로 지정 (slidesPerView: "auto" 필수)
+.connect-hero__swiper .swiper-slide {
+  width: $slide-w;
+  height: 100%;
+}
+
+// ── 개별 슬라이드 ────────────────────────────────────────
+.connect-hero__slide {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  cursor: pointer;
+
+  &.swiper-slide-active {
+    cursor: default;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.connect-hero__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.6s ease;
+}
+
+// ── 인라인 영상 ───────────────────────────────────────────
+.connect-hero__video {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+  // 유튜브 UI(제목/버튼)가 떠 있는 초반엔 투명하게 두고(배경 이미지 노출),
+  // UI가 자동으로 사라지는 시점(~3초)에 페이드 인
+  opacity: 0;
+  animation: heroVideoFadeIn 1s ease 5s forwards;
+
+  iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    // 16:9 비율을 유지하면서 컨테이너를 완전히 커버
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    transform: translate(-50%, -50%);
+    border: none;
+  }
+}
+
+@keyframes heroVideoFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+// 비활성 슬라이드 어두운 오버레이
+.connect-hero__dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.58);
+  transition: opacity 0.45s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.connect-hero__slide.swiper-slide-active .connect-hero__dim {
+  opacity: 0;
+}
+
+// 활성 슬라이드 좌측 텍스트 그라데이션
+.connect-hero__gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg,
+      rgba(0, 0, 0, 0.45) 0%,
+      rgba(0, 0, 0, 0.35) 28%,
+      rgba(0, 0, 0, 0.08) 58%,
+      transparent 100%),
+    linear-gradient(0deg,
+      rgba(0, 0, 0, 0.32) 0%,
+      transparent 45%);
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  pointer-events: none;
+}
+
+.connect-hero__slide.swiper-slide-active .connect-hero__gradient {
+  opacity: 1;
+}
+
+// ── 취향 뱃지 ────────────────────────────────────────────
+.connect-hero__badge {
+  position: absolute;
+  top: clamp(20px, 4%, 36px);
+  left: clamp(20px, 6%, 80px);
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 13px;
+  background: rgba(0, 0, 0, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 20px;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.4s ease 0.08s;
+  pointer-events: none;
+}
+
+.connect-hero__badge-heart {
+  color: #e06aac;
+  font-size: 0.72rem;
+}
+
+.connect-hero__slide.swiper-slide-active .connect-hero__badge {
+  opacity: 1;
+}
+
+// ── 텍스트 콘텐츠 ────────────────────────────────────────
+.connect-hero__content {
+  position: absolute;
+  bottom: 72px;
+  left: clamp(28px, 6%, 80px);
+  z-index: 3;
+  max-width: 420px;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.4s ease 0.08s, transform 0.4s ease 0.08s;
+  pointer-events: none;
+}
+
+.connect-hero__slide.swiper-slide-active .connect-hero__content {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+// 로고 이미지
+.connect-hero__logo {
+  margin-bottom: 16px;
+
+  img {
+    max-width: clamp(200px, 26vw, 380px);
+    max-height: 180px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.7));
+  }
+}
+
+.connect-hero__title {
+  margin-bottom: 12px;
+  color: #fff;
+  font-size: clamp(1.6rem, 2.2vw, 2.1rem);
+  font-weight: 900;
+  line-height: 1.2;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+}
+
+.connect-hero__rec-reason {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  margin-bottom: 2px;
+}
+
+.connect-hero__rec-director {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.connect-hero__meta {
+  margin-bottom: 20px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.connect-hero__dot {
+  margin: 0 4px;
+  opacity: 0.6;
+}
+
+.connect-hero__btns {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.connect-hero__btn-play,
+.connect-hero__btn-info {
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.connect-hero__btn-play {
+  gap: 8px;
+  height: 46px;
+  padding: 0 22px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  color: #111;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+
+  &:hover {
+    background: rgba(210, 210, 210, 0.95);
+    transform: scale(1.02);
+  }
+
+  svg {
+    width: 15px;
+    height: 15px;
+    fill: #111;
+  }
+}
+
+.connect-hero__btn-info {
+  gap: 7px;
+  height: 46px;
+  padding: 0 18px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  backdrop-filter: blur(4px);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: #fff;
+    stroke-linecap: round;
+    stroke-width: 2;
+  }
+}
+
+// ── 슬라이드 카운터 (우측 하단) ──────────────────────────
+.connect-hero__counter {
+  position: absolute;
+  bottom: 26px;
+  right: clamp(20px, 4%, 60px);
+  z-index: 3;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+
+  span {
+    margin: 0 5px;
+    opacity: 0.45;
+  }
+}
+
+.connect-hero__slide.swiper-slide-active .connect-hero__counter {
+  opacity: 1;
+}
+
+// ── 네비게이션 화살표 (카테고리 리스트와 동일) ────────────
+.connect-hero__swiper {
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    background: none;
+    border: none;
+    color: #fff;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+
+    &::after {
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    &.swiper-button-disabled {
+      opacity: 0 !important;
+      pointer-events: none;
+    }
+  }
+
+  .swiper-button-prev {
+    left: calc(#{$side-margin} + 14px) !important;
+  }
+
+  .swiper-button-next {
+    right: calc(#{$side-margin} + 14px) !important;
+  }
+}
+
+.connect-hero:hover .connect-hero__swiper {
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    opacity: 1;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+// ── 반응형 ───────────────────────────────────────────────
+@media (max-width: 1024px) {
+
+  // height는 $hero-h clamp가 담당 — 별도 오버라이드 없음
+  .connect-hero__swiper .swiper-slide {
+    width: 90%;
+  }
+}
+
+@media (max-width: 640px) {
+
+  /* 모바일 히어로 세로 크기: 60vh */
+  .connect-hero,
+  .connect-hero--loading {
+    height: calc(60vh + #{g.$header-height});
+  }
+
+  .connect-hero__swiper {
+    height: calc(60vh + #{g.$header-height} - 48px);
+    top: 24px; // (section - swiper) / 2 = 48px / 2
+  }
+
+  /* 양옆 슬라이드가 더 보이도록 슬라이드 폭 축소 */
+  .connect-hero__swiper .swiper-slide {
+    width: 84%;
+  }
+
+  /* 인라인 영상 확대 (세로형 카드에서 영상이 더 크게 보이도록) */
+  .connect-hero__video iframe {
+    transform: translate(-50%, -50%) scale(1.38);
+  }
+
+  /* 재생하기/상세정보 버튼 숨김 */
+  .connect-hero__btns {
+    display: none;
+  }
+
+  // 모바일에서 swiper 화살표 숨김 (터치 스와이프로 대체)
+  .connect-hero__nav,
+  .connect-hero__swiper .swiper-button-prev,
+  .connect-hero__swiper .swiper-button-next {
+    display: none !important;
+  }
+
+  .connect-hero__title {
+    font-size: 1.2rem;
+  }
+
+  .connect-hero__logo img {
+    max-width: clamp(140px, 44vw, 240px);
+    max-height: 110px;
+  }
+
+  .connect-hero__rec-reason,
+  .connect-hero__rec-director {
+    font-size: 0.8rem;
+  }
+
+  .connect-hero__content {
+    bottom: 8px;
+    left: 18px;
+    max-width: calc(100% - 36px);
+  }
+
+  .connect-hero__counter {
+    bottom: 16px;
+    right: 16px;
+    font-size: 0.72rem;
+  }
+
+  .connect-hero__badge {
+    top: 14px;
+    left: 14px;
+    font-size: 0.72rem;
+    padding: 5px 10px;
+  }
+}
+/* ===== 반응형: 히어로 버튼 축소 ===== */
+@include g.respond(tablet) {
+  .connect-hero__btn-play, .connect-hero__btn-info { height: 40px; font-size: 14px; }
+  .connect-hero__btn-play { padding: 0 16px; }
+  .connect-hero__btn-info { padding: 0 14px; }
+}
+@include g.respond(mobile) {
+  .connect-hero__btns { gap: 6px; }
+  .connect-hero__btn-play, .connect-hero__btn-info { height: 36px; font-size: 13px; }
+  .connect-hero__btn-play { padding: 0 13px; }
+  .connect-hero__btn-info { padding: 0 11px; }
+}

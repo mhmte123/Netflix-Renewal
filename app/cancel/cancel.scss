@@ -1,0 +1,70 @@
+@use "@/app/globals" as g;
+
+// ─── 해지 확인 박스 ───────────────────────────────────────────────────────────
+
+.cancel-check-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 2px solid #f40612;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+
+  svg {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+// ─── 해지하기 버튼 ────────────────────────────────────────────────────────────
+
+.cancel-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: #f40612;
+  color: g.$w-color;
+  font-size: g.$text-14;
+  font-weight: 700;
+  border: none;
+  border-radius: g.$radius-md;
+  cursor: pointer;
+  margin-bottom: 12px;
+  position: relative;
+  transition: background-color 0.15s, transform 0.15s;
+  min-height: 52px;
+
+  &:hover:not(:disabled) {
+    background-color: #fa1f2a;
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &.is-loading {
+    color: transparent;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: g.$w-color;
+      border-radius: 50%;
+      animation: cancel-spin 0.6s linear infinite;
+    }
+  }
+}
+
+@keyframes cancel-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

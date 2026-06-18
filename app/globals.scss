@@ -1,0 +1,908 @@
+@import "tailwindcss";
+
+/* 공통 */
+// COLOR
+$main-color: #e50914;
+$bg-color: #141414;
+$w-color: #ffffff; // 흰색
+$d-color: #000000; // 검정색
+$g-color: #999999; // 회색 (DS: --gray1)
+// TEXT-SIZE
+$text-12: 0.75rem; // 12px
+$text-13: 0.8125rem; // 13px
+$text-14: 0.875rem; // 14px
+$text-16: 1rem; // 16px
+$text-18: 1.125rem; // 18px
+$text-20: 1.25rem; // 20px
+$text-24: 1.5rem; // 24px
+$text-32: 2rem; // 32px
+// TEXT
+$main-text: $text-16;
+$title-text: $text-18;
+// RADIUS
+$radius-md: 8px;
+$radius-lg: 16px;
+
+// BREAKPOINTS (4단계: desktop(기본) / laptop(중간모니터) / tablet / mobile)
+$bp-laptop: 1440px;
+$bp-tablet: 1024px;
+$bp-mobile: 600px;
+
+@mixin respond($bp) {
+  @if $bp == laptop {
+    @media (max-width: $bp-laptop) { @content; }
+  } @else if $bp == tablet {
+    @media (max-width: $bp-tablet) { @content; }
+  } @else if $bp == mobile {
+    @media (max-width: $bp-mobile) { @content; }
+  }
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* header */
+$header-height: 81px;
+$main-menu-width: 80px;
+$main-menu-color: #8a8a88;
+// GAP
+$section-gap: 40px;
+
+* {
+  &::-webkit-scrollbar {
+    width: 8px; // 세로 스크롤 너비
+    height: 8px; // 가로 스크롤 높이
+    background-color: $d-color; // 전체 배경을 검은색으로
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #333; // 스크롤 막대 색상
+    border-radius: $radius-md; // 8px (둥근 모서리)
+    border: 2px solid $d-color; // 막대 주변에 여백을 준 듯한 효과
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #555; // 마우스 올렸을 때 조금 밝게
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: $d-color; // 트랙 배경색
+  }
+}
+
+.profile-pin-gate-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #141414;
+}
+
+.profile-pin-gate {
+  width: min(100%, 420px);
+  border: 1px solid #2e2e2e;
+  border-radius: $radius-md;
+  padding: 26px;
+  background: #141414;
+  color: $w-color;
+
+  h2 {
+    margin-top: 18px;
+    font-size: $text-20;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  p {
+    margin-top: 10px;
+    color: $main-menu-color;
+    font-size: $text-14;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .profile-pin-gate-submit {
+    width: 100%;
+    min-height: 40px;
+    margin-top: 18px;
+    border: 1px solid $main-color;
+    border-radius: $radius-md;
+    background: $main-color;
+    color: $w-color;
+    font-size: $text-14;
+    font-weight: 800;
+    cursor: pointer;
+
+    &:hover {
+      background: #f40612;
+    }
+  }
+}
+
+.profile-pin-gate-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: $main-menu-color;
+  font-size: $text-13;
+  cursor: pointer;
+
+  &:hover {
+    color: $w-color;
+  }
+
+  span {
+    width: 9px;
+    height: 9px;
+    border-left: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+  }
+}
+
+.profile-pin-gate-inputs {
+  display: flex;
+  gap: 8px;
+  margin-top: 22px;
+  justify-content: center;
+
+  input {
+    width: 48px;
+    height: 56px;
+    border: 1px solid #5a5a5a;
+    border-radius: $radius-md;
+    background: #121212;
+    color: $w-color;
+    font-size: $text-24;
+    text-align: center;
+
+    &:focus {
+      border-color: $w-color;
+      outline: none;
+    }
+
+    &.is-error {
+      border-color: #ff4d4d;
+      box-shadow: 0 0 0 1px rgba(255, 77, 77, 0.55);
+    }
+  }
+}
+
+.profile-pin-gate-error {
+  display: block;
+  margin-top: 10px;
+  color: #ff7777;
+  font-size: $text-12;
+}
+
+.profile-switch-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 210000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 7, 0, 0.96);
+  opacity: 0;
+  pointer-events: all;
+
+  &.is-enter {
+    animation: profileSwitchFadeIn 180ms ease-out forwards;
+  }
+
+  &.is-exit {
+    opacity: 1;
+    animation: profileSwitchFadeOut 720ms ease-in-out forwards;
+  }
+}
+
+.profile-switch-overlay__stage {
+  position: relative;
+  width: 148px;
+  height: 148px;
+  display: grid;
+  place-items: center;
+}
+
+.profile-switch-overlay__loader {
+  position: absolute;
+  width: 132px;
+  height: 132px;
+  object-fit: contain;
+  animation: profileSwitchSpin 900ms linear infinite;
+}
+
+.profile-switch-overlay__avatar {
+  position: relative;
+  z-index: 1;
+  width: 75px;
+  height: 75px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+@keyframes profileSwitchFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes profileSwitchFadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes profileSwitchSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes mainPageFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pageFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img,
+video {
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+address,
+em,
+i {
+  font-style: none;
+}
+
+.blind {
+  position: absolute;
+  top: -9999px;
+}
+
+body {
+  overflow-x: hidden; /* fallback: older Safari */
+  overflow-x: clip;   /* prevents horizontal scroll without creating scroll container → fixes iOS Safari position:fixed bug */
+  color: $w-color;
+  font-size: $main-text;
+  background-color: $bg-color;
+  font-family: var(--font-netflix), sans-serif;
+  // 한글이 단어 중간에서 끊기지 않도록(어절 단위 줄바꿈), 긴 영문/URL 은 넘칠 때만 분리
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.inner {
+  width: 1920px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 1920px) {
+  .inner {
+    padding-left: clamp(16px, 4vw, 40px);
+    padding-right: clamp(16px, 4vw, 40px);
+  }
+}
+
+main {
+  padding-top: $header-height;
+}
+
+main.fullscreen-page {
+  height: 100dvh;
+  padding-top: 0;
+  overflow: hidden;
+}
+
+.watch-body {
+  position: relative;
+  overflow: hidden;
+}
+
+.watch-chat-panel {
+  --watch-side-panel-width: clamp(280px, 24vw, 360px);
+  position: relative;
+  flex: 0 0 0;
+  height: 100%;
+  width: 0;
+  background: #0d0d0d;
+  opacity: 0;
+  transition:
+    flex-basis 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    width 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity 0.2s ease;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.watch-chat-panel[data-open="true"] {
+  flex-basis: var(--watch-side-panel-width);
+  width: var(--watch-side-panel-width);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.watch-chat-toggle {
+  position: relative;
+  margin-right: -1px;
+}
+
+.watch-chat-toggle:hover,
+.watch-chat-toggle:focus-visible {
+  opacity: 1 !important;
+  background: rgba(80, 80, 80, 0.92) !important;
+  border-color: rgba(255, 255, 255, 0.72) !important;
+  transform: translateX(-2px) !important;
+  outline: none;
+}
+
+@media (max-width: 1024px) {
+  .watch-client {
+    padding-inline: 14px !important;
+  }
+
+  .watch-chat-panel {
+    --watch-side-panel-width: clamp(260px, 32vw, 330px);
+  }
+}
+
+@media (max-width: 768px) {
+  .watch-client {
+    position: relative;
+    padding: max(14px, env(safe-area-inset-top)) 10px
+      max(8px, env(safe-area-inset-bottom)) !important;
+  }
+
+  .watch-topbar {
+    gap: 8px !important;
+  }
+
+  .watch-topbar__title {
+    display: none;
+  }
+
+  .watch-body {
+    position: relative;
+    gap: 0 !important;
+  }
+
+  .watch-player-column {
+    width: 100%;
+  }
+
+  .watch-chat-panel {
+    --watch-side-panel-width: min(72vw, 320px);
+    z-index: 40;
+    border-radius: 10px;
+    box-shadow: -20px 0 50px rgba(0, 0, 0, 0.55);
+  }
+
+  .watch-chat-panel > div {
+    background: #111 !important;
+  }
+
+  .watch-chat-toggle {
+    width: 34px !important;
+    height: 64px !important;
+    z-index: 50 !important;
+    opacity: 0.9 !important;
+  }
+
+  .watch-info-bar {
+    min-height: 54px !important;
+    gap: 8px !important;
+  }
+
+  .watch-info-bar__thumbnail {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .watch-topbar button {
+    padding: 7px 10px !important;
+    font-size: 12px !important;
+  }
+
+  .watch-info-bar {
+    align-items: flex-end !important;
+  }
+
+  .watch-info-bar > div:first-child {
+    max-width: 48%;
+  }
+
+  .watch-info-bar > div:last-child {
+    gap: 5px !important;
+  }
+
+  .watch-info-bar button {
+    padding: 7px 9px !important;
+    font-size: 11px !important;
+  }
+
+  .watch-party-host {
+    padding: 8px !important;
+  }
+
+  .watch-party-host .rep-badge__name {
+    display: none;
+  }
+}
+
+.flex-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main-page-wrap {
+  section {
+    margin-top: $section-gap;
+
+    .inner {
+      width: min(1920px, calc(100vw - #{$main-menu-width}));
+      margin-left: $main-menu-width;
+      margin-right: 0;
+      padding-left: clamp(24px,
+        calc((100vw - #{$main-menu-width} - 1920px) / 2),
+        80px);
+      padding-right: clamp(24px,
+        calc((100vw - #{$main-menu-width} - 1920px) / 2),
+        80px);
+    }
+
+    .section-title-outer {
+      width: calc(100vw - #{$main-menu-width});
+      margin-left: $main-menu-width;
+      padding-left: 0;
+      padding-right: clamp(24px,
+        calc((100vw - #{$main-menu-width} - 1920px) / 2),
+        80px);
+    }
+  }
+}
+
+/* ===== 반응형: 사이드메뉴 폭 축소에 맞춘 메인 콘텐츠 오프셋 =====
+   nav 폭: desktop/laptop 80px → tablet 64px → mobile 56px */
+@include respond(tablet) {
+  .main-page-wrap section .inner {
+    width: 100vw;
+    margin-left: 0;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .main-page-wrap section .section-title-outer {
+    width: 100vw;
+    margin-left: 0;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  main.has-nav {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom));
+  }
+
+  /* 태블릿·모바일(≤1024px): 커넥트 페이지의 히어로/소셜 캐러셀(Swiper)들이 peek 슬라이드를 위해
+     overflow:visible 을 써서 화면 밖 슬라이드가 가로로 넘친다. 이 가로 오버플로가 body 까지
+     전파되면 (1) 고정 헤더의 우측 GNB(검색/알림/프로필)가 뷰포트 밖으로 밀려 잘리고,
+     (2) 넘친 영역만큼 문서가 늘어나 푸터 아래로 빈 공간이 생긴다.
+     main 은 고정 헤더/하단 nav 의 '조상이 아니라 형제'이므로, 여기서 가로 오버플로를 가두면
+     고정 요소에는 영향 없이 body 로의 전파만 끊을 수 있다. peek 은 뷰포트 안쪽이라 그대로 노출되고,
+     화면 밖 슬라이드만 잘린다. (≤1024px 에서는 hover-card 가 이미 display:none 이라 가로 클립 부작용 없음) */
+  main.has-nav {
+    overflow-x: clip; /* overflow-y 는 visible 유지 → 세로 흐름/스티키 영향 없음 */
+  }
+}
+@include respond(mobile) {
+  /* 모바일 섹션 간격 일괄 32px */
+  .main-page-wrap section {
+    margin-top: 32px;
+  }
+
+  .main-page-wrap section .inner {
+    width: 100vw;
+    margin-left: 0;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .main-page-wrap section .section-title-outer {
+    width: 100vw;
+    margin-left: 0;
+    padding-right: 12px;
+  }
+
+  main.has-nav {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (min-width: 601px) and (max-width: $bp-tablet) {
+  .main-page-wrap section .inner,
+  .main-page-wrap section .section-title-outer,
+  .connect-section__inner,
+  .connect-review-list__inner,
+  .connect-friend-reactions__inner,
+  .connect-following-playlists__inner {
+    width: 100vw !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+
+  body :is(
+    .alarm-page,
+    .category-page,
+    .community-page,
+    .contact-page,
+    .custom-page,
+    .error-page,
+    .faq-page,
+    .feed-page,
+    .friends-page,
+    .goods-page,
+    .info-page,
+    .login-page,
+    .menu-custom-page,
+    .mood-main-page,
+    .mypage,
+    .playlist-detail-page,
+    .release-page,
+    .search-page,
+    .wishlist-page,
+    .acset-page,
+    .profile-settings-page
+  ) {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+
+  body :is(
+    .alarm-page,
+    .category-page,
+    .community-page,
+    .contact-page,
+    .custom-page,
+    .error-page,
+    .faq-page,
+    .feed-page,
+    .friends-page,
+    .goods-page,
+    .info-page,
+    .mood-main-page,
+    .mypage,
+    .release-page,
+    .search-page,
+    .wishlist-page
+  ) .inner,
+  body .menu-custom-page__inner,
+  body .acset-container,
+  body .profile-settings-container,
+  body .wishlist-inner {
+    width: 100% !important;
+    max-width: min(100%, 1100px);
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  body :is(
+    .watching-swiper-wrap,
+    .ranking-swiper-wrap,
+    .recommend-swiper,
+    .movie-list-viewport,
+    .original-wrap
+  ) {
+    width: 100vw !important;
+    margin-left: 0 !important;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+
+  body .recommend-section .section-title-outer {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+
+  body .playlist-detail-page .pl-body {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+
+  body footer {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+
+  body :is(
+    .alarm-page,
+    .category-catalog-page,
+    .category-page,
+    .community-page,
+    .contact-page,
+    .custom-page,
+    .error-page,
+    .faq-page,
+    .feed-page,
+    .friends-page,
+    .goods-page,
+    .info-page,
+    .login-page,
+    .media-list-page,
+    .menu-custom-page,
+    .mood-main-page,
+    .mypage,
+    .payment-page,
+    .pay-change-page,
+    .plan-page,
+    .playlist-detail-page,
+    .profile-settings-page,
+    .release-page,
+    .search-page,
+    .search-results-page,
+    .signin-page,
+    .wishlist-page,
+    .acset-page
+  ) {
+    padding-top: 16px !important;
+    padding-right: 24px !important;
+    padding-left: 24px !important;
+  }
+
+  body :is(
+    .alarm-page,
+    .category-page,
+    .community-page,
+    .contact-page,
+    .custom-page,
+    .error-page,
+    .faq-page,
+    .feed-page,
+    .friends-page,
+    .goods-page,
+    .info-page,
+    .media-list-page,
+    .mood-main-page,
+    .mypage,
+    .release-page,
+    .search-page,
+    .search-results-page
+  ) .inner,
+  body :is(
+    .category-shell,
+    .menu-custom-page__inner,
+    .search-page__inner,
+    .wishlist-inner,
+    .acset-container,
+    .profile-settings-container
+  ) {
+    width: 100% !important;
+    max-width: min(100%, 1100px) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+/* Mobile page shells should not keep the collapsed side-nav offset. */
+@include respond(mobile) {
+  body :is(
+    .alarm-page,
+    .category-page,
+    .community-page,
+    .contact-page,
+    .custom-page,
+    .error-page,
+    .faq-page,
+    .feed-page,
+    .friends-page,
+    .goods-page,
+    .login-page,
+    .menu-custom-page,
+    .mood-main-page,
+    .mypage,
+    .release-page,
+    .search-page,
+    .wishlist-page
+  ) {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  body :is(.acset-page, .profile-settings-page) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  body :is(
+    .alarm-page,
+    .category-page,
+    .contact-page,
+    .custom-page,
+    .error-page,
+    .faq-page,
+    .feed-page,
+    .friends-page,
+    .goods-page,
+    .mood-main-page,
+    .mypage,
+    .release-page,
+    .search-page
+  ) .inner,
+  body .menu-custom-page__inner,
+  body .acset-container,
+  body .profile-settings-container,
+  body .wishlist-inner {
+    width: 100%;
+    max-width: min(100%, 900px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  body :is(
+    .alarm-page,
+    .category-page,
+    .feed-page,
+    .friends-page,
+    .goods-page,
+    .mood-main-page,
+    .release-page,
+    .search-page
+  ) .inner {
+    max-width: 100%;
+  }
+
+  body :is(.acset-container, .profile-settings-container) {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  body .playlist-detail-page .pl-body {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  body :is(
+    .alarm-page,
+    .category-catalog-page,
+    .category-page,
+    .community-page,
+    .contact-page,
+    .custom-page,
+    .error-page,
+    .faq-page,
+    .feed-page,
+    .friends-page,
+    .goods-page,
+    .info-page,
+    .login-page,
+    .media-list-page,
+    .menu-custom-page,
+    .mood-main-page,
+    .mypage,
+    .payment-page,
+    .pay-change-page,
+    .plan-page,
+    .playlist-detail-page,
+    .profile-settings-page,
+    .release-page,
+    .search-page,
+    .search-results-page,
+    .signin-page,
+    .wishlist-page,
+    .acset-page
+  ) {
+    padding-top: 16px !important;
+    padding-right: 16px !important;
+    padding-left: 16px !important;
+  }
+
+  body :is(
+    .alarm-page,
+    .category-page,
+    .community-page,
+    .contact-page,
+    .custom-page,
+    .error-page,
+    .faq-page,
+    .feed-page,
+    .friends-page,
+    .goods-page,
+    .info-page,
+    .media-list-page,
+    .mood-main-page,
+    .mypage,
+    .release-page,
+    .search-page,
+    .search-results-page
+  ) .inner,
+  body :is(
+    .category-shell,
+    .menu-custom-page__inner,
+    .search-page__inner,
+    .wishlist-inner,
+    .acset-container,
+    .profile-settings-container
+  ) {
+    width: 100% !important;
+    max-width: min(100%, 900px) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+/* ===== 반응형: 태블릿/모바일(<=1024px)에서는 호버 미리보기 팝업 비활성화 ===== */
+@include respond(tablet) {
+  // 팝업 자체 숨김 (ThemeRow/CategoryList의 hover-card, PosterCard/검색결과의 search-hover-card)
+  .hover-card,
+  .search-hover-card {
+    display: none !important;
+  }
+
+  // 팝업이 뜰 때 포스터를 페이드아웃하던 부수효과 무력화 (탭 시 포스터가 사라지는 현상 방지)
+  .category-item:has(.hover-card) .img-box {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  .poster-card:hover .poster,
+  .poster-card:focus-visible .poster {
+    opacity: 1 !important;
+    transition-delay: 0s !important;
+  }
+}
+
+/* ===== 외부 SDK 잔여 iframe 차단 =====
+   Firebase 구글 로그인 SDK(gapi)가 body 끝에 심는 숨김용 iframe(id="I0_..." / ng-non-bindable)이
+   스타일 적용 실패 시 width:100% 인라인 요소로 문서 흐름에 끼어들어
+   푸터 아래 빈 공간을 만들고 해당 영역의 클릭을 가로채는 문제 방지.
+   (인증 기능에는 영향 없음 — 원래 화면에 보이면 안 되는 프록시 프레임) */
+body > iframe[ng-non-bindable],
+body > iframe[aria-hidden="true"][tabindex="-1"] {
+  display: none !important;
+}
